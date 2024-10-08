@@ -7,7 +7,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { useFormik } from "formik";
 import { LoginSchema } from '../schema/schema';
 import { postLogin } from '../utils/Helper';
-import getAndDecryptCookie, { Encrytion, getToken, storeToken } from '../libs/auth';
+import getAndDecryptCookie, { getCookies, storeCookies } from '../libs/auth';
 
 const ComponentsAuthLoginForm = () => {
     const router = useRouter();
@@ -25,9 +25,9 @@ const ComponentsAuthLoginForm = () => {
                 const result = await postLogin(values.email, values.password);
 
 
-                storeToken('AccessToken', Encrytion(result.data.token));
-                storeToken('Email', Encrytion(values.email));
-                storeToken('Name', Encrytion(result.data.user.name));
+                storeCookies('AccessToken', result.data.token);
+                storeCookies('Email', values.email);
+                storeCookies('Name', result.data.user.name);
                 toast.success(result.message)
                 setResponse(result);
                 console.log(result)
