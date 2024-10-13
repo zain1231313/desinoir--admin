@@ -1,15 +1,13 @@
-'use client'
-import React, { useEffect, useState } from 'react'
-import { createMainSection, fetchHomeData } from '@/components/utils/Helper';
+'use client';
+import React, { useEffect, useState } from 'react';
+import { createExpertise, createMainSection, fetchHomeData } from '@/components/utils/Helper';
 import { useDispatch } from 'react-redux';
 import { setData, setLoading, setError } from '@/store/HomeSlice';
 import { useFormik } from 'formik';
 import toast from 'react-hot-toast';
 
-
-
 const Expertise = () => {
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
 
     const dispatch = useDispatch();
     const formik = useFormik({
@@ -22,18 +20,18 @@ const Expertise = () => {
         enableReinitialize: true, // This allows Formik to update initial values when props change
         onSubmit: async (values) => {
             // Create a new FormData instance
-            setLoading(true)
+            setLoading(true);
             const formData = new FormData();
 
             // Append form values to formData
 
-            formData.append("expertiseTitle", values.ExpertisetitleEnglish);
-            formData.append("arExpertiseTitle", values.ExpertisetitleArabic);
-            formData.append("expertiseSubTitle", values.ExpertisesubtitleEnglish);
-            formData.append("arExpertiseSubTitle", values.ExpertisesubtitleArabic);
+            formData.append('expertiseTitle', values.ExpertisetitleEnglish);
+            formData.append('arExpertiseTitle', values.ExpertisetitleArabic);
+            formData.append('expertiseSubTitle', values.ExpertisesubtitleEnglish);
+            formData.append('arExpertiseSubTitle', values.ExpertisesubtitleArabic);
 
             try {
-                const result = await createMainSection(formData);
+                const result = await createExpertise(formData);
                 console.log(result);
                 // Update the values in the component
                 formik.setValues({
@@ -42,17 +40,17 @@ const Expertise = () => {
                     ExpertisesubtitleEnglish: result.data.data.en.ourExpertise.expertiseSubTitle,
                     ExpertisesubtitleArabic: result.data.data.ar.ourExpertise.expertiseSubTitle,
                 });
-                setLoading(false)
-                toast.success(result.message)
-                fetchDataAsync()
+                setLoading(false);
+                toast.success(result.message);
+                fetchDataAsync();
             } catch (error: any) {
-                toast.error(error)
+                toast.error(error);
             }
-        }
+        },
     });
 
     const fetchDataAsync = async () => {
-        setLoading(true) // Set loading to true before fetching
+        setLoading(true); // Set loading to true before fetching
         try {
             const result = await fetchHomeData();
             if (result) {
@@ -64,19 +62,17 @@ const Expertise = () => {
                     ExpertisesubtitleEnglish: result.data.data.en.ourExpertise.expertiseSubTitle || '',
                     ExpertisesubtitleArabic: result.data.data.ar.ourExpertise.expertiseSubTitle || '',
                 });
-                console.log(result.data.data.en)
+                console.log(result.data.data.en);
             }
-            setLoading(false) // Set loading to false after fetching
+            setLoading(false); // Set loading to false after fetching
         } catch (error) {
             dispatch(setError('Failed to fetch data')); // Handle any errors
-            setLoading(false) // Set loading to false after fetching
+            setLoading(false); // Set loading to false after fetching
         }
     };
     useEffect(() => {
-
         fetchDataAsync();
     }, [dispatch]);
-
 
     return (
         <div>
@@ -87,9 +83,7 @@ const Expertise = () => {
                 <form onSubmit={formik.handleSubmit}>
                     <div className="max-sm:my-2 lg:my-3">
                         <div>
-                            <label>
-                                Title (EN)
-                            </label>
+                            <label>Title (EN)</label>
                             <input
                                 type="text"
                                 placeholder="Title English"
@@ -102,9 +96,7 @@ const Expertise = () => {
                     </div>
                     <div className="max-sm:my-2 lg:my-3">
                         <div>
-                            <label>
-                                Title (AR)
-                            </label>
+                            <label>Title (AR)</label>
                             <input
                                 type="text"
                                 placeholder="Title Arabic"
@@ -117,9 +109,7 @@ const Expertise = () => {
                     </div>
                     <div className="max-sm:my-2 lg:my-3">
                         <div>
-                            <label>
-                                Subtitle (EN)
-                            </label>
+                            <label>Subtitle (EN)</label>
                             <input
                                 type="text"
                                 placeholder="Subtitle English"
@@ -132,9 +122,7 @@ const Expertise = () => {
                     </div>
                     <div className="max-sm:my-2 lg:my-3">
                         <div>
-                            <label>
-                                Subtitle (AR)
-                            </label>
+                            <label>Subtitle (AR)</label>
                             <input
                                 type="text"
                                 placeholder="Subtitle Arabic"
@@ -146,15 +134,13 @@ const Expertise = () => {
                         </div>
                     </div>
 
-                    <button
-                        type="submit"
-                        className="mt-4 bg-blue-500 text-white py-2 px-4 rounded">
+                    <button type="submit" className="mt-4 rounded bg-blue-500 px-4 py-2 text-white">
                         Submit
                     </button>
                 </form>
-            </div >
-        </div >
-    )
-}
+            </div>
+        </div>
+    );
+};
 
-export default Expertise
+export default Expertise;

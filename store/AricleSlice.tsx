@@ -44,10 +44,12 @@ interface Article {
 
 interface ArticlesState {
     selectedArticle: Article | null;
+    id: string | null;
 }
 
 const initialState: ArticlesState = {
     selectedArticle: null,
+    id: null,
 };
 
 export const articlesSlice = createSlice({
@@ -60,9 +62,13 @@ export const articlesSlice = createSlice({
         clearSelectedArticle: (state) => {
             state.selectedArticle = null;
         },
+        setId: (state, action: PayloadAction<string>) => {
+            state.id = action.payload;
+        },
     },
 });
 
-export const { setSelectedArticle, clearSelectedArticle } = articlesSlice.actions;
+export const { setSelectedArticle, clearSelectedArticle, setId } = articlesSlice.actions;
 export const selectSelectedArticle = (state: IRootState) => state.articles.selectedArticle;
+export const selectId = (state: IRootState) => state.articles.id;
 export default articlesSlice.reducer;

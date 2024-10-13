@@ -26,6 +26,7 @@
         "@types/react": "18.0.27",
         "@types/react-dom": "18.0.10",
         "@x1mrdonut1x/nouislider-react": "^3.4.3",
+        "apexcharts": "^3.37.1",
         "crypto-js": "^4.2.0",
         "datatables.net": "^2.1.6",
         "datatables.net-dt": "^2.1.6",

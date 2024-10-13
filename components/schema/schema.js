@@ -40,7 +40,18 @@ export const FaqSchema = Yup.object().shape({
     enAnswer: Yup.string().required('Answer in English is required'),
     arAnswer: Yup.string().required('Answer in Arabic is required'),
     type: Yup.string().required('Type is required')
-}); 
+});
+// export const MainOurWork = Yup.object().shape({
+//     title: Yup.string().required('Title is required'),
+//     arTitle: Yup.string().required('Arabic title is required'),
+//     subtitle: Yup.string().required('Subtitle is required'),
+//     arSubtitle: Yup.string().required('Arabic subtitle is required'),
+//     types: Yup.string().required('Types is required'),
+//     description: Yup.string().required('Description is required'),
+//     arDescription: Yup.string().required('Arabic description is required'),
+//     primaryImage: Yup.mixed().required('Primary Image is required'),
+//     descriptionImage: Yup.mixed().required('Description Image is required'),
+// });
 
 export const WorkSchema = Yup.object({
     subtitle: Yup.string().required('Subtitle is required'),

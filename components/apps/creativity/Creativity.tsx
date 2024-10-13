@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import React, { useCallback, useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -17,8 +17,7 @@ const Creativity = () => {
     const [fileName2, setFileName2] = useState<string | null>(null);
     const [engDescrip, setEngDescrip] = useState('');
     const [arDescrip, setArDescrip] = useState('');
-    const [loading, setLoading] = useState(false)
-
+    const [loading, setLoading] = useState(false);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -40,24 +39,25 @@ const Creativity = () => {
             CreativitysubtitleEnglish: '',
             CreativitysubtitleArabic: '',
             Creativityyears: '',
+            CreativityyearsArabic: '',
         },
         enableReinitialize: true,
         onSubmit: async (values) => {
-
             const formData = new FormData();
             if (image2) {
-                formData.append("creativityImage", image2);
+                formData.append('creativityImage', image2);
             }
-            formData.append("creativityTitle", values.CreativitytitleEnglish);
-            formData.append("arCreativityTitle", values.CreativitytitleArabic);
-            formData.append("creativitySubtitle", values.CreativitysubtitleEnglish);
-            formData.append("arCreativitySubtitle", values.CreativitysubtitleArabic);
-            formData.append("creativityDescription", engDescrip);
-            formData.append("arCreativityDescription", arDescrip);
-            formData.append("creativityYearsOfExperience", values.Creativityyears);
+            formData.append('creativityTitle', values.CreativitytitleEnglish);
+            formData.append('arCreativityTitle', values.CreativitytitleArabic);
+            formData.append('creativitySubtitle', values.CreativitysubtitleEnglish);
+            formData.append('arCreativitySubtitle', values.CreativitysubtitleArabic);
+            formData.append('creativityDescription', engDescrip);
+            formData.append('arCreativityDescription', arDescrip);
+            formData.append('creativityYearsOfExperience', values.Creativityyears);
+            formData.append('arCreativityYearsOfExperience', values.CreativityyearsArabic);
 
             try {
-                setLoading(true)
+                setLoading(true);
                 const result = await createMainSection(formData);
                 formik.setValues({
                     CreativitytitleEnglish: result.data.data.en.creativitySection.creativityTitle,
@@ -65,24 +65,25 @@ const Creativity = () => {
                     CreativitysubtitleEnglish: result.data.data.en.creativitySection.creativitySubtitle,
                     CreativitysubtitleArabic: result.data.data.ar.creativitySection.creativitySubtitle,
                     Creativityyears: result.data.data.en.creativitySection.creativityYearsOfExperience,
+                    CreativityyearsArabic: result.data.data.ar.creativitySection.creativityYearsOfExperience,
                 });
                 setEngDescrip(result.data.data.en.creativitySection.creativityDescription);
                 setArDescrip(result.data.data.ar.creativitySection.creativityDescription);
                 setImage2(result.data.data.en.creativitySection.creativityImage);
                 setFilePreview2(result.data.data.en.creativitySection.creativityImage);
                 toast.success(result.message);
-                fetchDataAsync()
-                setLoading(false)
+                fetchDataAsync();
+                setLoading(false);
             } catch (error: any) {
-                setLoading(false)
+                setLoading(false);
                 toast.error(error);
                 console.error(error);
             }
-        }
+        },
     });
 
     const fetchDataAsync = async () => {
-        setLoading(true)
+        setLoading(true);
         try {
             const result = await fetchHomeData();
             if (result) {
@@ -93,16 +94,16 @@ const Creativity = () => {
                     CreativitysubtitleEnglish: result.data.data.en.creativitySection.creativitySubtitle,
                     CreativitysubtitleArabic: result.data.data.ar.creativitySection.creativitySubtitle,
                     Creativityyears: result.data.data.en.creativitySection.creativityYearsOfExperience,
+                    CreativityyearsArabic: result.data.data.ar.creativitySection.creativityYearsOfExperience,
                 });
                 setEngDescrip(result.data.data.en.creativitySection.creativityDescription);
                 setArDescrip(result.data.data.ar.creativitySection.creativityDescription);
                 setImage2(result.data.data.en.creativitySection.creativityImage);
             }
-            setLoading(false)
-
+            setLoading(false);
         } catch (error) {
-            setLoading(false)
-            console.error("Error fetching data:", error);
+            setLoading(false);
+            console.error('Error fetching data:', error);
             dispatch(setError('Failed to fetch data'));
         }
     };
@@ -111,7 +112,9 @@ const Creativity = () => {
     }, [dispatch]);
     return (
         <>
-            {loading === true ? <Loading /> :
+            {loading === true ? (
+                <Loading />
+            ) : (
                 <div>
                     <h2 className="mb-1 flex items-center px-2 py-3 font-extrabold uppercase ">
                         <span>Creativity</span>
@@ -120,35 +123,22 @@ const Creativity = () => {
                         <form onSubmit={formik.handleSubmit}>
                             <div className="my-2">
                                 <div className="">
-                                    {image2 && (
-                                        <img src={`${!filePreview2 ? image2 : filePreview2}`} alt="Initial Image" className='w-40 h-40 object-cover' />
-                                    )}
+                                    {image2 && <img src={`${!filePreview2 ? image2 : filePreview2}`} alt="Initial Image" className="h-40 w-40 object-cover" />}
                                     <div className="my-2">
                                         <div className="">
                                             <label htmlFor="file-input" className="btn btn-primary w-fit" style={{ cursor: 'pointer' }}>
                                                 Upload image
-                                                <input
-                                                    type="file"
-                                                    id="file-input"
-                                                    placeholder="Choose a File"
-                                                    accept="image/*"
-                                                    onChange={handleFileChange}
-                                                    style={{ display: 'none' }}
-                                                />
+                                                <input type="file" id="file-input" placeholder="Choose a File" accept="image/*" onChange={handleFileChange} style={{ display: 'none' }} />
                                             </label>
-
-
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             {/*  ///////////////////// title /////////////////  */}
-                            <div className="grid grid-cols-2 gap-4 max-md:gap-2 max-sm:grid-cols-1">
+                            <div className="max-md:gap-2 max-sm:grid-cols-1 grid grid-cols-2 gap-4">
                                 <div className="max-sm:my-2 lg:my-3">
                                     <div>
-                                        <label>
-                                            Title (EN)
-                                        </label>
+                                        <label>Title (EN)</label>
                                         <input
                                             type="text"
                                             placeholder="Title English"
@@ -161,9 +151,7 @@ const Creativity = () => {
                                 </div>
                                 <div className="max-sm:my-2 lg:my-3">
                                     <div>
-                                        <label>
-                                            Title (AR)
-                                        </label>
+                                        <label>Title (AR)</label>
                                         <input
                                             type="text"
                                             placeholder="Title Arabic"
@@ -177,12 +165,10 @@ const Creativity = () => {
                             </div>
 
                             {/*  ///////////////////// subtitle /////////////////  */}
-                            <div className="grid grid-cols-2 gap-4 max-md:gap-2 max-sm:grid-cols-1">
+                            <div className="max-md:gap-2 max-sm:grid-cols-1 grid grid-cols-2 gap-4">
                                 <div className="max-sm:my-2 lg:my-3">
                                     <div>
-                                        <label>
-                                            Subtitle (EN)
-                                        </label>
+                                        <label>Subtitle (EN)</label>
                                         <input
                                             type="text"
                                             placeholder="Subtitle English"
@@ -195,9 +181,7 @@ const Creativity = () => {
                                 </div>
                                 <div className="max-sm:my-2 lg:my-3">
                                     <div>
-                                        <label>
-                                            Subtitle (AR)
-                                        </label>
+                                        <label>Subtitle (AR)</label>
                                         <input
                                             type="text"
                                             placeholder="Subtitle Arabic"
@@ -210,31 +194,27 @@ const Creativity = () => {
                                 </div>
                             </div>
                             {/* ////////////////////////// description ///////////// */}
-                            <div className="grid grid-cols-2 gap-4 max-lg:grid-cols-1 max-lg:gap-0">
+                            <div className="max-lg:grid-cols-1 max-lg:gap-0 grid grid-cols-2 gap-4">
                                 <div className="mb-5">
-                                    <label className="">
-                                        Description (EN)
-                                    </label>
+                                    <label className="">Description (EN)</label>
                                     <ReactQuill
                                         theme="snow"
                                         value={engDescrip}
                                         onChange={(content) => {
-                                            console.log("asdyhjkashdjkhasjkd", content)
-                                            setEngDescrip(content)
+                                            console.log('asdyhjkashdjkhasjkd', content);
+                                            setEngDescrip(content);
                                         }}
                                         placeholder="Description Arabic"
                                     />
                                 </div>
                                 <div className="mb-5">
-                                    <label className="">
-                                        Description (AR)
-                                    </label>
+                                    <label className="">Description (AR)</label>
                                     <ReactQuill
                                         theme="snow"
                                         value={arDescrip}
                                         onChange={(content) => {
-                                            console.log("asdyhjkashdjkhasjkd", content)
-                                            setArDescrip(content)
+                                            console.log('asdyhjkashdjkhasjkd', content);
+                                            setArDescrip(content);
                                         }}
                                     />
                                 </div>
@@ -242,15 +222,26 @@ const Creativity = () => {
 
                             <div className="max-sm:my-2 lg:my-3">
                                 <div>
-                                    <label>
-                                        Years
-                                    </label>
+                                    <label>Creativity Years English</label>
                                     <input
                                         type="text"
-                                        placeholder="Subtitle English"
+                                        placeholder="Creativity Years English"
                                         className="form-input ltr:rounded-l-none rtl:rounded-r-none"
                                         name="Creativityyears"
                                         value={formik.values.Creativityyears}
+                                        onChange={formik.handleChange}
+                                    />
+                                </div>
+                            </div>
+                            <div className="max-sm:my-2 lg:my-3">
+                                <div>
+                                    <label>Creativity Years Arabic</label>
+                                    <input
+                                        type="text"
+                                        placeholder="Creativity Years Arabic English"
+                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none"
+                                        name="CreativityyearsArabic"
+                                        value={formik.values.CreativityyearsArabic}
                                         onChange={formik.handleChange}
                                     />
                                 </div>
@@ -260,13 +251,11 @@ const Creativity = () => {
                                 Submit Form
                             </button>
                         </form>
-                    </div >
-                </div >
-            }
+                    </div>
+                </div>
+            )}
         </>
     );
-}
+};
 
 export default Creativity;
-
-

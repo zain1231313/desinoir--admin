@@ -2,7 +2,7 @@
 import API_ENDPOINT from '../apiRoutes/ApiRoutes';
 // import { setData, setError, setLoading } from "@/store/HomeSlice";
 // import { Data } from "@/types/dataTypes";
-import getAndDecryptCookie from '../libs/auth';
+import getAndDecryptCookie, { getToken } from '../libs/auth';
 import toast from 'react-hot-toast';
 
 export const postLogin = async (email: string, password: string) => {
@@ -57,7 +57,46 @@ export const fetchHomeData = async () => {
         return null;
     }
 };
+export const createHeaderHome = async (formData: FormData) => {
+    const myHeaders = new Headers();
+    myHeaders.append('Authorization', `Bearer ${getAndDecryptCookie('AccessToken')}`);
 
+    const requestOptions: RequestInit = {
+        method: 'POST',
+        headers: myHeaders,
+        body: formData,
+        redirect: 'follow',
+    };
+
+    try {
+        const response = await fetch(API_ENDPOINT.ADD_MAIN_HOME, requestOptions);
+        const result = await response.json();
+        console.log('Errors==>', result);
+        return result;
+    } catch (error: any) {
+        toast.error(error);
+    }
+};
+export const createServiceHome = async (formData: FormData) => {
+    const myHeaders = new Headers();
+    myHeaders.append('Authorization', `Bearer ${getAndDecryptCookie('AccessToken')}`);
+
+    const requestOptions: RequestInit = {
+        method: 'POST',
+        headers: myHeaders,
+        body: formData,
+        redirect: 'follow',
+    };
+
+    try {
+        const response = await fetch(API_ENDPOINT.ADD_SERVICE_HOME, requestOptions);
+        const result = await response.json();
+        console.log('Errors==>', result);
+        return result;
+    } catch (error: any) {
+        toast.error(error);
+    }
+};
 export const createMainSection = async (formData: FormData) => {
     const myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${getAndDecryptCookie('AccessToken')}`);
@@ -70,8 +109,29 @@ export const createMainSection = async (formData: FormData) => {
     };
 
     try {
-        const response = await fetch(API_ENDPOINT.UPDATE_HOME_SECTION, requestOptions);
+        const response = await fetch(API_ENDPOINT.ADD_CREATIVE_HOME, requestOptions);
         const result = await response.json();
+        console.log('Errors==>', result);
+        return result;
+    } catch (error: any) {
+        toast.error(error);
+    }
+};
+export const createExpertise = async (formData: FormData) => {
+    const myHeaders = new Headers();
+    myHeaders.append('Authorization', `Bearer ${getAndDecryptCookie('AccessToken')}`);
+
+    const requestOptions: RequestInit = {
+        method: 'POST',
+        headers: myHeaders,
+        body: formData,
+        redirect: 'follow',
+    };
+
+    try {
+        const response = await fetch(API_ENDPOINT.ADD_EXPERTISE_HOME, requestOptions);
+        const result = await response.json();
+        console.log('Errors==>', result);
         return result;
     } catch (error: any) {
         toast.error(error);
@@ -256,6 +316,99 @@ export const fetchAllOurWork = async (): Promise<any> => {
     const data = await response.json();
     return data;
 };
+export const updateProblemStatement = async (id: string, data: any) => {
+    try {
+        const response = await fetch(API_ENDPOINT.UPDATE_WORK_PROBLEM + `${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json', // Ensure you're sending JSON
+                Authorization: `Bearer ${getAndDecryptCookie('AccessToken')}`,
+            },
+            body: JSON.stringify(data), // Convert data to JSON string
+        });
+
+        if (!response.ok) {
+            const errorResult = await response.json(); // Get error message from the response
+            throw new Error(errorResult.message || 'Failed to update problem statement');
+        }
+
+        const result = await response.json();
+        return result; // Return the updated problem statement
+    } catch (error) {
+        console.error('Error updating problem statement:', error);
+        throw error; // Rethrow the error to be handled by the calling function
+    }
+};
+export const updateOurWorkProblem = async (id: string, data: any) => {
+    try {
+        const response = await fetch(API_ENDPOINT.UPDATE_WORK_PROBLEM + `${id}`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${getAndDecryptCookie('AccessToken')}`,
+            },
+            body: data,
+        });
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('Error updating work:', error);
+        throw error;
+    }
+};
+export const updateOurWorkChallenges = async (id: string, data: any) => {
+    try {
+        const response = await fetch(API_ENDPOINT.UPDATE_WORK_CHALLENGE + `${id}`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${getAndDecryptCookie('AccessToken')}`,
+            },
+            body: data,
+        });
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('Error updating work:', error);
+        throw error;
+    }
+};
+export const updateOurWorkSolution = async (id: string, data: any) => {
+    console.log('Solution Data=>', data);
+    try {
+        const response = await fetch(API_ENDPOINT.UPDATE_WORK_SOLUTION + `${id}`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${getAndDecryptCookie('AccessToken')}`,
+            },
+            body: data,
+        });
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('Error updating work:', error);
+        throw error;
+    }
+};
+
+export const updateWorkMajorScreen = async (id: string, data: FormData) => {
+    try {
+        const response = await fetch(API_ENDPOINT.UPDATE_OUR_WORK_MAJOR_SCREEN + `${id}`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${getAndDecryptCookie('AccessToken')}`,
+            },
+            body: data,
+        });
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('Error updating work:', error);
+        throw error;
+    }
+};
 
 export const updateWorkData = async (id: string, data: FormData) => {
     try {
@@ -360,12 +513,174 @@ export const addOurWork = async (data: any) => {
             },
         };
 
-        const response = await fetch(API_ENDPOINT.ADD_OUR_WORK_SECTION, requestOptions);
+        const response = await fetch(API_ENDPOINT.ADD_OUR_WORK_MAIN, requestOptions);
 
         const result = await response.json(); // Use .text() if the response is plain text
         return result;
     } catch (error) {
         console.error('Error in addOurWork:', error);
+        throw error;
+    }
+};
+export const addOurWorkMain = async (data: any) => {
+    const formData = new FormData();
+    formData.append('subtitle', data.subtitle || '');
+    formData.append('arSubtitle', data.arSubtitle || '');
+    formData.append('title', data.title || '');
+    formData.append('arTitle', data.arTitle || '');
+    formData.append('types', data.types || '');
+    formData.append('description', data.description || '');
+    formData.append('arDescription', data.arDescription || '');
+    if (data.primaryImage) {
+        formData.append('primaryImage', data.primaryImage);
+    }
+    if (data.descriptionImage) {
+        formData.append('descriptionImage', data.descriptionImage);
+    }
+    console.log('Main Work=>', formData);
+    try {
+        const requestOptions: RequestInit = {
+            method: 'POST',
+            body: formData,
+            redirect: 'follow',
+            headers: {
+                Authorization: `Bearer ${getAndDecryptCookie('AccessToken')}`,
+            },
+        };
+        const response = await fetch(API_ENDPOINT.ADD_OUR_WORK_MAIN, requestOptions);
+        console.log('Response =>', response);
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('Error in addOurWork:', error);
+        throw error;
+    }
+};
+export const addOurWorkProblem = async (data: any) => {
+    console.log('Before Form=>', data);
+    const formData = new FormData();
+    formData.append('ProblemStatementTitle', data.ProblemStatementTitle || '');
+    formData.append('arProblemStatementTitle', data.arProblemStatementTitle || '');
+    formData.append('ProblemStatementDescription', data.ProblemStatementDescription || '');
+    formData.append('arProblemStatementDescription', data.arProblemStatementDescription || '');
+    formData.append('ourWorkId', data.ourWorkId || '');
+
+    if (data.ProblemStatementImage) {
+        formData.append('ProblemStatementImage', data.ProblemStatementImage);
+    }
+    console.log('Problem =>', formData);
+    try {
+        const requestOptions: RequestInit = {
+            method: 'POST',
+            body: formData,
+            redirect: 'follow',
+            headers: {
+                Authorization: `Bearer ${getAndDecryptCookie('AccessToken')}`,
+            },
+        };
+        const response = await fetch(API_ENDPOINT.ADD_OUR_WORK_PROBLEM, requestOptions);
+        console.log('Response =>', response);
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('Error in Problem:', error);
+        throw error;
+    }
+};
+
+export const addOurWorkChallenge = async (data: any) => {
+    console.log('Before Form=>', data);
+    const formData = new FormData();
+    formData.append('challengesTitle', data.challengesTitle || '');
+    formData.append('arChallengesTitle', data.arChallengesTitle || '');
+    formData.append('challengesDescription', data.challengesDescription || '');
+    formData.append('arChallengesDescription', data.arChallengesDescription || '');
+    formData.append('ourWorkId', data.ourWorkId || '');
+
+    if (data.challengeImage) {
+        formData.append('challengeImage', data.challengeImage);
+    }
+    console.log('Problem =>', formData);
+    try {
+        const requestOptions: RequestInit = {
+            method: 'POST',
+            body: formData,
+            redirect: 'follow',
+            headers: {
+                Authorization: `Bearer ${getAndDecryptCookie('AccessToken')}`,
+            },
+        };
+        const response = await fetch(API_ENDPOINT.ADD_OUR_WORK_CHALLENGE, requestOptions);
+        console.log('Response =>', response);
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('Error in Problem:', error);
+        throw error;
+    }
+};
+export const addOurWorkSolution = async (data: any) => {
+    console.log('Before Form=>', data);
+    const formData = new FormData();
+    formData.append('SolutionTitle', data.SolutionTitle || '');
+    formData.append('arSolutionTitle', data.arSolutionTitle || '');
+    formData.append('SolutionDescription', data.SolutionDescription || '');
+    formData.append('arSolutionDescription', data.arSolutionDescription || '');
+    formData.append('ourWorkId', data.ourWorkId || '');
+
+    if (data.SolutionImage) {
+        formData.append('SolutionImage', data.SolutionImage);
+    }
+    console.log('Solution =>', formData);
+    try {
+        const requestOptions: RequestInit = {
+            method: 'POST',
+            body: formData,
+            redirect: 'follow',
+            headers: {
+                Authorization: `Bearer ${getAndDecryptCookie('AccessToken')}`,
+            },
+        };
+        const response = await fetch(API_ENDPOINT.ADD_OUR_WORK_SOLUTION, requestOptions);
+        console.log('Response =>', response);
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('Error in Problem:', error);
+        throw error;
+    }
+};
+export const addOurWorkMajorScreen = async (data: any) => {
+    console.log('Before Form=>', data);
+    const formData = new FormData();
+    formData.append('description2', data.description2 || '');
+    formData.append('arDescription2', data.arDescription2 || '');
+    formData.append('ourWorkId', data.ourWorkId || '');
+    if (data.description2Image) {
+        formData.append('description2Image', data.description2Image);
+    }
+
+    // Handle multiple screen images
+    if (data.MajorScreensImages && Array.isArray(data.MajorScreensImages)) {
+        data.MajorScreensImages.forEach((image: File, index: number) => {
+            formData.append(`MajorScreensImages`, image);
+        });
+    }
+    try {
+        const requestOptions: RequestInit = {
+            method: 'POST',
+            body: formData,
+            redirect: 'follow',
+            headers: {
+                Authorization: `Bearer ${getAndDecryptCookie('AccessToken')}`,
+            },
+        };
+        const response = await fetch(API_ENDPOINT.ADD_OUR_WORK_MAJOR_SCREEN, requestOptions);
+        console.log('Response =>', response);
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('Error in Problem:', error);
         throw error;
     }
 };
@@ -519,14 +834,7 @@ export const fetchDataWithToken = async () => {
     }
 };
 
-export const addClientVoice = async (
-    enTitle: string,
-    enSubtitle: string,
-    arTitle: string,
-    arSubtitle: string,
-    voices: any[],
-    image: File | null
-) => {
+export const addClientVoice = async (enTitle: string, enSubtitle: string, arTitle: string, arSubtitle: string, voices: any[], image: File | null) => {
     const myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${getAndDecryptCookie('AccessToken')}`);
 
@@ -557,14 +865,83 @@ export const addClientVoice = async (
         throw error;
     }
 };
-export const updateClientVoice = async (
-    enTitle: string,
-    enSubtitle: string,
-    arTitle: string,
-    arSubtitle: string,
-    voices: any[],
-    voiceId: string
-) => {
+export const fetchLogoWithToken = async () => {
+    const myHeaders = new Headers();
+    myHeaders.append('Authorization', `Bearer ${getAndDecryptCookie('AccessToken')}`);
+
+    const requestOptions: RequestInit = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow',
+    };
+
+    try {
+        const response = await fetch(API_ENDPOINT.GET_LOGO, requestOptions);
+        const jsonData = await response.json();
+        return jsonData;
+    } catch (error) {
+        console.error('Fetch error:', error);
+        throw error;
+    }
+};
+
+export const addLogos = async (darkLogoFile: File | null, lightLogoFile: File | null) => {
+    const myHeaders = new Headers();
+    myHeaders.append('Authorization', `Bearer ${getAndDecryptCookie('AccessToken')}`);
+
+    const formdata = new FormData();
+    if (darkLogoFile) {
+        formdata.append('darkLogo', darkLogoFile, '[PROXY]');
+    }
+    if (lightLogoFile) {
+        formdata.append('lightLogo', lightLogoFile, '[PROXY]');
+    }
+
+    const requestOptions: RequestInit = {
+        method: 'POST',
+        headers: myHeaders,
+        body: formdata,
+        redirect: 'follow',
+    };
+
+    try {
+        const response = await fetch(API_ENDPOINT.ADD_PRODUCT_LOGO, requestOptions);
+
+        const result = await response.json();
+        console.log(result);
+        return result; // Return result for further processing if needed
+    } catch (error) {
+        console.error('Error:', error);
+        throw error; // Rethrow the error for handling in the caller function
+    }
+};
+
+export const updateLogos = async (Data: any | null, productId: string) => {
+    const myHeaders = new Headers();
+    myHeaders.append('Authorization', `Bearer ${getAndDecryptCookie('AccessToken')}`);
+
+    const formData = new FormData();
+
+    const requestOptions: RequestInit = {
+        method: 'PUT',
+        headers: myHeaders,
+        body: Data,
+        redirect: 'follow',
+    };
+
+    try {
+        console.log('URL=>', `${API_ENDPOINT.UPDATE_LOGO}${productId}`);
+        const response = await fetch(`${API_ENDPOINT.UPDATE_LOGO}${productId}`, requestOptions);
+        const result = await response.json();
+        console.log('Logos updated successfully:', result);
+        return result;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error; // Rethrow the error for handling in the caller function
+    }
+};
+
+export const updateClientVoice = async (enTitle: string, enSubtitle: string, arTitle: string, arSubtitle: string, voices: any[], voiceId: string) => {
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
     myHeaders.append('Authorization', `Bearer ${getAndDecryptCookie('AccessToken')}`);
@@ -594,7 +971,26 @@ export const updateClientVoice = async (
     }
 };
 
+export const deleteProductLogos = async (id: string): Promise<void> => {
+    const myHeaders = new Headers();
+    myHeaders.append('Authorization', `Bearer ${getAndDecryptCookie('AccessToken')}`);
 
+    const requestOptions: RequestInit = {
+        method: 'DELETE',
+        headers: myHeaders,
+        redirect: 'follow',
+    };
+
+    try {
+        const response = await fetch(API_ENDPOINT.DELETE_PRODUCT_LOGO + `${id}`, requestOptions);
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('Error deleting Product Logos:', error);
+        throw error;
+    }
+};
 export const deleteClientVoice = async (id: string): Promise<void> => {
     const myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${getAndDecryptCookie('AccessToken')}`);
@@ -651,6 +1047,66 @@ export const postAboutData = async (formData: FormData): Promise<any> => {
         };
 
         const response = await fetch(API_ENDPOINT.ADD_ABOUT, requestOptions);
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('Error posting about data:', error);
+        throw error;
+    }
+};
+export const AboutCreatives = async (formData: FormData): Promise<any> => {
+    try {
+        const myHeaders = new Headers();
+        myHeaders.append('Authorization', `Bearer ${getAndDecryptCookie('AccessToken')}`);
+
+        const requestOptions: RequestInit = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formData,
+            redirect: 'follow',
+        };
+
+        const response = await fetch(API_ENDPOINT.ADD_ABOUT, requestOptions);
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('Error posting about data:', error);
+        throw error;
+    }
+};
+export const AboutProjects = async (formData: FormData): Promise<any> => {
+    try {
+        const myHeaders = new Headers();
+        myHeaders.append('Authorization', `Bearer ${getAndDecryptCookie('AccessToken')}`);
+
+        const requestOptions: RequestInit = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formData,
+            redirect: 'follow',
+        };
+
+        const response = await fetch(API_ENDPOINT.ADD_ABOUT_COUNTER, requestOptions);
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('Error posting about data:', error);
+        throw error;
+    }
+};
+export const AboutWhyChooses = async (formData: FormData): Promise<any> => {
+    try {
+        const myHeaders = new Headers();
+        myHeaders.append('Authorization', `Bearer ${getAndDecryptCookie('AccessToken')}`);
+
+        const requestOptions: RequestInit = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formData,
+            redirect: 'follow',
+        };
+
+        const response = await fetch(API_ENDPOINT.ADD_ABOUT_WHYCHOOOSE, requestOptions);
         const result = await response.json();
         return result;
     } catch (error) {
@@ -1496,16 +1952,14 @@ export const deleteServiceData3 = async (
     }
 };
 
-
-
 export const getMetaData = async () => {
     const myHeaders = new Headers();
-    myHeaders.append("Authorization", `Bearer ${getAndDecryptCookie('AccessToken')}`);
+    myHeaders.append('Authorization', `Bearer ${getAndDecryptCookie('AccessToken')}`);
 
     const requestOptions: RequestInit = {
-        method: "GET",
+        method: 'GET',
         headers: myHeaders,
-        redirect: "follow"
+        redirect: 'follow',
     };
 
     try {
@@ -1516,36 +1970,30 @@ export const getMetaData = async () => {
         const result = await response.json();
         return result;
     } catch (error) {
-        console.error("Fetch error: ", error);
+        console.error('Fetch error: ', error);
         throw error;
     }
 };
 
-
 // helpers/apiHelper.ts
-export const addMetaTags = async (
-    title: string,
-    description: string,
-    type: string,
-    imageFile: File | null,
-): Promise<any> => {
+export const addMetaTags = async (title: string, description: string, type: string, imageFile: File | null): Promise<any> => {
     const myHeaders = new Headers();
-    myHeaders.append("Authorization", `Bearer ${getAndDecryptCookie('AccessToken')}`);
+    myHeaders.append('Authorization', `Bearer ${getAndDecryptCookie('AccessToken')}`);
 
     const formData = new FormData();
-    formData.append("title", title);
-    formData.append("description", description);
-    formData.append("type", type);
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('type', type);
 
     if (imageFile) {
-        formData.append("image", imageFile, "[PROXY]");
+        formData.append('image', imageFile, '[PROXY]');
     }
 
     const requestOptions: RequestInit = {
-        method: "POST",
+        method: 'POST',
         headers: myHeaders,
         body: formData,
-        redirect: "follow"
+        redirect: 'follow',
     };
 
     try {
@@ -1553,30 +2001,28 @@ export const addMetaTags = async (
         const result = await response.json();
         return result; // return the response data
     } catch (error) {
-        console.error("Error adding meta tag:", error);
+        console.error('Error adding meta tag:', error);
         throw error; // re-throw the error for handling in the calling function
     }
 };
 
-
 export const deleteMeta = async (id: string): Promise<any> => {
     try {
         const myHeaders = new Headers();
-        myHeaders.append("Authorization", `Bearer ${getAndDecryptCookie('AccessToken')}`);
+        myHeaders.append('Authorization', `Bearer ${getAndDecryptCookie('AccessToken')}`);
 
         const requestOptions = {
-            method: "DELETE",
+            method: 'DELETE',
             headers: myHeaders,
-            redirect: "follow" as RequestRedirect,
+            redirect: 'follow' as RequestRedirect,
         };
 
         const response = await fetch(API_ENDPOINT.DELETE_META_DATA + `${id}`, requestOptions);
 
-
         const result = await response.json();
         return result;
     } catch (error) {
-        console.error("Error during DELETE request:", error);
+        console.error('Error during DELETE request:', error);
         throw error;
     }
 };

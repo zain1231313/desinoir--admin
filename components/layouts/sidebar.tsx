@@ -11,8 +11,8 @@ import IconCaretDown from '@/components/icon/icon-caret-down';
 import IconMinus from '@/components/icon/icon-minus';
 import { usePathname } from 'next/navigation';
 import { getTranslation } from '@/i18n';
-import logo from "../../public/logo-main.svg"
-import darkLogo from "../../public/DarkLogo.png"
+import logo from '../../public/logo-main.svg';
+import darkLogo from '../../public/DarkLogo.png';
 import Image from 'next/image';
 import IconHome from '../icon/icon-home';
 import IconChrome from '../icon/icon-chrome';
@@ -34,6 +34,8 @@ const Sidebar = () => {
     // const [errorSubMenu, setErrorSubMenu] = useState(false);
     const [homeMenuOpen, setHomeMenuOpen] = useState(false);
     const [servicesMenuOpen, setServicesMenuOpen] = useState(false);
+    const [aboutMenu, setAboutMenu] = useState(false);
+    const [ourWork, setOurWork] = useState(false);
     const themeConfig = useSelector((state: IRootState) => state.themeConfig);
     const semidark = useSelector((state: IRootState) => state.themeConfig.semidark);
     const toggleHomeMenu = () => {
@@ -43,6 +45,12 @@ const Sidebar = () => {
 
     const toggleServicesMenu = () => {
         setServicesMenuOpen(!servicesMenuOpen);
+    };
+    const toggleAboutMenu = () => {
+        setAboutMenu(!aboutMenu);
+    };
+    const toggleOurWork = () => {
+        setOurWork(!ourWork);
     };
     const isDark = useSelector((state: IRootState) => state.themeConfig.theme === 'dark' || state.themeConfig.isDarkMode);
 
@@ -88,8 +96,7 @@ const Sidebar = () => {
                 <div className="h-full bg-white dark:bg-black">
                     <div className="flex items-center justify-between px-4 py-3">
                         <Link href="/" className="main-logo flex shrink-0 items-center">
-                            <Image src={isDark ? logo : darkLogo} width={150} height={150} alt='..' />
-                            
+                            <Image src={isDark ? logo : darkLogo} width={150} height={150} alt=".." />
                         </Link>
 
                         <button
@@ -104,23 +111,16 @@ const Sidebar = () => {
                         <ul className="relative space-y-0.5 p-4 py-0 font-semibold">
                             <li className="nav-item">
                                 <ul>
-
                                     <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
                                         <IconMinus className="hidden h-5 w-4 flex-none" />
                                         <span>{t('Pages')}</span>
                                     </h2>
 
                                     <li className="menu nav-item">
-                                        <button
-                                            type="button"
-                                            className={`${homeMenuOpen ? 'active' : ''} nav-link group w-full`}
-                                            onClick={toggleHomeMenu}
-                                        >
+                                        <button type="button" className={`${homeMenuOpen ? 'active' : ''} nav-link group w-full`} onClick={toggleHomeMenu}>
                                             <div className="flex items-center">
                                                 <IconHome className="shrink-0 group-hover:!text-primary" />
-                                                <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
-                                                    {t('Home')}
-                                                </span>
+                                                <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{t('Home')}</span>
                                             </div>
 
                                             <div className={homeMenuOpen ? '' : '-rotate-90 rtl:rotate-90'}>
@@ -133,59 +133,54 @@ const Sidebar = () => {
                                                 <li className="ps-2">
                                                     <Link href="/apps/home-header" className="group">
                                                         <div className="flex ">
-
                                                             <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Header')}</span>
-
                                                         </div>
-                                                        <div className='ltr:pl-3 rtl:pr-3 '></div>
+                                                        <div className="ltr:pl-3 rtl:pr-3 "></div>
                                                     </Link>
                                                 </li>
                                                 <li className="ps-2">
                                                     <Link href="/apps/main-services" className="group">
                                                         <div className="flex ">
-
                                                             <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Main Services')}</span>
-
                                                         </div>
-                                                        <div className='ltr:pl-3 rtl:pr-3 '></div>
+                                                        <div className="ltr:pl-3 rtl:pr-3 "></div>
                                                     </Link>
                                                 </li>
-
-
 
                                                 <li className="ps-2">
                                                     <Link href="/apps/creativity" className="group">
                                                         <div className="flex ">
-
                                                             <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Creativity')}</span>
-
                                                         </div>
-                                                        <div className='ltr:pl-3 rtl:pr-3 '></div>
+                                                        <div className="ltr:pl-3 rtl:pr-3 "></div>
                                                     </Link>
                                                 </li>
 
                                                 <li className="ps-2">
                                                     <Link href="/apps/expertise" className="group">
                                                         <div className="flex ">
-
                                                             <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Expertise')}</span>
-
                                                         </div>
-                                                        <div className='ltr:pl-3 rtl:pr-3 '></div>
+                                                        <div className="ltr:pl-3 rtl:pr-3 "></div>
                                                     </Link>
                                                 </li>
 
                                                 <li className="ps-2">
                                                     <Link href="/apps/testimonial" className="group">
                                                         <div className="flex ">
-
                                                             <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Testimonial')}</span>
-
                                                         </div>
-                                                        <div className='ltr:pl-3 rtl:pr-3 '></div>
+                                                        <div className="ltr:pl-3 rtl:pr-3 "></div>
                                                     </Link>
                                                 </li>
-
+                                                <li className="ps-2">
+                                                    <Link href="/apps/productlogo" className="group">
+                                                        <div className="flex ">
+                                                            <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Product Logo')}</span>
+                                                        </div>
+                                                        <div className="ltr:pl-3 rtl:pr-3 "></div>
+                                                    </Link>
+                                                </li>
                                             </ul>
                                         </AnimateHeight>
                                     </li>
@@ -214,17 +209,67 @@ const Sidebar = () => {
                                             </div>
                                         </Link>
                                     </li>
-                                    <li className="nav-item">
-                                        <Link href="/apps/our-work" className="group">
+
+                                    <li className="menu nav-item">
+                                        <button type="button" className={`${ourWork ? 'active' : ''} nav-link group w-full`} onClick={toggleOurWork}>
                                             <div className="flex items-center">
                                                 <IconClipboardText className="shrink-0 group-hover:!text-primary" />
                                                 <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{t('Our Work')}</span>
                                             </div>
-                                        </Link>
+
+                                            <div className={ourWork ? '' : '-rotate-90 rtl:rotate-90'}>
+                                                <IconCaretDown />
+                                            </div>
+                                        </button>
+
+                                        <AnimateHeight duration={300} height={ourWork ? 'auto' : 0}>
+                                            <ul className="sub-menu text-gray-500">
+                                                <li className="ps-2">
+                                                    <Link href="/apps/our-work" className="group">
+                                                        <div className="flex ">
+                                                            <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Add Our Work')}</span>
+                                                        </div>
+                                                        <div className="ltr:pl-3 rtl:pr-3 "></div>
+                                                    </Link>
+                                                </li>
+                                                <li className="ps-2">
+                                                    <Link href="/apps/our-work/problem" className="group">
+                                                        <div className="flex ">
+                                                            <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Problem Section')}</span>
+                                                        </div>
+                                                        <div className="ltr:pl-3 rtl:pr-3 "></div>
+                                                    </Link>
+                                                </li>
+
+                                                <li className="ps-2">
+                                                    <Link href="/apps/our-work/challenges" className="group">
+                                                        <div className="flex ">
+                                                            <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Challenges Section')}</span>
+                                                        </div>
+                                                        <div className="ltr:pl-3 rtl:pr-3 "></div>
+                                                    </Link>
+                                                </li>
+
+                                                <li className="ps-2">
+                                                    <Link href="/apps/our-work/solution" className="group">
+                                                        <div className="flex ">
+                                                            <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Solution Section')}</span>
+                                                        </div>
+                                                        <div className="ltr:pl-3 rtl:pr-3 "></div>
+                                                    </Link>
+                                                </li>
+
+                                                <li className="ps-2">
+                                                    <Link href="/apps/our-work/major-screen" className="group">
+                                                        <div className="flex ">
+                                                            <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Major Screen Section ')}</span>
+                                                        </div>
+                                                        <div className="ltr:pl-3 rtl:pr-3 "></div>
+                                                    </Link>
+                                                </li>
+                                            </ul>
+                                        </AnimateHeight>
                                     </li>
-
-
-
 
                                     <li className="nav-item">
                                         <Link href="/apps/footer" className="group">
@@ -259,18 +304,11 @@ const Sidebar = () => {
                                         </Link>
                                     </li>
 
-
                                     <li className="menu nav-item">
-                                        <button
-                                            type="button"
-                                            className={`${servicesMenuOpen ? 'active' : ''} nav-link group w-full`}
-                                            onClick={toggleServicesMenu}
-                                        >
+                                        <button type="button" className={`${servicesMenuOpen ? 'active' : ''} nav-link group w-full`} onClick={toggleServicesMenu}>
                                             <div className="flex items-center">
                                                 <IconCircleCheck className="shrink-0 group-hover:!text-primary" />
-                                                <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
-                                                    {t('Services')}
-                                                </span>
+                                                <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{t('Services')}</span>
                                             </div>
 
                                             <div className={servicesMenuOpen ? '' : '-rotate-90 rtl:rotate-90'}>
@@ -296,13 +334,39 @@ const Sidebar = () => {
                                         </AnimateHeight>
                                     </li>
 
-                                    <li className="nav-item">
+                                    {/* <li className="nav-item">
                                         <Link href="/apps/about" className="group">
                                             <div className="flex items-center">
                                                 <IconInfoCircle className="shrink-0 group-hover:!text-primary" />
                                                 <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{t('About')}</span>
                                             </div>
                                         </Link>
+                                    </li> */}
+                                    <li className="menu nav-item">
+                                        <button type="button" className={`${aboutMenu ? 'active' : ''} nav-link group w-full`} onClick={toggleAboutMenu}>
+                                            <div className="flex items-center">
+                                                <IconInfoCircle className="shrink-0 group-hover:!text-primary" />
+                                                <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{t('About')}</span>
+                                            </div>
+
+                                            <div className={aboutMenu ? '' : '-rotate-90 rtl:rotate-90'}>
+                                                <IconCaretDown />
+                                            </div>
+                                        </button>
+
+                                        <AnimateHeight duration={300} height={aboutMenu ? 'auto' : 0}>
+                                            <ul className="sub-menu text-gray-500">
+                                                <li>
+                                                    <Link href="/apps/about/about-creative">{t('Creative')}</Link>
+                                                </li>
+                                                <li>
+                                                    <Link href="/apps/about/about-project">{t('Complete Porjects')}</Link>
+                                                </li>
+                                                <li>
+                                                    <Link href="/apps/about/about-whychoose">{t('Why Choose')}</Link>
+                                                </li>
+                                            </ul>
+                                        </AnimateHeight>
                                     </li>
 
                                     <li className="nav-item">
@@ -315,7 +379,6 @@ const Sidebar = () => {
                                     </li>
                                 </ul>
                             </li>
-
                         </ul>
                     </PerfectScrollbar>
                 </div>

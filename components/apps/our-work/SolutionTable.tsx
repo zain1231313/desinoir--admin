@@ -13,15 +13,11 @@ import toast from 'react-hot-toast';
 import $ from 'jquery';
 import 'datatables.net';
 
-function OurWork() {
+function SolutionTable() {
     const [open, setOpen] = useState<boolean>(false);
     const [works, setWorks] = useState<any[]>([]);
     const [workId, setWorkId] = useState<string>('');
     const dispatch = useDispatch();
-    const selectedWork = useSelector((state: IRootState) => state.selectedWork.selectedWork);
-    const [loading, setLoading] = useState(false);
-
-    const handleOpen = () => setOpen(!open);
 
     const getWorksData = async () => {
         const data = await fetchAllOurWork();
@@ -33,12 +29,12 @@ function OurWork() {
     }, []);
 
     useEffect(() => {
-        if (works?.length > 0) {
-            if ($.fn.dataTable.isDataTable('#WorkTable')) {
-                $('#WorkTable').DataTable().destroy();
+        if (works.length > 0) {
+            if ($.fn.dataTable.isDataTable('#WorkSolution')) {
+                $('#WorkSolution').DataTable().destroy();
             }
 
-            $('#WorkTable').DataTable({
+            $('#WorkSolution').DataTable({
                 paging: true,
                 searching: true,
                 ordering: false,
@@ -71,32 +67,24 @@ function OurWork() {
             console.error('Error deleting work:', error);
         }
     };
+
     console.log('Works ==>', works);
 
     return (
         <>
             <h2 className="mb-1 flex items-center px-2 py-3 font-extrabold uppercase">
-                <span>Our Work</span>
+                <span>Solution Section </span>
             </h2>
             <div className="panel border-white-light px-3 dark:border-[#1b2e4b]">
-                <div className="py-3">
-                    <Link href={'/apps/our-work/add-work'}>
-                        <button type="button" className="btn btn-primary ml-auto">
-                            Add
-                        </button>
-                    </Link>
-                </div>
-
                 <div className="w-full overflow-x-scroll">
                     <table id="WorkTable" className="display overflow-x-scroll">
                         <thead>
                             <tr>
-                                <th>Image</th>
-                                <th>Category</th>
-                                <th>Title (EN)</th>
-                                <th>Title (AR)</th>
-                                <th>Subtitle (EN)</th>
-                                <th>Subtitle (AR)</th>
+                                <th>Solution Image</th>
+                                <th>Solution Title</th>
+                                <th>Solution Title (AR)</th>
+                                <th>Solution Description</th>
+                                <th>Solution Description (AR)</th>
                                 <th>Created at</th>
                                 <th>Action</th>
                             </tr>
@@ -105,24 +93,24 @@ function OurWork() {
                             {works?.map((work) => (
                                 <tr key={work._id} onClick={() => handleRowClick(work)}>
                                     <td>
-                                        <Image className="h-10 w-10 rounded-full" src={work?.descriptionImage} alt={work?.title?.en} width={40} height={40} />
+                                        <Image className="h-10 w-10 rounded-full" src={work?.SolutionImage} alt={work?.title?.en} width={40} height={40} />
                                     </td>
-                                    <td className="capitalize">{work?.types}</td>
-                                    <td>{work?.title?.en}</td>
-                                    <td>{work?.title?.ar}</td>
-                                    <td>{work?.subtitle?.en}</td>
-                                    <td>{work?.subtitle?.ar}</td>
+                                    {/* <td className="capitalize">{work?.types}</td> */}
+                                    <td>{work?.SolutionTitle?.en}</td>
+                                    <td>{work?.SolutionTitle?.ar}</td>
+                                    <td>{work?.SolutionDescription?.en?.slice(0, 20) + '...'}</td>
+                                    <td>{work?.SolutionDescription?.ar?.slice(0, 20) + '...'}</td>
                                     <td>{new Date(work?.createdAt).toLocaleDateString()}</td>
                                     <td>
                                         <div className="flex items-center justify-center gap-3">
                                             <button>
-                                                <Link href={`/apps/our-work/edit-works?id=${work._id}`}>
+                                                <Link href={`/apps/our-work/edit-solution?id=${work._id}`}>
                                                     <IconPencil />
                                                 </Link>
                                             </button>
-                                            <button onClick={() => handleDeleteClick(work._id)}>
+                                            {/* <button onClick={() => handleDeleteClick(work._id)}>
                                                 <IconTrash />
-                                            </button>
+                                            </button> */}
                                         </div>
                                     </td>
                                 </tr>
@@ -136,4 +124,4 @@ function OurWork() {
     );
 }
 
-export default OurWork;
+export default SolutionTable;

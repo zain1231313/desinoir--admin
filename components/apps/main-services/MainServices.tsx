@@ -5,7 +5,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
-import { createMainSection, fetchHomeData } from '@/components/utils/Helper';
+import { createMainSection, createServiceHome, fetchHomeData } from '@/components/utils/Helper';
 import { setData, setLoading, setError } from '@/store/HomeSlice';
 import toast from 'react-hot-toast';
 
@@ -116,7 +116,7 @@ const MainServices = () => {
             formData.append("arMotionGraphicDesignDescription", armotionDescrip);
 
             try {
-                const result = await createMainSection(formData);
+                const result = await createServiceHome(formData);
                 console.log("results ---------", result);
                 formik.setValues({
                     // Update formik values if necessary

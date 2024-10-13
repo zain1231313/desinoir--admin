@@ -1,6 +1,6 @@
-"use client"
+'use client';
 import React, { useEffect, useState } from 'react';
-import { createMainSection, fetchHomeData } from '@/components/utils/Helper';
+import { createHeaderHome, createMainSection, fetchHomeData } from '@/components/utils/Helper';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
 import { setData, setLoading, setError } from '@/store/HomeSlice';
@@ -14,60 +14,64 @@ const HomeHeader = () => {
     const [initialImage, setInitialImage] = useState<string | null>(null);
     const [filePreview, setFilePreview] = useState<string | null>(null);
     const [file, setFile] = useState<File | null>(null);
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
     const [fileName, setFileName] = useState<string | null>(null);
-
 
     const formik = useFormik({
         initialValues: {
             titleEnglish: '',
             titleArabic: '',
             counter: '',
-            image: ''
+            arCount: '',  // New field
+            completedProjects: '',  // New field
+            arCompletedProjects: '',  // New field
+            image: '',
         },
-        enableReinitialize: true, // This allows Formik to update initial values when props change
+        enableReinitialize: true,
         onSubmit: async (values) => {
-            // Create a new FormData instance
-            setLoading(true)
+            console.log('MAIN Home =>', values);
+            setLoading(true);
             const formData = new FormData();
-
-            // Append form values to formData
             if (image1) {
-                formData.append("image", image1);
+                formData.append('image', image1);
             }
-            formData.append("count", values.counter);
-            formData.append("title", values.titleEnglish);
-            formData.append("arTitle", values.titleArabic);
+            formData.append('count', values.counter);
+            formData.append('arCount', values.arCount);  // New field added to formData
+            formData.append('completedProjects', values.completedProjects);  // New field added to formData
+            formData.append('arCompletedProjects', values.arCompletedProjects);  // New field added to formData
+            formData.append('title', values.titleEnglish);
+            formData.append('arTitle', values.titleArabic);
 
             try {
-                const result = await createMainSection(formData);
+                const result = await createHeaderHome(formData);
                 console.log(result);
-                // Update the values in the component
                 if (result.success === true) {
                     formik.setValues({
                         titleEnglish: result.data.data.en.mainBanner.title,
                         titleArabic: result.data.data.ar.mainBanner.title,
                         counter: result.data.data.en.mainBanner.count,
+                        arCount: result.data.data.ar.mainBanner.count,  // Set new field value
+                        completedProjects: result.data.data.en.mainBanner.completedProjects,  // Set new field value
+                        arCompletedProjects: result.data.data.ar.mainBanner.completedProjects,  // Set new field value
                         image: result.data.data.en.mainBanner.image,
                     });
                     setImage1(result.data.data.en.mainBanner.image);
                     setInitialImage(result.data.data.en.mainBanner.image);
-                    fetchDataAsync()
-                    setLoading(false)
-                    toast.success(result.message)
+                    fetchDataAsync();
+                    setLoading(false);
+                    toast.success(result.message);
                 } else {
-                    setLoading(false)
-                    toast.error(result.message)
-
+                    setLoading(false);
+                    toast.error(result.message);
                 }
             } catch (error: any) {
-                setLoading(false)
-                toast.error(error)
-                console.error(error)
+                setLoading(false);
+                toast.error(error);
+                console.error(error);
             }
-        }
-
+        },
     });
+
     const handleFileSelect1 = (file: File) => {
         setImage1(file);
 
@@ -92,109 +96,132 @@ const HomeHeader = () => {
             handleFileSelect1(file);
         }
     };
+
     const fetchDataAsync = async () => {
-        setLoading(true) // Set loading to true before fetching
+        setLoading(true);
         try {
             const result = await fetchHomeData();
             if (result) {
-                dispatch(setData(result)); // Store the fetched data in Redux
+                dispatch(setData(result));
 
                 formik.setValues({
                     titleEnglish: result.data.data.en.mainBanner.title,
                     titleArabic: result.data.data.ar.mainBanner.title,
                     counter: result.data.data.en.mainBanner.count,
+                    arCount: result.data.data.ar.mainBanner.count,  // Fetch new field value
+                    completedProjects: result.data.data.en.mainBanner.completedProjects,  // Fetch new field value
+                    arCompletedProjects: result.data.data.ar.mainBanner.completedProjects,  // Fetch new field value
                     image: result.data.data.en.mainBanner.image,
                 });
                 setImage1(result.data.data.en.mainBanner.image);
                 console.log(result.data.data.en.mainBanner.image);
             }
         } catch (error) {
-            dispatch(setError('Failed to fetch data')); // Handle any errors
+            dispatch(setError('Failed to fetch data'));
         } finally {
-            setLoading(false) // Set loading to false after fetching
+            setLoading(false);
         }
     };
-    useEffect(() => {
 
+    useEffect(() => {
         fetchDataAsync();
     }, [dispatch]);
 
     return (
         <>
-            {loading === true ? <Loading /> :
-                <div className="panel border-white-light px-3 mb-3 dark:border-[#1b2e4b]">
+            {loading === true ? (
+                <Loading />
+            ) : (
+                <div className="panel mb-3 border-white-light px-3 dark:border-[#1b2e4b]">
                     <h5 className="text-lg font-semibold dark:text-white-light">Header Section</h5>
                     <form onSubmit={formik.handleSubmit}>
                         <div className="my-2">
-                            <div>
-                                <label className="">
-                                    Title (EN)
-                                </label>
-                                <input
-                                    type="text"
-                                    placeholder="Title English"
-                                    className="form-input"
-                                    name="titleEnglish"
-                                    value={formik.values.titleEnglish}
-                                    onChange={formik.handleChange}
-                                />
-                            </div>
+                            <label className="">Title (EN)</label>
+                            <input
+                                type="text"
+                                placeholder="Title English"
+                                className="form-input"
+                                name="titleEnglish"
+                                value={formik.values.titleEnglish}
+                                onChange={formik.handleChange}
+                            />
                         </div>
                         <div className="my-2">
-                            <div>
-                                <label className="">
-                                    Title (AR)
-                                </label>
-                                <input
-                                    type="text"
-                                    placeholder="Title Arabic"
-                                    className="form-input"
-                                    name="titleArabic"
-                                    value={formik.values.titleArabic}
-                                    onChange={formik.handleChange}
-                                />
-                            </div>
+                            <label className="">Title (AR)</label>
+                            <input
+                                type="text"
+                                placeholder="Title Arabic"
+                                className="form-input"
+                                name="titleArabic"
+                                value={formik.values.titleArabic}
+                                onChange={formik.handleChange}
+                            />
                         </div>
                         <div className="my-2">
-                            <div >
-                                <label>
-                                    Counter
-                                </label>
-                                <input
-                                    type="text"
-                                    placeholder="Counter"
-                                    className="form-input"
-                                    name="counter"
-                                    value={formik.values.counter}
-                                    onChange={formik.handleChange}
-                                />
-                            </div>
+                            <label>Counter</label>
+                            <input
+                                type="number"
+                                placeholder="Counter"
+                                className="form-input"
+                                name="counter"
+                                value={formik.values.counter}
+                                onChange={formik.handleChange}
+                            />
                         </div>
-                        {image1 && (
-                            <img src={`${!filePreview ? image1 : filePreview}`} alt="Initial Image" className='w-40 h-40 object-cover' />
-                        )}
                         <div className="my-2">
-                            <div className="">
-                                <label htmlFor="file-input" className="btn btn-primary w-fit" style={{ cursor: 'pointer' }}>
-                                    Upload image
-                                    <input
-                                        type="file"
-                                        id="file-input"
-                                        placeholder="Choose a File"
-                                        accept="image/*"
-                                        onChange={handleFileChange}
-                                        style={{ display: 'none' }}
-                                    />
-                                </label>
-                                {fileName && <p>Selected file: {fileName}</p>}
-
-                            </div>
+                            <label>Arabic Counter</label> {/* New field */}
+                            <input
+                                type="number"
+                                placeholder="Arabic Counter"
+                                className="form-input"
+                                name="arCount"
+                                value={formik.values.arCount}
+                                onChange={formik.handleChange}
+                            />
+                        </div>
+                        <div className="my-2">
+                            <label>Completed Projects</label> {/* New field */}
+                            <input
+                                type="text"
+                                placeholder="Completed Projects"
+                                className="form-input"
+                                name="completedProjects"
+                                value={formik.values.completedProjects}
+                                onChange={formik.handleChange}
+                            />
+                        </div>
+                        <div className="my-2">
+                            <label>Arabic Completed Projects</label> {/* New field */}
+                            <input
+                                type="text"
+                                placeholder="Arabic Completed Projects"
+                                className="form-input"
+                                name="arCompletedProjects"
+                                value={formik.values.arCompletedProjects}
+                                onChange={formik.handleChange}
+                            />
+                        </div>
+                        {image1 && <img src={`${!filePreview ? image1 : filePreview}`} alt="Initial Image" className="h-40 w-40 object-cover" />}
+                        <div className="my-2">
+                            <label htmlFor="file-input" className="btn btn-primary w-fit" style={{ cursor: 'pointer' }}>
+                                Upload image
+                                <input
+                                    type="file"
+                                    id="file-input"
+                                    placeholder="Choose a File"
+                                    accept="image/*"
+                                    onChange={handleFileChange}
+                                    style={{ display: 'none' }}
+                                />
+                            </label>
+                            {fileName && <p>Selected file: {fileName}</p>}
                         </div>
                         <button type="submit" className="btn btn-primary !mt-6">
                             Submit Form
                         </button>
-                    </form >
-                </div >}
+                    </form>
+                </div>
+            )}
         </>
     );
 };
