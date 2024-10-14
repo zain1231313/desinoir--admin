@@ -137,6 +137,56 @@ export const createExpertise = async (formData: FormData) => {
         toast.error(error);
     }
 };
+export const submitTeamHeader = async (values: any) => {
+    const formData = new FormData();
+    formData.append('enTitle', values.enTitle);
+    formData.append('arTitle', values.arTitle);
+
+    formData.append('enSubTitle', values.enSubTitle);
+    formData.append('arSubTitle', values.arSubTitle);
+
+    if (values.servicePrimaryImage) {
+        formData.append('emoji', values.servicePrimaryImage);
+    }
+
+    const response = await fetch(API_ENDPOINT.UPDATE_TEAM_HEADER, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            Authorization: `Bearer ${getAndDecryptCookie('AccessToken')}`,
+        },
+    });
+
+    return response.json();
+};
+export const GetTeamHeader = async (type: any) => {
+    // console.log('type=>', type);
+    // Construct query string from queryParams
+
+    // Create headers with Authorization token
+    const myHeaders = new Headers();
+    myHeaders.append('Authorization', `Bearer ${getAndDecryptCookie('AccessToken')}`);
+
+    // Set default options
+    const defaultOptions: RequestInit = {
+        method: 'GET',
+        headers: myHeaders,
+    };
+
+    try {
+        // Fetch data from the API
+        const response = await fetch(API_ENDPOINT.GET_TEAM_HEADER + `${type}`, defaultOptions);
+
+        // Check for non-OK response status
+
+        // Parse and return the response as JSON
+        return await response.json();
+    } catch (error) {
+        // Log and rethrow the error for further handling
+        console.error('Fetch error:', error);
+        throw error;
+    }
+};
 
 // /////////// slider Crud
 export const fetchSliderData = async () => {

@@ -12,6 +12,7 @@ import $ from 'jquery';
 import 'datatables.net';
 import { teamSchema } from '@/components/schema/schema';
 import DeleteModal from '@/components/Modals/DeleteModal';
+import TeamHeader from '../reuseable/TeamHeader';
 type TeamMember = {
     _id: string;
     name: {
@@ -181,6 +182,7 @@ const Teams = () => {
                 <Loading />
             ) : (
                 <div>
+                    <TeamHeader/>
                     <h2 className="mb-1 flex items-center px-2 py-3 font-extrabold uppercase ">
                         <span>Team</span>
                     </h2>

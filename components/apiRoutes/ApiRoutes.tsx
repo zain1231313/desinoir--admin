@@ -126,6 +126,8 @@ const API_ENDPOINT = {
     CREATE_FAQ: Server + 'faqs/create-faq',
 
     GET_SERVICES: Server + 'service/get-services-data?keyword=',
+    GET_TEAM_HEADER: Server + 'team/get-team-title/',
+    UPDATE_TEAM_HEADER: Server + 'team/team-title',
     UPDATE_SERVICES: Server + 'service/add-service-data',
     UPDATE_CHOOSE_CARD: Server + 'service/add-whyChoose-data',
     UPDATE_CHOOSE: Server + 'service/add-whyChooseTitle-data',
