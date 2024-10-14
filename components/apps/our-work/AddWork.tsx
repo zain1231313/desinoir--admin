@@ -2,6 +2,7 @@
 import { MainOurWork } from '@/components/schema/mainourwork';
 import { addOurWorkMain } from '@/components/utils/Helper';
 import { useFormik } from 'formik';
+import Image from 'next/image';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import ReactQuill from 'react-quill';
@@ -146,7 +147,7 @@ const MainOurwork = ({ onNextStep }: any) => {
                         <label>Primary Image</label>
                         {imagePreview && (
                             <div className="my-2">
-                                <img src={imagePreview} alt="Preview" className="h-20 w-20 rounded-lg object-cover" />
+                                <Image width={50} height={50} src={imagePreview} alt="Preview" className="h-20 w-20 rounded-lg object-cover" />
                             </div>
                         )}
                         <label htmlFor="primaryImage" className="btn btn-primary w-fit" style={{ cursor: 'pointer' }}>
@@ -192,7 +193,7 @@ const MainOurwork = ({ onNextStep }: any) => {
                     <label>Description Image</label>
                     {descriptionPreview && (
                         <div className="my-2">
-                            <img src={descriptionPreview} alt="Preview" className="h-20 w-20 rounded-lg object-cover" />
+                            <Image width={50} height={50} src={descriptionPreview} alt="Preview" className="h-20 w-20 rounded-lg object-cover" />
                         </div>
                     )}
                     <label htmlFor="description" className="btn btn-primary w-fit" style={{ cursor: 'pointer' }}>

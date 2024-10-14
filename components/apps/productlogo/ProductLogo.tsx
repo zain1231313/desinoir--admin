@@ -296,7 +296,7 @@ function ProductLogo() {
                                         <label htmlFor="darkLogo">Dark Logo</label>
                                         {previewUrlDark && (
                                             <div className="my-2">
-                                                <img src={previewUrlDark} className="h-20 w-20 object-cover" alt=".." />
+                                                <Image width={50} height={50} src={previewUrlDark} className="h-20 w-20 object-cover" alt=".." />
                                             </div>
                                         )}
                                         <label htmlFor="darkLogo" className="btn btn btn-primary w-fit" style={{ cursor: 'pointer' }}>
@@ -309,7 +309,7 @@ function ProductLogo() {
                                         <label htmlFor="lightLogo">Light Logo</label>
                                         {previewUrlLight && (
                                             <div className="my-2">
-                                                <img src={previewUrlLight} className="h-20 w-20 object-cover" alt=".." />
+                                                <Image width={50} height={50} src={previewUrlLight} className="h-20 w-20 object-cover" alt=".." />
                                             </div>
                                         )}
                                         <label htmlFor="lightLogo" className="btn btn btn-primary w-fit" style={{ cursor: 'pointer' }}>

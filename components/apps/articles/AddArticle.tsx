@@ -3,6 +3,7 @@ import Loading from '@/components/layouts/loading';
 // import { ArticleSchema } from '@/components/schema/schema';
 import { addNewArticle } from '@/components/utils/Helper';
 import { useFormik } from 'formik';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
@@ -145,7 +146,7 @@ const AddArticle = () => {
                     <form onSubmit={formik.handleSubmit}>
                         <div className="panel border-white-light px-3 dark:border-[#1b2e4b]">
                             <label>Primary Image Section</label>
-                            {primaryImagePreview && <img src={primaryImagePreview} alt="Primary Preview" className="h-40 w-40 object-cover" />}
+                            {primaryImagePreview && <Image width={50} height={50} src={primaryImagePreview} alt="Primary Preview" className="h-40 w-40 object-cover" />}
                             <div className="my-2">
                                 <label htmlFor="primary-file-input" className="btn btn-primary w-fit cursor-pointer rounded-l-md">
                                     Upload primary image
@@ -154,7 +155,7 @@ const AddArticle = () => {
                             </div>
 
                             <label>Secondary Image Section</label>
-                            {secondaryImagePreview && <img src={secondaryImagePreview} alt="Primary Preview" className="h-40 w-40 object-cover" />}
+                            {secondaryImagePreview && <Image width={50} height={50} src={secondaryImagePreview} alt="Primary Preview" className="h-40 w-40 object-cover" />}
                             <div className="my-2">
                                 <label htmlFor="secondary-file-input" className="btn btn-primary w-fit cursor-pointer rounded-l-md">
                                     Upload secondary image
@@ -300,7 +301,7 @@ const AddArticle = () => {
                             </div>
 
                             <label>Admin Image Section</label>
-                            {adminImagePreview && <img src={adminImagePreview} alt="Admin Preview" className="h-40 w-40 object-cover" />}
+                            {adminImagePreview && <Image width={50} height={50} src={adminImagePreview} alt="Admin Preview" className="h-40 w-40 object-cover" />}
                             <div className="my-2">
                                 <label htmlFor="admin-file-input" className="btn btn-primary w-fit cursor-pointer rounded-l-md">
                                     Upload admin image

@@ -7,6 +7,7 @@ import 'react-quill/dist/quill.snow.css';
 import { fetchAllOurWork, updateOurWorkChallenges, updateWorkData } from '@/components/utils/Helper';
 import { useRouter, useSearchParams } from 'next/navigation';
 import API_ENDPOINT from '@/components/apiRoutes/ApiRoutes';
+import Image from 'next/image';
 
 const EditChallenges = () => {
     const router = useRouter();
@@ -177,7 +178,7 @@ const EditChallenges = () => {
                 <label>Challenge Image</label>
                 {challengePreview && (
                     <div className="my-2">
-                        <img src={challengePreview} alt="Challenge Image" className="h-20 w-20 rounded-lg object-cover" />
+                        <Image width={50} height={50} src={challengePreview} alt="Challenge Image" className="h-20 w-20 rounded-lg object-cover" />
                     </div>
                 )}
                 <label htmlFor="challengeImage" className="btn btn-primary w-fit" style={{ cursor: 'pointer' }}>

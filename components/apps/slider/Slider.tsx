@@ -233,7 +233,7 @@ const Slider = () => {
                                     <option value="">Select type</option>
                                     <option value="uiux">Ui/Ux</option>
                                     <option value="branding">Branding</option>
-                                    <option value="motionGraphic">Motion Graphic</option>
+                                    <option value="motiongraphic">Motion Graphic</option>
                                     <option value="graphicdesign">Graphic Design</option>
                                 </select>
                             )}

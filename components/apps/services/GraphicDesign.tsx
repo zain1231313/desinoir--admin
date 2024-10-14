@@ -7,7 +7,7 @@ const GraphicDesign = () => {
 
   return (
     <>
-      <Services type="graphicdesign" />
+      <Services />
     </>
   );
 };

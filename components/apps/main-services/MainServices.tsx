@@ -8,6 +8,7 @@ import { useFormik } from 'formik';
 import { createMainSection, createServiceHome, fetchHomeData } from '@/components/utils/Helper';
 import { setData, setLoading, setError } from '@/store/HomeSlice';
 import toast from 'react-hot-toast';
+import Image from 'next/image';
 
 const MainServices = () => {
     const dispatch = useDispatch();
@@ -15,7 +16,6 @@ const MainServices = () => {
     const [brandingicon, setBrandingicon] = useState<File | null>(null);
     const [graphicIcon, setGraphicIcon] = useState<File | null>(null);
     const [motionIcon, setMotionIcon] = useState<File | null>(null);
-
     const [uiuxFilePreview, setUiuxFilePreview] = useState<string | null>(null);
     const [brandingFilePreview, setBrandingFilePreview] = useState<string | null>(null);
     const [graphicDesignFilePreview, setGraphicDesignFilePreview] = useState<string | null>(null);
@@ -290,7 +290,7 @@ const MainServices = () => {
             </h2>
             <form onSubmit={formik.handleSubmit}>
                 <div className="panel border-white-light px-3 mb-3 dark:border-[#1b2e4b]">
-                    <h5 className="text-lg font-semibold dark:text-white-light">Title Section</h5>
+                    <h5 className="text-lg font-semibold dark:text-white-light">Title Section 123</h5>
 
                     <div className="grid grid-cols-2 gap-4 max-md:gap-2 gap-y-0 max-sm:grid-cols-1 mb-2">
 
@@ -365,7 +365,7 @@ const MainServices = () => {
                 <div className="panel border-white-light px-3 mb-3 dark:border-[#1b2e4b]">
                     <h5 className="text-lg font-semibold dark:text-white-light">UI/UX Design Section</h5>
                     {uiicon && (
-                        <img src={`${!uiuxFilePreview ? uiicon : uiuxFilePreview}`} alt="Initial Image" className='w-40 h-40 object-cover' />
+                        <Image width={50} height={50} src={`${!uiuxFilePreview ? uiicon : uiuxFilePreview}`} alt="Initial Image" className='w-40 h-40 object-cover' />
                     )}
                     <div className="my-2">
                         <div className="">
@@ -454,7 +454,7 @@ const MainServices = () => {
                     <h5 className="text-lg font-semibold dark:text-white-light">Branding Section</h5>
 
                     {brandingicon && (
-                        <img src={`${!brandingFilePreview ? brandingicon : brandingFilePreview}`} alt="Initial Image" className='w-40 h-40 object-cover' />
+                        <Image width={50} height={50} src={`${!brandingFilePreview ? brandingicon : brandingFilePreview}`} alt="Initial Image" className='w-40 h-40 object-cover' />
                     )}
                     <div className="my-2">
                         <div className="">
@@ -544,7 +544,7 @@ const MainServices = () => {
                     <h5 className="text-lg font-semibold dark:text-white-light">Graphic Designing Section</h5>
 
                     {graphicIcon && (
-                        <img src={`${!graphicDesignFilePreview ? graphicIcon : graphicDesignFilePreview}`} alt="Initial Image" className='w-40 h-40 object-cover' />
+                        <Image width={50} height={50} src={`${!graphicDesignFilePreview ? graphicIcon : graphicDesignFilePreview}`} alt="Initial Image" className='w-40 h-40 object-cover' />
                     )}
                     <div className="my-2">
                         <div className="">
@@ -626,7 +626,7 @@ const MainServices = () => {
                     <h5 className="text-lg font-semibold dark:text-white-light">Motion Graphics Designing Section</h5>
 
                     {motionIcon && (
-                        <img src={`${!motionGraphicsFilePreview ? motionIcon : motionGraphicsFilePreview}`} alt="Initial Image" className='w-40 h-40 object-cover' />
+                        <Image width={50} height={50} src={`${!motionGraphicsFilePreview ? motionIcon : motionGraphicsFilePreview}`} alt="Initial Image" className='w-40 h-40 object-cover' />
                     )}
                     <div className="my-2">
                         <div className="">

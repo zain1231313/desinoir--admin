@@ -3,15 +3,12 @@ import React, { useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useFormik } from 'formik';
-import { GetServices, submitServiceData } from '@/components/utils/Helper';
+import { GetServices, submitServiceData, weWorkSubmitData } from '@/components/utils/Helper';
 import toast from 'react-hot-toast';
 import Workdata from './Workdata';
 import ProcessData from './ProcessData';
 import WhychooseData from './WhychooseData';
 import MainService from './MainService';
-import MainWeWork from './MainWeWork';
-import MainProcess from './MainProcess';
-import MainChoose from './Choose';
 
 interface WorkData {
     workIcon: string;
@@ -73,15 +70,12 @@ interface SelectedRowDataType {
     };
 }
 
-const Services = () => {
+const MainWeWork = (type: any) => {
     const [value, setValue] = useState<any>(''); // Adjusted type if needed
     const [edit, setEdit] = useState(false); // Adjusted type if needed
-    const [type, setType] = useState('uiux');
     const [valuear, setValuear] = useState<any>(''); // Adjusted type if needed
     const [tableData, setTableData] = useState<any>(''); // Adjusted type if needed
     const [open, setOpen] = useState(false);
-    const [workdata, setWorkdata] = useState<any>();
-    const [isEditMode, setIsEditMode] = useState<boolean>(false);
     const [preview, setPreview] = useState<any>(null);
     const [process, setProcess] = useState<any>(null);
     const [primaryImagePreview, setPrimaryImagePreview] = useState<any>(null);
@@ -90,7 +84,9 @@ const Services = () => {
     const fetchData = async () => {
         try {
             const result = await GetServices(type);
+
             setValue(result.data[0].data.en);
+
             setValuear(result.data[0].data.ar);
             setTableData(result.data[0].data);
         } catch (error) {
@@ -106,33 +102,17 @@ const Services = () => {
     const formik = useFormik({
         initialValues: {
             type: type,
-            servicePrimaryImage: '',
-            serviceSecondaryImage: '',
-            serviceTitle: '',
-            serviceTitleAr: '',
-            serviceDescription: '',
-            serviceDescriptionAr: '',
-
             maintitle: '',
             maintitleAr: '',
             mainSubTitle: '',
             mainSubTitleAr: '',
             mainDescription: '',
             mainDescriptionAr: '',
-
-            ProcessMainTitle: '',
-            ProcessMainTitleAr: '',
-            ProcessMainSubTitle: '',
-            ProcessMainSubTitleAr: '',
-            ProcessmainDescription: '',
-            ProcessmainDescriptionAr: '',
-            Processimage: '',
-            whyChooseDesinior: '',
-            whyChooseDesiniorAr: '',
         },
         onSubmit: async (values) => {
+            console.log('We Work=>', values);
             try {
-                const response = await submitServiceData(values, type);
+                const response = await weWorkSubmitData(values, type);
                 console.log(response, 'responseresponse');
                 toast.success(response.message);
                 fetchData();
@@ -144,34 +124,13 @@ const Services = () => {
 
     useEffect(() => {
         formik.setValues({
-            type: type,
-            servicePrimaryImage: value?.servicePrimaryImage || '',
-            serviceSecondaryImage: value?.serviceSecondaryImage || '',
-
-            serviceTitle: value?.serviceTitle || '',
-            serviceTitleAr: valuear?.serviceTitle || '',
-            serviceDescription: value?.serviceDescription || '',
-            serviceDescriptionAr: valuear?.serviceDescription || '',
-            /////////////////
+            type: '',
             maintitle: value?.howWorks?.mainTitle || '',
             maintitleAr: valuear?.howWorks?.mainTitle || '',
             mainSubTitle: value?.howWorks?.mainSubTitle || '',
             mainSubTitleAr: valuear?.howWorks?.mainSubTitle || '',
             mainDescription: value?.howWorks?.mainDescription || '',
             mainDescriptionAr: valuear?.howWorks?.mainDescription || '',
-            /////////////////
-            ProcessMainTitle: value?.ourProcess?.mainTitle || '',
-            ProcessMainTitleAr: valuear?.ourProcess?.mainTitle || '',
-            ProcessMainSubTitle: value?.ourProcess?.mainSubTitle || '',
-            ProcessMainSubTitleAr: valuear?.ourProcess?.mainSubTitle || '',
-            ProcessmainDescription: value?.ourProcess?.mainDescription || '',
-            ProcessmainDescriptionAr: valuear?.ourProcess?.mainDescription || '',
-            /////////////////
-
-            Processimage: value?.ourProcess?.image || '',
-
-            whyChooseDesinior: value?.whyChooseDesinior?.mainTitle || '',
-            whyChooseDesiniorAr: valuear?.whyChooseDesinior?.mainTitle || '',
         });
         setPrimaryImagePreview(value?.servicePrimaryImage);
         setPreview(value?.serviceSecondaryImage);
@@ -182,39 +141,21 @@ const Services = () => {
 
     useEffect(() => {
         if (value && valuear) {
+            console.log('Get==>', value);
             formik.setValues({
-                type: `${type}`,
-                serviceTitle: value?.serviceTitle,
-                serviceTitleAr: valuear?.serviceTitle,
-                serviceDescription: value?.serviceDescription,
-                serviceDescriptionAr: valuear?.serviceDescription,
+                type: ``,
                 maintitle: value?.howWorks?.mainTitle,
                 maintitleAr: valuear?.howWorks?.mainTitle,
                 mainSubTitle: value?.howWorks?.mainSubTitle,
                 mainSubTitleAr: valuear?.howWorks?.mainSubTitle,
                 mainDescription: value?.howWorks?.mainDescription,
                 mainDescriptionAr: valuear?.howWorks?.mainDescription,
-                ProcessMainTitle: value?.ourProcess?.mainTitle,
-                ProcessMainTitleAr: valuear?.ourProcess?.mainTitle,
-                ProcessMainSubTitle: value?.ourProcess?.mainSubTitle,
-                ProcessMainSubTitleAr: valuear?.ourProcess?.mainSubTitle,
-                ProcessmainDescription: value?.ourProcess?.mainDescription,
-                ProcessmainDescriptionAr: valuear?.ourProcess?.mainDescription,
-                Processimage: value?.ourProcess?.image,
-
-                servicePrimaryImage: value?.servicePrimaryImage,
-                serviceSecondaryImage: value?.serviceSecondaryImage,
-                whyChooseDesinior: value?.whyChooseDesinior?.mainTitle,
-                whyChooseDesiniorAr: valuear?.whyChooseDesinior?.mainTitle,
             });
             console.log('------', value);
             setPrimaryImagePreview(value?.servicePrimaryImage);
         }
     }, []);
 
-    const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setType(event.target.value); // Select type and update state
-    };
     return (
         <div className="">
             <h2 className="mb-1 flex items-center px-2 py-3 font-extrabold uppercase ">
@@ -230,37 +171,67 @@ const Services = () => {
                         : 'Service'}
                 </span>
             </h2>
-            <div>
-                {edit ? (
-                    <input className="form-input" readOnly disabled name="type" value={formik.values.type} placeholder="Type" />
-                ) : (
-                    <div>
-                        <select className="form-select" value={type} onChange={handleTypeChange} name="type">
-                            <option value="">Select type</option>
-                            <option value="uiux">UI/UX</option>
-                            <option value="branding">Branding</option>
-                            <option value="motionGraphic">Motion Graphic</option>
-                            <option value="graphicdesign">Graphic Design</option>
-                        </select>
-                    </div>
-                )}
-            </div>
             <div className="grid grid-cols-1 gap-4 ">
-                {/* <MainService type={type} /> */}
                 <div className="panel border-white-light px-3 dark:border-[#1b2e4b]">
-                    <MainWeWork type={type} />
+                    <h5 className="text-lg font-semibold dark:text-white-light">How We Works Section</h5>
+                    <form onSubmit={formik.handleSubmit}>
+                        <div className="max-lg:gap-2 max-2xl:gap-3 mb-3 grid grid-cols-1 gap-4 lg:grid-cols-2">
+                            <div className="my-2">
+                                <div className="">
+                                    <label className="font-semibold ">Title</label>
+                                    <input type="text" placeholder="Title English" className="form-input" value={formik.values.maintitle} onChange={formik.handleChange} name="maintitle" />
+                                </div>
+                            </div>
+                            <div className="my-2">
+                                <div>
+                                    <label className="font-semibold ">Title</label>
+                                    <input
+                                        type="text"
+                                        id="maintitleAr"
+                                        name="maintitleAr"
+                                        placeholder="Title Arabic"
+                                        className="form-input"
+                                        value={formik.values.maintitleAr}
+                                        onChange={formik.handleChange}
+                                    />
+                                </div>
+                            </div>
+                            <div className="my-2">
+                                <div className="">
+                                    <label className="font-semibold ">Subtitle</label>
+                                    <input type="text" placeholder="Title English" className="form-input" value={formik.values.mainSubTitle} onChange={formik.handleChange} name="mainSubTitle" />
+                                </div>
+                            </div>
+                            <div className="my-2">
+                                <div>
+                                    <label className="font-semibold ">Subtitle</label>
+                                    <input
+                                        type="text"
+                                        id="mainSubTitleAr"
+                                        name="mainSubTitleAr"
+                                        placeholder="Title Arabic"
+                                        className="form-input"
+                                        value={formik.values.mainSubTitleAr}
+                                        onChange={formik.handleChange}
+                                    />
+                                </div>
+                            </div>
+                            <div className="mb-5">
+                                <ReactQuill theme="snow" value={formik.values.mainDescription} onChange={(value) => formik.setFieldValue('mainDescription', value)} />
+                            </div>
+                            <div className="mb-5">
+                                <ReactQuill theme="snow" value={formik.values.mainDescriptionAr} onChange={(value) => formik.setFieldValue('mainDescriptionAr', value)} />
+                            </div>
+                        </div>
 
-                    <Workdata type={type} />
-                    <div className="panel border-white-light px-3 dark:border-[#1b2e4b]">
-                        <MainProcess type={type} />
-                        <ProcessData type={type} />
-                    </div>
-                    <MainChoose type={type} />
-                    <WhychooseData type={type} />
+                        <button type="submit" className="mt-4 rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
+                            Save
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
     );
 };
 
-export default Services;
+export default MainWeWork;

@@ -1,9 +1,10 @@
+'use client';
 import IconPencil from '@/components/icon/icon-pencil';
 import IconTrash from '@/components/icon/icon-trash';
 import { addServiceData, addServiceData2, deleteServiceData, deleteServiceData2, GetServices, updateServiceData, updateServiceData2 } from '@/components/utils/Helper';
 import { Button, Dialog, DialogBody, DialogFooter, DialogHeader } from '@material-tailwind/react';
 import { useFormik } from 'formik';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import $ from 'jquery';
 import 'datatables.net';
@@ -12,18 +13,18 @@ import DeleteModal from '@/components/Modals/DeleteModal';
 
 const ProcessData = (type: any) => {
     const [open, setOpen] = useState(false);
+    const [edit, setEdit] = useState(false); // Adjusted type if needed
     const [processdata, setProcessdata] = useState<any>();
     const [isEditMode, setIsEditMode] = useState<boolean>(false);
     const [preview, setPreview] = useState<any>();
-    const [modelData, setModelData] = useState<any>()
-    const [workId, setWorkId] = useState<any>()
-    const [arworkId, setArworkId] = useState<any>()
-    const [openDel, setOpenDel] = useState(false)
+    const [modelData, setModelData] = useState<any>();
+    const [workId, setWorkId] = useState<any>();
+    const [arworkId, setArworkId] = useState<any>();
+    const [openDel, setOpenDel] = useState(false);
 
     const fetchData = async () => {
         try {
-
-            const result = await GetServices(type.type);
+            const result = await GetServices(type);
             const datamap = result?.data?.map((item: any, index: number) => {
                 const mapLanguageData = (langData: any, lang: string) => {
                     return langData?.map((item2: any) => {
@@ -32,7 +33,7 @@ const ProcessData = (type: any) => {
                             id: _id,
                             title: process,
                             description: explain,
-                            language: lang
+                            language: lang,
                         };
                     });
                 };
@@ -45,9 +46,8 @@ const ProcessData = (type: any) => {
                     enData,
                 };
             });
-            setProcessdata(datamap)
+            setProcessdata(datamap);
             console.log(datamap);
-
         } catch (error) {
             console.error('Failed to fetch data:', error);
         }
@@ -69,13 +69,14 @@ const ProcessData = (type: any) => {
 
     useEffect(() => {
         fetchData();
-    }, [type.type]);
+    }, [type]);
 
     const handleOpen = () => {
         setOpen(true);
-    }
+    };
     const formik = useFormik({
         initialValues: {
+            type: type.type,
             processTitleEn: '',
             processTitleAr: '',
             processDescriptionEn: '',
@@ -85,58 +86,50 @@ const ProcessData = (type: any) => {
         },
         validationSchema: processDataSchema,
         onSubmit: async (values) => {
-            console.log("values =================", values)
+            console.log('values =================', values);
             try {
                 if (!isEditMode) {
-                    console.log("edit mode is off");
+                    console.log('edit mode is off');
 
                     const processData = [
                         {
                             process: values.processTitleEn,
                             explain: values.processDescriptionEn,
-                        }
+                        },
                     ];
 
                     const arProcessData = [
                         {
                             process: values.processTitleAr,
                             explain: values.processDescriptionAr,
-                        }
+                        },
                     ];
 
                     // Make the API call with helper function
-                    const result = await addServiceData2(
-                        type.type,
-                        processData,
-                        arProcessData,
-                    );
+                    const result = await addServiceData2(values.type, processData, arProcessData);
                     fetchData();
                     setOpen(false);
-                    console.log("API response:", result);
+                    console.log('API response:', result);
                     if (result.success === true) {
                         toast.success(result.message);
                     } else {
                         toast.error(result.message);
                     }
                 } else {
-                    console.log("edit mode is on");
+                    console.log('edit mode is on');
                     // Prepare data for update
                     const serviceData = {
-                        processData: JSON.stringify(
-                            {
-                                process: values.processTitleEn,
-                                explain: values.processDescriptionEn,
-                            }
-                        ),
-                        arProcessData: JSON.stringify(
-                            {
-                                process: values.processTitleAr,
-                                explain: values.processDescriptionAr,
-                            }
-                        ),
+                        processData: JSON.stringify({
+                            process: values.processTitleEn,
+                            explain: values.processDescriptionEn,
+                        }),
+                        arProcessData: JSON.stringify({
+                            process: values.processTitleAr,
+                            explain: values.processDescriptionAr,
+                        }),
                         processId: values.processId,
                         processarId: values.processArId,
-                        Type: type.type
+                        Type: values.type,
                         // whyChooseData: '',  // Include actual values if needed
                         // arWhyChooseData: '',
                     };
@@ -152,7 +145,7 @@ const ProcessData = (type: any) => {
                 }
             } catch (error: any) {
                 toast.error(error.message);
-                console.error("Error submitting the form:", error);
+                console.error('Error submitting the form:', error);
             }
         },
     });
@@ -173,20 +166,16 @@ const ProcessData = (type: any) => {
         }
     }, [isEditMode, modelData]);
 
-
     const handleDeletemodal = async () => {
         try {
-            const result = await deleteServiceData2(
-                workId,
-                arworkId,
-            );
+            const result = await deleteServiceData2(workId, arworkId);
             // const result2 = await deleteServiceData2(
             // );
             if (result.success === true) {
                 toast.success('Work Item deleted successfully');
             }
             setOpenDel(false);
-            fetchData()
+            fetchData();
             // processId: 'yourProcessId',
             // arprocessId: undefined,
             // whyChooseDesiniorId: undefined,
@@ -194,7 +183,7 @@ const ProcessData = (type: any) => {
 
             // console.log('Deleted successfully:', result);
         } catch (error) {
-            toast.error('Failed to delete Work Item')
+            toast.error('Failed to delete Work Item');
             console.error('Deletion error:', error);
         }
     };
@@ -202,17 +191,21 @@ const ProcessData = (type: any) => {
     return (
         <div>
             <div>
-                <button type='button' className='ml-auto my-2 btn btn-primary' onClick={() => {
-                    setIsEditMode(false);
-                    setPreview(null);
-                    formik.resetForm();
-                    handleOpen();
-                }}>
+                <button
+                    type="button"
+                    className="btn btn-primary my-2 ml-auto"
+                    onClick={() => {
+                        setIsEditMode(false);
+                        setPreview(null);
+                        formik.resetForm();
+                        handleOpen();
+                    }}
+                >
                     Add
                 </button>
             </div>
-            <div className='w-full overflow-x-scroll'>
-                <table id='processTable'>
+            <div className="w-full overflow-x-scroll">
+                <table id="processTable">
                     <thead>
                         <tr>
                             <th>Title (EN)</th>
@@ -232,21 +225,20 @@ const ProcessData = (type: any) => {
                                 const enItem = process.enData ? process.enData[index] : null;
                                 const arItem = process.arData ? process.arData[index] : null;
 
-
                                 const handleEdit = (process: any, process2: any) => {
                                     // setSelectedRowData(process);
-                                    console.log("process", process)
-                                    console.log("process", process2)
+                                    console.log('process', process);
+                                    console.log('process', process2);
                                     setIsEditMode(true);
-                                    setModelData({ process, process2 })
+                                    setModelData({ process, process2 });
 
                                     setOpen(true); // Open the dialog
                                     // setCurrentIndex(index);
                                 };
 
                                 const handleDelete = async (data: any, data2: any) => {
-                                    console.log("data id  ------------", data)
-                                    console.log("data2 id  ------------", data2)
+                                    console.log('data id  ------------', data);
+                                    console.log('data2 id  ------------', data2);
                                     setOpenDel(true);
                                     setWorkId(data);
                                     setArworkId(data2);
@@ -254,32 +246,23 @@ const ProcessData = (type: any) => {
                                     // arprocessId: undefined,
                                     // whyChooseDesiniorId: undefined,
                                     // arwhyChooseDesiniorId: undefined,
-                                    console.log("state id  ------------", workId)
-                                    console.log("state id  ------------", arworkId)
+                                    console.log('state id  ------------', workId);
+                                    console.log('state id  ------------', arworkId);
                                 };
                                 return (
                                     <tr key={index}>
-
-                                        <td>
-                                            {enItem ? enItem.title : null}
-                                        </td>
-                                        <td>
-                                            {arItem ? arItem.title : null}
-                                        </td>
-                                        <td>
-                                            {enItem ? enItem.description : null}
-                                        </td>
-                                        <td>
-                                            {arItem ? arItem.description : null}
-                                        </td>
+                                        <td>{enItem ? enItem.title : null}</td>
+                                        <td>{arItem ? arItem.title : null}</td>
+                                        <td>{enItem ? enItem.description : null}</td>
+                                        <td>{arItem ? arItem.description : null}</td>
 
                                         <td>
                                             <div className="flex items-center justify-center">
-                                                <div onClick={() => handleEdit(enItem, arItem)} className='cursor-pointer'>
+                                                <div onClick={() => handleEdit(enItem, arItem)} className="cursor-pointer">
                                                     <IconPencil />
                                                 </div>
 
-                                                <div onClick={() => handleDelete(enItem?.id, arItem?.id)} className='cursor-pointer'>
+                                                <div onClick={() => handleDelete(enItem?.id, arItem?.id)} className="cursor-pointer">
                                                     <IconTrash />
                                                 </div>
                                             </div>
@@ -290,31 +273,19 @@ const ProcessData = (type: any) => {
                         })}
                     </tbody>
                 </table>
-
             </div>
-
-
 
             <Dialog open={open} handler={() => setOpen(false)} className="h-fit dark:bg-[#060818]">
                 <DialogHeader>{isEditMode ? 'Edit Process' : 'Add Process'}</DialogHeader>
                 <DialogBody>
+                    <div>
+                        <input className="form-input" readOnly disabled name="type" value={type} placeholder="Type" />
+                    </div>
                     <form onSubmit={formik.handleSubmit}>
+                        <input className="form-input" readOnly disabled name="type" value={type.type} placeholder="Type" />
 
-
-                        <input
-                            type="text"
-                            className="hidden"
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            value={formik.values.processId}
-                        />
-                        <input
-                            type="text"
-                            className="hidden"
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            value={formik.values.processArId}
-                        />
+                        <input type="text" className="hidden" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.processId} />
+                        <input type="text" className="hidden" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.processArId} />
                         <div>
                             <label htmlFor="processTitleEn">Title (EN)</label>
                             <input
@@ -326,9 +297,7 @@ const ProcessData = (type: any) => {
                                 onBlur={formik.handleBlur}
                                 value={formik.values.processTitleEn} // Always use formik.values
                             />
-                            {formik.touched.processTitleEn && formik.errors.processTitleEn ? (
-                                <p className='text-red-800 text-xs'>{formik.errors.processTitleEn}</p>
-                            ) : null}
+                            {formik.touched.processTitleEn && formik.errors.processTitleEn ? <p className="text-xs text-red-800">{formik.errors.processTitleEn}</p> : null}
                         </div>
 
                         <div>
@@ -342,9 +311,7 @@ const ProcessData = (type: any) => {
                                 onBlur={formik.handleBlur}
                                 value={formik.values.processTitleAr} // Always use formik.values
                             />
-                            {formik.touched.processTitleAr && formik.errors.processTitleAr ? (
-                                <p className='text-red-800 text-xs'>{formik.errors.processTitleAr}</p>
-                            ) : null}
+                            {formik.touched.processTitleAr && formik.errors.processTitleAr ? <p className="text-xs text-red-800">{formik.errors.processTitleAr}</p> : null}
                         </div>
 
                         <div>
@@ -357,9 +324,7 @@ const ProcessData = (type: any) => {
                                 onBlur={formik.handleBlur}
                                 value={formik.values.processDescriptionEn} // Always use formik.values
                             />
-                            {formik.touched.processDescriptionEn && formik.errors.processDescriptionEn ? (
-                                <p className='text-red-800 text-xs'>{formik.errors.processDescriptionEn}</p>
-                            ) : null}
+                            {formik.touched.processDescriptionEn && formik.errors.processDescriptionEn ? <p className="text-xs text-red-800">{formik.errors.processDescriptionEn}</p> : null}
                         </div>
 
                         <div>
@@ -372,15 +337,13 @@ const ProcessData = (type: any) => {
                                 onBlur={formik.handleBlur}
                                 value={formik.values.processDescriptionAr} // Always use formik.values
                             />
-                            {formik.touched.processDescriptionAr && formik.errors.processDescriptionAr ? (
-                                <p className='text-red-800 text-xs'>{formik.errors.processDescriptionAr}</p>
-                            ) : null}
+                            {formik.touched.processDescriptionAr && formik.errors.processDescriptionAr ? <p className="text-xs text-red-800">{formik.errors.processDescriptionAr}</p> : null}
                         </div>
                         <DialogFooter>
                             <Button color="red" onClick={() => setOpen(false)}>
                                 Cancel
                             </Button>
-                            <Button type="submit" className='ms-2' color="green">
+                            <Button type="submit" className="ms-2" color="green">
                                 {isEditMode ? 'Update' : 'Add'}
                             </Button>
                         </DialogFooter>
@@ -388,17 +351,9 @@ const ProcessData = (type: any) => {
                 </DialogBody>
             </Dialog>
 
-
-            {openDel &&
-                <DeleteModal
-                    open={openDel}
-                    onClose={() => setOpenDel(false)}
-                    onDelete={() => handleDeletemodal()}
-                    message="Are you sure you want to delete this Work Item?"
-                />
-            }
+            {openDel && <DeleteModal open={openDel} onClose={() => setOpenDel(false)} onDelete={() => handleDeletemodal()} message="Are you sure you want to delete this Work Item?" />}
         </div>
-    )
-}
+    );
+};
 
-export default ProcessData
+export default ProcessData;

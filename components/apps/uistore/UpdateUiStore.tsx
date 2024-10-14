@@ -9,6 +9,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useRouter, useSearchParams } from 'next/navigation';
 import API_ENDPOINT from '@/components/apiRoutes/ApiRoutes';
+import Image from 'next/image';
 
 // Validation Schema
 interface TranslatableField {
@@ -243,7 +244,7 @@ const UpdateUiStore = () => {
                         <label>Primary Image</label>
                         {imagePreview && (
                             <div className="my-2">
-                                <img src={imagePreview} alt="Preview" className="rounded-lg w-20 h-20 object-cover" />
+                                <Image width={50} height={50} src={imagePreview} alt="Preview" className="rounded-lg w-20 h-20 object-cover" />
                             </div>
                         )}
                         <label htmlFor="primaryImage" className='btn btn-primary w-fit' style={{ cursor: 'pointer' }}>
@@ -292,7 +293,7 @@ const UpdateUiStore = () => {
                         {sliderPreviews.length > 0 && (
                             <div className="my-2 flex gap-2">
                                 {sliderPreviews.map((preview, index) => (
-                                    <img
+                                    <Image width={50} height={50}
                                         key={index}
                                         src={preview}
                                         alt={`Slider ${index}`}

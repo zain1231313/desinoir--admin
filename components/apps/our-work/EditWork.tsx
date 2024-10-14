@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import { fetchAllOurWork, updateWorkData } from '@/components/utils/Helper';
 import { useRouter, useSearchParams } from 'next/navigation';
 import API_ENDPOINT from '@/components/apiRoutes/ApiRoutes';
+import Image from 'next/image';
 
 const EditWorkForm = () => {
 const router = useRouter();
@@ -267,7 +268,7 @@ onBlur={formik.handleBlur}
 <label>Primary Image</label>
 {imagePreview && (
 <div className="my-2">
-<img src={imagePreview} alt="Preview" className="h-20 w-20 rounded-lg object-cover" />
+<Image width={50} height={50} src={imagePreview} alt="Preview" className="h-20 w-20 rounded-lg object-cover" />
 </div>
 )}
 <label htmlFor="primaryImage" className="btn btn-primary w-fit" style={{ cursor: 'pointer' }}>
@@ -312,7 +313,7 @@ placeholder="Description Arabic"
 <label>Description Image</label>
 {descriptionPreview && (
 <div className="my-2">
-<img src={descriptionPreview} alt="Preview" className="h-20 w-20 rounded-lg object-cover" />
+<Image width={50} height={50} src={descriptionPreview} alt="Preview" className="h-20 w-20 rounded-lg object-cover" />
 </div>
 )}
 <label htmlFor="description" className="btn btn-primary w-fit" style={{ cursor: 'pointer' }}>

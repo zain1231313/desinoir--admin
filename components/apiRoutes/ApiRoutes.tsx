@@ -127,7 +127,14 @@ const API_ENDPOINT = {
 
     GET_SERVICES: Server + 'service/get-services-data?keyword=',
     UPDATE_SERVICES: Server + 'service/add-service-data',
-    UPDATE_SERVICES_DATA: Server + 'service/update-service-data',
+    UPDATE_CHOOSE_CARD: Server + 'service/add-whyChoose-data',
+    UPDATE_CHOOSE: Server + 'service/add-whyChooseTitle-data',
+    UPDATE_PROCESS_CARD: Server + 'service/add-service-data',
+    UPDATE_PROCESS: Server + 'service/add-processTitle-data',
+    UPDATE_WORKCARD: Server + 'service/add-howWork-data',
+    UPDATE_WEWORK: Server + 'service/add-howWorkTitle-data',
+    UPDATE_WORK_CARD: Server + 'service/update-service-howwork-data',
+    UPDATE_CHOOSE_CARD2: Server + 'service/update-service-whyChoose-data',
     DELETE_SERVICES_DATA: Server + 'service/delete-service-data',
 
     GET_META_DATA: Server + 'meta-tags/get-meta-tags',

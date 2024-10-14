@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { useState } from 'react';
 
 interface FileUploaderProps {
@@ -42,7 +43,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ label, onFileSelect }) => {
         />
       </label>
 
-      {filePreview && <img src={filePreview} className='w-20 h-20 object-cover mt-4' />}
+      {filePreview && <Image width={50} height={50} alt=".." src={filePreview} className='w-20 h-20 object-cover mt-4' />}
       {fileName && <p>Selected file: {fileName}</p>}
 
     </div>

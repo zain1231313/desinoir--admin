@@ -4,6 +4,7 @@ import { addOurWorkChallenge, addOurWorkMain, addOurWorkProblem, addOurWorkSolut
 import { IRootState } from '@/store';
 import { selectId } from '@/store/AricleSlice';
 import { useFormik } from 'formik';
+import Image from 'next/image';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import ReactQuill from 'react-quill';
@@ -128,7 +129,7 @@ const SolutionWork = ({ onNextStep }: any) => {
                 <label>Solution Image</label>
                 {solutionPreview && (
                     <div className="my-2">
-                        <img src={solutionPreview} alt="solution  Image" className="h-20 w-20 rounded-lg object-cover" />
+                        <Image width={50} height={50} src={solutionPreview} alt="solution  Image" className="h-20 w-20 rounded-lg object-cover" />
                     </div>
                 )}
                 <label htmlFor="solutionImage" className="btn btn-primary w-fit" style={{ cursor: 'pointer' }}>

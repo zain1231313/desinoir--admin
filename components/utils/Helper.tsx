@@ -2,7 +2,7 @@
 import API_ENDPOINT from '../apiRoutes/ApiRoutes';
 // import { setData, setError, setLoading } from "@/store/HomeSlice";
 // import { Data } from "@/types/dataTypes";
-import getAndDecryptCookie, { getToken } from '../libs/auth';
+import getAndDecryptCookie, { getCookies } from '../libs/auth';
 import toast from 'react-hot-toast';
 
 export const postLogin = async (email: string, password: string) => {
@@ -1467,6 +1467,7 @@ export async function deleteFaq(id: string): Promise<void> {
 }
 
 export const GetServices = async (type: any) => {
+    // console.log('type=>', type);
     // Construct query string from queryParams
 
     // Create headers with Authorization token
@@ -1480,7 +1481,7 @@ export const GetServices = async (type: any) => {
     };
 
     try {
-        console.log(type.type);
+        console.log(type);
         // Fetch data from the API
         const response = await fetch(API_ENDPOINT.GET_SERVICES + `${type.type}`, defaultOptions);
 
@@ -1494,36 +1495,59 @@ export const GetServices = async (type: any) => {
         throw error;
     }
 };
+export const submitChooseData = async (values: any, type: any) => {
+    const formData = new FormData();
+    console.log(type);
+    formData.append('type', values.type);
+    formData.append('whyChooseDesiniorMainTitle', values.whyChooseDesinior);
+    formData.append('arWhyChooseDesiniorMainTitle', values.whyChooseDesiniorAr);
+
+    const response = await fetch(API_ENDPOINT.UPDATE_CHOOSE, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            Authorization: `Bearer ${getAndDecryptCookie('AccessToken')}`,
+        },
+    });
+
+    return response.json();
+};
 
 export const submitServiceData = async (values: any, type: any) => {
     const formData = new FormData();
-    console.log(type);
-
-    // How it Works Section
-    formData.append('howWorksMainTitle', values.maintitle);
-    formData.append('arHowWorksMainTitle', values.maintitleAr);
-
-    formData.append('howWorksMainSubTitle', values.mainSubTitle);
-    formData.append('arHowWorksMainSubTitle', values.mainSubTitleAr);
-
-    formData.append('howWorksMainDescription', values.mainDescription);
-    formData.append('arHowWorksMainDescription', values.mainDescriptionAr);
-
+    console.log(values.type);
     // Append values to formData
-    formData.append('type', type.type);
+    formData.append('type', values.type);
     formData.append('serviceTitle', values.serviceTitle);
     formData.append('arServiceTitle', values.serviceTitleAr);
 
     formData.append('serviceDescription', values.serviceDescription);
     formData.append('arServiceDescription', values.serviceDescriptionAr);
 
-    // Primary & Secondary Image
     if (values.servicePrimaryImage) {
         formData.append('servicePrimaryImage', values.servicePrimaryImage);
     }
     if (values.serviceSecondaryImage) {
         formData.append('serviceSecondaryImage', values.serviceSecondaryImage);
     }
+
+    const response = await fetch(API_ENDPOINT.UPDATE_SERVICES, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            Authorization: `Bearer ${getAndDecryptCookie('AccessToken')}`,
+        },
+    });
+
+    return response.json();
+};
+
+export const submitProcessData = async (values: any, type: any) => {
+    const formData = new FormData();
+    console.log(type);
+
+    formData.append('type', values.type);
+
     if (values.Processimage) {
         formData.append('ourprocessImage', values.Processimage);
     }
@@ -1538,24 +1562,39 @@ export const submitServiceData = async (values: any, type: any) => {
     formData.append('ourProcessMainDescription', values.ProcessmainDescription);
     formData.append('arOurProcessMainDescription', values.ProcessmainDescriptionAr);
 
-    // JSON Stringify for array fields like ourProcessData[] and whyChooseDesiniorData[]
-    // formData.append("ourProcessData", JSON.stringify(values.ProcessmainData));
-    // formData.append("arOurProcessData", JSON.stringify(values.ProcessmainDataAr));
-
-    // Why Choose Section
-    formData.append('whyChooseDesiniorMainTitle', values.whyChooseDesinior);
-    formData.append('arWhyChooseDesiniorMainTitle', values.whyChooseDesiniorAr);
-    // formData.append("whyChooseDesiniorData", JSON.stringify(values.whyChooseDesiniorData));
-    // formData.append("arWhyChooseDesiniorData", JSON.stringify(values.arWhyChooseDesiniorData));
-
     // Call API
-    const response = await fetch(API_ENDPOINT.UPDATE_SERVICES, {
+    const response = await fetch(API_ENDPOINT.UPDATE_PROCESS, {
         method: 'POST',
         body: formData,
         headers: {
             Authorization: `Bearer ${getAndDecryptCookie('AccessToken')}`,
         },
     });
+
+    return response.json();
+};
+export const weWorkSubmitData = async (values: any, type: any) => {
+    const formData = new FormData();
+    console.log(type);
+
+    formData.append('howWorksMainTitle', values.maintitle);
+    formData.append('arHowWorksMainTitle', values.maintitleAr);
+
+    formData.append('howWorksMainSubTitle', values.mainSubTitle);
+    formData.append('arHowWorksMainSubTitle', values.mainSubTitleAr);
+
+    formData.append('howWorksMainDescription', values.mainDescription);
+    formData.append('arHowWorksMainDescription', values.mainDescriptionAr);
+
+    formData.append('type', values.type);
+    const response = await fetch(API_ENDPOINT.UPDATE_WEWORK, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            Authorization: `Bearer ${getAndDecryptCookie('AccessToken')}`,
+        },
+    });
+    console.log('Response=>', response);
 
     return response.json();
 };
@@ -1613,6 +1652,55 @@ export const addServiceData = async (
         throw error;
     }
 };
+export const addWorkData = async (
+    workIcon: any,
+    type: any,
+    howWorksData: any[], // Expecting arrays for each data type
+    arHowWorksData: any[]
+    // ourProcessData: any[],
+    // arOurProcessData: any[],
+    // whyChooseDesiniorData: any[],
+    // arWhyChooseDesiniorData: any[]
+) => {
+    console.log(howWorksData);
+    try {
+        // Headers setup
+        const headers = new Headers();
+        headers.append('Authorization', `Bearer ${getAndDecryptCookie('AccessToken')}`);
+
+        // Form data setup
+        const formdata = new FormData();
+
+        formdata.append('howWorksData[]', JSON.stringify(howWorksData));
+        formdata.append('arHowWorksData[]', JSON.stringify(arHowWorksData));
+
+        // formdata.append("ourProcessData[]", JSON.stringify(ourProcessData));
+        // formdata.append("arOurProcessData[]", JSON.stringify(arOurProcessData));
+        // formdata.append("whyChooseDesiniorData[]", JSON.stringify(whyChooseDesiniorData));
+        // formdata.append("arWhyChooseDesiniorData[]", JSON.stringify(arWhyChooseDesiniorData));
+
+        formdata.append('workIcon', workIcon);
+        formdata.append('type', type);
+
+        // Request options
+        const requestOptions: RequestInit = {
+            method: 'POST',
+            headers,
+            body: formdata,
+            redirect: 'follow',
+        };
+
+        // Make the fetch call
+        const response = await fetch(API_ENDPOINT.UPDATE_WORKCARD, requestOptions);
+
+        const result = await response.json();
+        console.log('Service data added:', result);
+        return result;
+    } catch (error) {
+        console.error('Error adding service data:', error);
+        throw error;
+    }
+};
 export const addServiceData2 = async (
     // workIcon: any,
     // workId: string,
@@ -1642,7 +1730,7 @@ export const addServiceData2 = async (
         // formdata.append("arWhyChooseDesiniorData[]", JSON.stringify(arWhyChooseDesiniorData));
 
         // formdata.append("workIcon", workIcon);
-        formdata.append('type', type.type);
+        formdata.append('type', type);
         // formdata.append("workId", workId);
         // formdata.append("arworkId", workArId);
 
@@ -1655,7 +1743,7 @@ export const addServiceData2 = async (
         };
 
         // Make the fetch call
-        const response = await fetch(API_ENDPOINT.UPDATE_SERVICES, requestOptions);
+        const response = await fetch(API_ENDPOINT.UPDATE_PROCESS_CARD, requestOptions);
 
         const result = await response.json();
         console.log('Service data added:', result);
@@ -1678,7 +1766,7 @@ export const addServiceData3 = async (
     try {
         console.log('//////////////////Helper data//////////////////');
         console.log(values.workIcon);
-        console.log(Type.type);
+        console.log(Type);
         console.log(whyChooseData);
         console.log(arWhyChooseData);
         console.log('////////////////////////////////////');
@@ -1690,7 +1778,7 @@ export const addServiceData3 = async (
         const formdata = new FormData();
 
         formdata.append('icon', values.workIcon);
-        formdata.append('type', Type.type);
+        formdata.append('type', Type);
         formdata.append('whyChooseDesiniorData', whyChooseData);
         formdata.append('arWhyChooseDesiniorData', arWhyChooseData);
 
@@ -1706,7 +1794,7 @@ export const addServiceData3 = async (
         };
 
         // Make the fetch call
-        const response = await fetch(API_ENDPOINT.UPDATE_SERVICES, requestOptions);
+        const response = await fetch(API_ENDPOINT.UPDATE_CHOOSE_CARD, requestOptions);
 
         const result = await response.json();
         console.log('Service data added:', result);
@@ -1717,7 +1805,7 @@ export const addServiceData3 = async (
     }
 };
 
-export const updateServiceData = async (serviceData: { howWorksData: string; arHowWorksData: string; workId: string; workarId: string; Type: string; workIcon: File | null }) => {
+export const updateServiceData = async (serviceData: { howWorksData: string; arHowWorksData: string; workId: string; workarId: string; type: string; workIcon: File | null }) => {
     try {
         const myHeaders = new Headers();
         myHeaders.append('Authorization', `Bearer ${getAndDecryptCookie('AccessToken')}`);
@@ -1730,7 +1818,7 @@ export const updateServiceData = async (serviceData: { howWorksData: string; arH
         }
         formdata.append('howWorksData', serviceData.howWorksData);
         formdata.append('arHowWorksData', serviceData.arHowWorksData);
-        formdata.append('type', serviceData.Type);
+        formdata.append('type', serviceData.type);
 
         const requestOptions: RequestInit = {
             method: 'PUT',
@@ -1739,7 +1827,7 @@ export const updateServiceData = async (serviceData: { howWorksData: string; arH
             redirect: 'follow',
         };
         console.log(requestOptions);
-        const response = await fetch(API_ENDPOINT.UPDATE_SERVICES_DATA, requestOptions);
+        const response = await fetch(API_ENDPOINT.UPDATE_WORK_CARD, requestOptions);
         const result = await response.json();
 
         return result;
@@ -1789,7 +1877,7 @@ export const updateServiceData2 = async (serviceData: {
             redirect: 'follow' as RequestRedirect,
         };
 
-        const response = await fetch(API_ENDPOINT.UPDATE_SERVICES_DATA, requestOptions);
+        const response = await fetch(API_ENDPOINT.UPDATE_WORK_CARD, requestOptions);
         const result = await response.json();
 
         return result;
@@ -1799,38 +1887,21 @@ export const updateServiceData2 = async (serviceData: {
     }
 };
 export const updateServiceData3 = async (serviceData: {
-    // howWorksData: string;
-    // arHowWorksData: string;
-    // processData: string;
-    // arProcessData: string;
-    // processId: string;
-    // processarId: string;
     whyChooseDesiniorId: string;
     arwhyChooseDesiniorId: string;
     Type: any;
     whyChooseData: string;
     arWhyChooseData: string;
-    // workId: string;
-    // workarId: string;
     workIcon: File | null;
 }) => {
+    console.log('type service===>', serviceData.Type);
     try {
         const myHeaders = new Headers();
         myHeaders.append('Authorization', `Bearer ${getAndDecryptCookie('AccessToken')}`);
-
         const formdata = new FormData();
-        // formdata.append("howWorksData", serviceData.howWorksData);
-        // formdata.append("arHowWorksData", serviceData.arHowWorksData);
-        // formdata.append("processData", serviceData.processData);
-        // formdata.append("arProcessData", serviceData.arProcessData);
         formdata.append('whyChooseData', serviceData.whyChooseData);
         formdata.append('arWhyChooseData', serviceData.arWhyChooseData);
-        formdata.append('type', serviceData.Type?.type);
-        // formdata.append("workId", serviceData.workId);
-        // formdata.append("arworkId", serviceData.workarId);
-        // formdata.append("processId", serviceData.processId);
-        // formdata.append("arprocessId", serviceData.processarId);
-
+        formdata.append('type', serviceData.Type);
         formdata.append('whyChooseDesiniorId', serviceData.whyChooseDesiniorId);
         formdata.append('arwhyChooseDesiniorId', serviceData.arwhyChooseDesiniorId);
         if (serviceData.workIcon) {
@@ -1844,7 +1915,8 @@ export const updateServiceData3 = async (serviceData: {
             redirect: 'follow' as RequestRedirect,
         };
 
-        const response = await fetch(API_ENDPOINT.UPDATE_SERVICES_DATA, requestOptions);
+        const response = await fetch(API_ENDPOINT.UPDATE_CHOOSE_CARD2, requestOptions);
+
         const result = await response.json();
 
         return result;

@@ -6,7 +6,7 @@ const Uidesign = () => {
 
     return (
         <>
-            <Services type="uiux" />
+            <Services  />
         </>
     );
 };

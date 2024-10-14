@@ -1,15 +1,16 @@
-'use client'
+'use client';
 import IconPencil from '@/components/icon/icon-pencil';
 import IconTrash from '@/components/icon/icon-trash';
-import { addServiceData, deleteServiceData, GetServices, updateServiceData } from '@/components/utils/Helper';
+import { addServiceData, addWorkData, deleteServiceData, GetServices, updateServiceData } from '@/components/utils/Helper';
 import { Button, Dialog, DialogBody, DialogFooter, DialogHeader } from '@material-tailwind/react';
 import { useFormik } from 'formik';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import $ from 'jquery';
 import 'datatables.net';
 import { workDataSchema } from '@/components/schema/schema';
 import DeleteModal from '@/components/Modals/DeleteModal';
+import Image from 'next/image';
 
 const Workdata = (type: any) => {
     const [tableData, setTableData] = useState<any>(''); // Adjusted type if needed
@@ -17,15 +18,16 @@ const Workdata = (type: any) => {
     const [workdata, setWorkdata] = useState<any>();
     const [isEditMode, setIsEditMode] = useState<boolean>(false);
     const [preview, setPreview] = useState<any>();
-    const [modelData, setModelData] = useState<any>()
-    const [workId, setWorkId] = useState<any>()
-    const [arworkId, setArworkId] = useState<any>()
-    const [openDel, setOpenDel] = useState(false)
-
+    const [modelData, setModelData] = useState<any>();
+    const [workId, setWorkId] = useState<any>();
+    const [arworkId, setArworkId] = useState<any>();
+    const [openDel, setOpenDel] = useState(false);
+    const [edit, setEdit] = useState(false); // Adjusted type if needed
     const fetchData = async () => {
         try {
-            console.log("data fetched ")
-            const result = await GetServices(type.type);
+            console.log('data fetched ');
+            const result = await GetServices(type);
+            console.log('Words Data==>', result);
             const datamap = result?.data?.map((item: any, index: number) => {
                 const mapLanguageData = (langData: any, lang: string) => {
                     return langData?.map((item2: any) => {
@@ -35,7 +37,7 @@ const Workdata = (type: any) => {
                             icon: workIcon,
                             title: workTitle,
                             description: workDescription,
-                            language: lang
+                            language: lang,
                         };
                     });
                 };
@@ -48,9 +50,7 @@ const Workdata = (type: any) => {
                     enData,
                 };
             });
-            setWorkdata(datamap)
-            console.log(datamap);
-
+            setWorkdata(datamap);
             setTableData(result.data[0].data);
         } catch (error) {
             console.error('Failed to fetch data:', error);
@@ -70,15 +70,15 @@ const Workdata = (type: any) => {
                 info: false,
             });
         }
-    }, [workdata]);
+    }, [workdata, type]);
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [type]);
 
     const handleOpen = () => {
         setOpen(true);
-    }
+    };
     const formik = useFormik({
         initialValues: {
             workIcon: null,
@@ -88,77 +88,66 @@ const Workdata = (type: any) => {
             workDescriptionAr: '',
             workId: '',
             workArId: '',
+            type: type.type,
         },
         validationSchema: workDataSchema,
         enableReinitialize: true,
         onSubmit: async (values) => {
-            console.log("values =================", values)
+            console.log('values =================', values);
             try {
                 if (!isEditMode) {
-                    console.log("edit mode is off");
+                    console.log('edit mode is off');
 
                     const howWorksData = [
                         {
                             workTitle: values.workTitleEn,
                             workDescription: values.workDescriptionEn,
-                        }
+                        },
                     ];
 
                     const arHowWorksData = [
                         {
                             workTitle: values.workTitleAr,
                             workDescription: values.workDescriptionAr,
-                        }
+                        },
                     ];
 
                     // Make the API call with helper function
-                    const result = await addServiceData(
-                        values.workIcon,
-                        values.workId,
-                        values.workArId,
-                        type.type,
-                        howWorksData,
-                        arHowWorksData,
-                    );
+                    const result = await addWorkData(values.workIcon, values.type, howWorksData, arHowWorksData);
                     fetchData();
-                    formik.resetForm()
+                    formik.resetForm();
                     setOpen(false);
-                    console.log("API response:", result);
+                    console.log('API response:', result);
                     toast.success(result.message);
-
                 } else {
-                    console.log("edit mode is on");
+                    console.log('edit mode is on');
 
                     // Prepare data for update
                     const serviceData = {
-                        howWorksData: JSON.stringify(
-                            {
-                                workTitle: values.workTitleEn,
-                                workDescription: values.workDescriptionEn,
-                            }
-                        ),
-                        arHowWorksData: JSON.stringify(
-                            {
-                                workTitle: values.workTitleAr,
-                                workDescription: values.workDescriptionAr,
-                            }
-                        ),
+                        howWorksData: JSON.stringify({
+                            workTitle: values.workTitleEn,
+                            workDescription: values.workDescriptionEn,
+                        }),
+                        arHowWorksData: JSON.stringify({
+                            workTitle: values.workTitleAr,
+                            workDescription: values.workDescriptionAr,
+                        }),
                         workId: values.workId,
                         workarId: values.workArId,
                         workIcon: values.workIcon,
-                        Type: type.type.type
+                        type: values.type,
                         // processData: '',  // Include actual values if needed
                         // arProcessData: '',
                         // whyChooseData: '',  // Include actual values if needed
                         // arWhyChooseData: '',
                         // processId: '', // Include actual values if needed
                     };
-                    console.log(type.type.type)
+                    // console.log(type.type.type);
                     // Make the API call with the update helper function
                     const result = await updateServiceData(serviceData);
-                    console.log('ressiljadhshfjksadhadksujkds', result)
+                    console.log('ressiljadhshfjksadhadksujkds', result);
                     fetchData();
-                    console.log('fetch ke neeche', result)
+                    console.log('fetch ke neeche', result);
                     setOpen(false);
                     if (result.success === true) {
                         toast.success(result.message);
@@ -168,7 +157,7 @@ const Workdata = (type: any) => {
                 }
             } catch (error: any) {
                 toast.error(error.message);
-                console.error("Error submitting the form:", error);
+                console.error('Error submitting the form:', error);
             }
         },
     });
@@ -190,13 +179,12 @@ const Workdata = (type: any) => {
         }
     }, [isEditMode, modelData]);
 
-
     // Handling file input
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.currentTarget.files?.[0];
         if (file) {
             // Set the file in Formik state
-            formik.setFieldValue("workIcon", file);
+            formik.setFieldValue('workIcon', file);
 
             // Use FileReader to read the file and create a data URL for the preview
             const reader = new FileReader();
@@ -207,21 +195,16 @@ const Workdata = (type: any) => {
         }
     };
 
-
-
     const handleDeletemodal = async () => {
         try {
-            const result = await deleteServiceData(
-                workId,
-                arworkId,
-            );
+            const result = await deleteServiceData(workId, arworkId);
             // const result2 = await deleteServiceData2(
             // );
             if (result.success === true) {
                 toast.success('Work Item deleted successfully');
             }
             setOpenDel(false);
-            fetchData()
+            fetchData();
             // processId: 'yourProcessId',
             // arprocessId: undefined,
             // whyChooseDesiniorId: undefined,
@@ -229,26 +212,28 @@ const Workdata = (type: any) => {
 
             // console.log('Deleted successfully:', result);
         } catch (error) {
-            toast.error('Failed to delete Work Item')
+            toast.error('Failed to delete Work Item');
             console.error('Deletion error:', error);
         }
     };
 
-
-
     return (
         <div>
             <div>
-                <button type='button' className='ml-auto my-2 btn btn-primary' onClick={() => {
-                    setIsEditMode(false);
-                    setPreview(null)
-                    handleOpen();
-                }}>
+                <button
+                    type="button"
+                    className="btn btn-primary my-2 ml-auto"
+                    onClick={() => {
+                        setIsEditMode(false);
+                        setPreview(null);
+                        handleOpen();
+                    }}
+                >
                     Add
                 </button>
             </div>
-            <div className='w-full overflow-x-scroll'>
-                <table id='workTable'>
+            <div className="w-full overflow-x-scroll">
+                <table id="workTable">
                     <thead>
                         <tr>
                             <th>Icon</th>
@@ -269,56 +254,37 @@ const Workdata = (type: any) => {
                                 const enItem = work.enData ? work.enData[index] : null;
                                 const arItem = work.arData ? work.arData[index] : null;
 
-
                                 const handleEdit = (work: any, work2: any) => {
                                     // setSelectedRowData(work);
-                                    console.log("work", work)
-                                    console.log("work", work2)
+                                    console.log('work', work);
+                                    console.log('work', work2);
                                     setIsEditMode(true);
-                                    setModelData({ work, work2 })
+                                    setModelData({ work, work2 });
 
                                     setOpen(true); // Open the dialog
                                     // setCurrentIndex(index);
                                 };
 
                                 const handleDelete = async (data: any, data2: any) => {
-                                    console.log("data id  ------------", data)
-                                    console.log("data2 id  ------------", data2)
                                     setOpenDel(true);
                                     setWorkId(data);
                                     setArworkId(data2);
-                                    // processId: 'yourProcessId',
-                                    // arprocessId: undefined,
-                                    // whyChooseDesiniorId: undefined,
-                                    // arwhyChooseDesiniorId: undefined,
-                                    console.log("state id  ------------", workId)
-                                    console.log("state id  ------------", arworkId)
                                 };
                                 return (
                                     <tr key={index}>
-                                        <td>
-                                            {enItem ? <img src={enItem.icon} alt={enItem.title} className='w-12 h-12 object-cover rounded-full' width={50} /> : null}
-                                        </td>
-                                        <td>
-                                            {enItem ? enItem.title : null}
-                                        </td>
-                                        <td>
-                                            {arItem ? arItem.title : null}
-                                        </td>
-                                        <td>
-                                            {enItem ? enItem.description : null}
-                                        </td>
-                                        <td>
-                                            {arItem ? arItem.description : null}
-                                        </td>
+                                        <td>{enItem ? <Image width={50} height={50} src={enItem.icon} alt={enItem.title} className="h-12 w-12 rounded-full object-cover" /> : null}</td>
+                                        <td>{enItem ? enItem.title : null}</td>
+                                        <td>{arItem ? arItem.title : null}</td>
+                                        <td>{enItem ? enItem.description : null}</td>
+                                        <td>{arItem ? arItem.description : null}</td>
 
                                         <td>
                                             <div className="flex items-center justify-center">
-                                                <div onClick={() => handleEdit(enItem, arItem)} className='cursor-pointer'>
+                                                <div onClick={() => handleEdit(enItem, arItem)} className="cursor-pointer">
                                                     <IconPencil />
                                                 </div>
 
-                                                <div onClick={() => handleDelete(enItem?.id, arItem?.id)} className='cursor-pointer'>
+                                                <div onClick={() => handleDelete(enItem?.id, arItem?.id)} className="cursor-pointer">
                                                     <IconTrash />
                                                 </div>
                                             </div>
@@ -329,10 +295,7 @@ const Workdata = (type: any) => {
                         })}
                     </tbody>
                 </table>
-
             </div>
-
-
 
             <Dialog open={open} handler={() => setOpen(false)} className="h-fit dark:bg-[#060818]">
                 <DialogHeader>{isEditMode ? 'Edit Work' : 'Add Work'}</DialogHeader>
@@ -340,60 +303,32 @@ const Workdata = (type: any) => {
                     <form onSubmit={formik.handleSubmit}>
                         <div>
                             <label htmlFor="workIcon">Icon</label>
-                                {/* Preview the uploaded or current image */}
-                                {preview && (
-                                    <div className="mt-2">
-                                        <img
-                                            src={preview}
-                                            alt="Preview"
-                                            className="h-16 w-16 object-cover"
-                                        />
-                                    </div>
-                                )}
-                                {/* In Edit mode, show the existing image if no new image is uploaded */}
+                            {/* Preview the uploaded or current image */}
+                            {preview && (
+                                <div className="mt-2">
+                                    <Image width={50} height={50} src={preview} alt="Preview" className="h-16 w-16 object-cover" />
+                                </div>
+                            )}
+                            {/* In Edit mode, show the existing image if no new image is uploaded */}
                             {isEditMode && !preview && modelData?.work?.icon && (
                                 <div className="mt-2">
-                                    <img
+                                    <Image width={50} height={50}
                                         src={modelData.work.icon} // Existing image from the server
                                         alt="Current Icon"
                                         className="h-16 w-16 object-cover"
                                     />
                                 </div>
                             )}
-                            <label htmlFor="workIcon" className='btn btn-primary w-fit mt-2'  style={{ cursor: 'pointer' }}>
+                            <label htmlFor="workIcon" className="btn btn-primary mt-2 w-fit" style={{ cursor: 'pointer' }}>
                                 Choose Image
-                                <input
-                                    type="file"
-                                    id="workIcon"
-                                    name="workIcon"
-                                    accept='image/*'
-                                    className="form-input"
-                                    onChange={(event) => handleFileChange(event)}
-                                    style={{display: 'none'}}
-                                />
+                                <input type="file" id="workIcon" name="workIcon" accept="image/*" className="form-input" onChange={(event) => handleFileChange(event)} style={{ display: 'none' }} />
                             </label>
-
-
-
-                            
                         </div>
-                        {formik.touched.workIcon && formik.errors.workIcon ? (
-                            <p className='text-red-800 text-xs'>{formik.errors.workIcon}</p>
-                        ) : null}
-                        <input
-                            type="text"
-                            className="hidden"
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            value={formik.values.workId}
-                        />
-                        <input
-                            type="text"
-                            className="hidden"
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            value={formik.values.workArId}
-                        />
+                        <input className="form-input" readOnly disabled name="type" value={type.type} placeholder="Type" />
+
+                        {formik.touched.workIcon && formik.errors.workIcon ? <p className="text-xs text-red-800">{formik.errors.workIcon}</p> : null}
+                        <input type="text" className="hidden" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.workId} />
+                        <input type="text" className="hidden" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.workArId} />
                         <div>
                             <label htmlFor="workTitleEn">Title (EN)</label>
                             <input
@@ -405,9 +340,7 @@ const Workdata = (type: any) => {
                                 onBlur={formik.handleBlur}
                                 value={formik.values.workTitleEn} // Always use formik.values
                             />
-                            {formik.touched.workTitleEn && formik.errors.workTitleEn ? (
-                                <p className='text-red-800 text-xs'>{formik.errors.workTitleEn}</p>
-                            ) : null}
+                            {formik.touched.workTitleEn && formik.errors.workTitleEn ? <p className="text-xs text-red-800">{formik.errors.workTitleEn}</p> : null}
                         </div>
 
                         <div>
@@ -421,9 +354,7 @@ const Workdata = (type: any) => {
                                 onBlur={formik.handleBlur}
                                 value={formik.values.workTitleAr} // Always use formik.values
                             />
-                            {formik.touched.workTitleAr && formik.errors.workTitleAr ? (
-                                <p className='text-red-800 text-xs'>{formik.errors.workTitleAr}</p>
-                            ) : null}
+                            {formik.touched.workTitleAr && formik.errors.workTitleAr ? <p className="text-xs text-red-800">{formik.errors.workTitleAr}</p> : null}
                         </div>
 
                         <div>
@@ -436,9 +367,7 @@ const Workdata = (type: any) => {
                                 onBlur={formik.handleBlur}
                                 value={formik.values.workDescriptionEn} // Always use formik.values
                             />
-                            {formik.touched.workDescriptionEn && formik.errors.workDescriptionEn ? (
-                                <p className='text-red-800 text-xs'>{formik.errors.workDescriptionEn}</p>
-                            ) : null}
+                            {formik.touched.workDescriptionEn && formik.errors.workDescriptionEn ? <p className="text-xs text-red-800">{formik.errors.workDescriptionEn}</p> : null}
                         </div>
 
                         <div>
@@ -451,15 +380,13 @@ const Workdata = (type: any) => {
                                 onBlur={formik.handleBlur}
                                 value={formik.values.workDescriptionAr} // Always use formik.values
                             />
-                            {formik.touched.workDescriptionAr && formik.errors.workDescriptionAr ? (
-                                <p className='text-red-800 text-xs'>{formik.errors.workDescriptionAr}</p>
-                            ) : null}
+                            {formik.touched.workDescriptionAr && formik.errors.workDescriptionAr ? <p className="text-xs text-red-800">{formik.errors.workDescriptionAr}</p> : null}
                         </div>
                         <DialogFooter>
                             <Button color="red" onClick={() => setOpen(false)}>
                                 Cancel
                             </Button>
-                            <Button type="submit" className='ms-2' color="green">
+                            <Button type="submit" className="ms-2" color="green">
                                 {isEditMode ? 'Update' : 'Add'}
                             </Button>
                         </DialogFooter>
@@ -467,16 +394,9 @@ const Workdata = (type: any) => {
                 </DialogBody>
             </Dialog>
 
-            {openDel &&
-                <DeleteModal
-                    open={openDel}
-                    onClose={() => setOpenDel(false)}
-                    onDelete={() => handleDeletemodal()}
-                    message="Are you sure you want to delete this Work Item?"
-                />
-            }
+            {openDel && <DeleteModal open={openDel} onClose={() => setOpenDel(false)} onDelete={() => handleDeletemodal()} message="Are you sure you want to delete this Work Item?" />}
         </div>
-    )
-}
+    );
+};
 
-export default Workdata
+export default Workdata;

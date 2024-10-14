@@ -7,6 +7,7 @@ import { useFormik } from 'formik';
 import fetchAboutData, { AboutCreatives, postAboutData } from '@/components/utils/Helper';
 import toast from 'react-hot-toast';
 import Loading from '@/components/layouts/loading';
+import Image from 'next/image';
 
 const AboutCreative = () => {
     const [loading, setLoading] = useState(false);
@@ -125,7 +126,7 @@ const AboutCreative = () => {
                                 <h5 className="text-lg font-semibold dark:text-white-light">Creativity Section</h5>
                                 <div className="my-2">
                                     <div className="">
-                                        {filePreview2 && <img src={filePreview2} alt="Initial Image" className="h-40 w-40 object-cover" />}
+                                        {filePreview2 && <Image width={50} height={50} src={filePreview2} alt="Initial Image" className="h-40 w-40 object-cover" />}
                                         <div className="my-2">
                                             <div className="">
                                                 <label htmlFor="file-input" className="btn btn-primary w-fit" style={{ cursor: 'pointer' }}>

@@ -8,6 +8,7 @@ import { setData, setLoading, setError } from '@/store/HomeSlice';
 import { useFormik } from 'formik';
 import toast from 'react-hot-toast';
 import Loading from '@/components/layouts/loading';
+import Image from 'next/image';
 
 const Creativity = () => {
     const dispatch = useDispatch();
@@ -123,7 +124,7 @@ const Creativity = () => {
                         <form onSubmit={formik.handleSubmit}>
                             <div className="my-2">
                                 <div className="">
-                                    {image2 && <img src={`${!filePreview2 ? image2 : filePreview2}`} alt="Initial Image" className="h-40 w-40 object-cover" />}
+                                    {image2 && <Image width={50} height={50} src={`${!filePreview2 ? image2 : filePreview2}`} alt="Initial Image" className="h-40 w-40 object-cover" />}
                                     <div className="my-2">
                                         <div className="">
                                             <label htmlFor="file-input" className="btn btn-primary w-fit" style={{ cursor: 'pointer' }}>

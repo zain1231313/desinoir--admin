@@ -6,7 +6,7 @@ const MotionGraphic = () => {
 
     return (
         <>
-            <Services type="motionGraphic" />
+            <Services />
         </>
     );
 };

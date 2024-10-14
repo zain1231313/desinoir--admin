@@ -1,65 +1,64 @@
-'use client'
+'use client';
 import IconPencil from '@/components/icon/icon-pencil';
 import IconTrash from '@/components/icon/icon-trash';
 import { WhyChooseSchema } from '@/components/schema/schema';
 import { addServiceData3, deleteServiceData3, GetServices, updateServiceData3 } from '@/components/utils/Helper';
 import { Button, Dialog, DialogBody, DialogFooter, DialogHeader } from '@material-tailwind/react';
 import { useFormik } from 'formik';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import $ from 'jquery';
 import 'datatables.net';
 import DeleteModal from '@/components/Modals/DeleteModal';
+import Image from 'next/image';
 const WhychooseData = (type: any) => {
     const [tableData, setTableData] = useState<any>(''); // Adjusted type if needed
     const [open, setOpen] = useState(false);
+    const [edit, setEdit] = useState(false); // Adjusted type if needed
     const [workdata, setWorkdata] = useState<any>();
     const [isEditMode, setIsEditMode] = useState<boolean>(false);
     const [preview, setPreview] = useState<any>();
-    const [modelData, setModelData] = useState<any>()
-    const [workId, setWorkId] = useState<any>()
-    const [arworkId, setArworkId] = useState<any>()
-    const [openDel, setOpenDel] = useState(false)
-
+    const [modelData, setModelData] = useState<any>();
+    const [workId, setWorkId] = useState<any>();
+    const [arworkId, setArworkId] = useState<any>();
+    const [openDel, setOpenDel] = useState(false);
 
     const fetchData = async () => {
         try {
-
-            const result = await GetServices(type.type);
-            console.log('reesult', result)
+            const result = await GetServices(type);
+            console.log('reesult', result);
             const datamap = result?.data?.map((item: any, index: number) => {
                 const mapLanguageData = (langData: any, lang: string) => {
                     return langData?.map((item2: any) => {
                         const { icon, title, description, _id } = item2;
-                        console.log('item2-------', item2)
+                        console.log('item2-------', item2);
                         return {
                             id: _id,
                             icon,
                             title: title,
                             description: description,
-                            language: lang
+                            language: lang,
                         };
                     });
                 };
 
                 const arData = mapLanguageData(item?.data?.ar?.whyChooseDesinior?.data, 'ar');
-                console.log('item2-------', arData)
+                console.log('item2-------', arData);
                 const enData = mapLanguageData(item?.data?.en?.whyChooseDesinior?.data, 'en');
-                console.log('item2-------', enData)
+                console.log('item2-------', enData);
 
                 return {
                     arData,
                     enData,
                 };
             });
-            setWorkdata(datamap)
-            console.log(datamap)
+            setWorkdata(datamap);
+            console.log(datamap);
             setTableData(result.data[0].data);
         } catch (error) {
             console.error('Failed to fetch data:', error);
         }
     };
-
 
     useEffect(() => {
         if (workdata) {
@@ -78,14 +77,15 @@ const WhychooseData = (type: any) => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [type]);
 
     const handleOpen = () => {
         setOpen(true);
-    }
+    };
     const formik = useFormik({
         initialValues: {
             workIcon: null,
+            type: type.type,
             titleEn: '',
             titleAr: '',
             descriptionEn: '',
@@ -95,35 +95,30 @@ const WhychooseData = (type: any) => {
         },
         validationSchema: WhyChooseSchema,
         onSubmit: async (values) => {
-            console.log("values =================", values)
+            console.log('values =================', values.type);
             try {
                 if (!isEditMode) {
-                    console.log("edit mode is off");
+                    console.log('edit mode is off');
 
                     const whyChooseData = JSON.stringify([
                         {
                             title: values.titleEn,
                             description: values.descriptionEn,
-                        }
+                        },
                     ]);
 
                     const arWhyChooseData = JSON.stringify([
                         {
                             title: values.titleAr,
                             description: values.descriptionAr,
-                        }
+                        },
                     ]);
-                    const Type = type.type
+                    const Type = values.type;
                     // Make the API call with helper function
-                    const result = await addServiceData3(
-                        values,
-                        Type,
-                        whyChooseData,
-                        arWhyChooseData,
-                    );
+                    const result = await addServiceData3(values, Type, whyChooseData, arWhyChooseData);
                     fetchData();
                     setOpen(false);
-                    console.log("API response:", result);
+                    console.log('API response:', result);
                     if (result.success === true) {
                         toast.success(result.message);
                         fetchData();
@@ -131,26 +126,22 @@ const WhychooseData = (type: any) => {
                         toast.error(result.message);
                     }
                 } else {
-                    console.log("edit mode is on");
+                    console.log('edit mode is on');
 
                     // Prepare data for update
                     const serviceData = {
-                        whyChooseData: JSON.stringify(
-                            {
-                                title: values.titleAr,
-                                description: values.descriptionAr,
-                            }
-                        ),
-                        arWhyChooseData: JSON.stringify(
-                            {
-                                title: values.titleAr,
-                                description: values.descriptionAr,
-                            }
-                        ),
+                        whyChooseData: JSON.stringify({
+                            title: values.titleAr,
+                            description: values.descriptionAr,
+                        }),
+                        arWhyChooseData: JSON.stringify({
+                            title: values.titleAr,
+                            description: values.descriptionAr,
+                        }),
                         whyChooseDesiniorId: values.whyChooseDesiniorId,
                         arwhyChooseDesiniorId: values.arwhyChooseDesiniorId,
                         workIcon: values.workIcon,
-                        Type: type.type
+                        Type:values.type,
                         // processData: '',  // Include actual values if needed
                         // arProcessData: '',
                         // whyChooseData: '',  // Include actual values if needed
@@ -170,7 +161,7 @@ const WhychooseData = (type: any) => {
                 }
             } catch (error: any) {
                 toast.error(error.message);
-                console.error("Error submitting the form:", error);
+                console.error('Error submitting the form:', error);
             }
         },
     });
@@ -192,17 +183,16 @@ const WhychooseData = (type: any) => {
             });
         }
         if (!isEditMode) {
-            formik.resetForm()
+            formik.resetForm();
         }
     }, [isEditMode, modelData]);
-
 
     // Handling file input
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.currentTarget.files?.[0];
         if (file) {
             // Set the file in Formik state
-            formik.setFieldValue("workIcon", file);
+            formik.setFieldValue('workIcon', file);
 
             // Use FileReader to read the file and create a data URL for the preview
             const reader = new FileReader();
@@ -213,20 +203,16 @@ const WhychooseData = (type: any) => {
         }
     };
 
-
     const handleDeletemodal = async () => {
         try {
-            const result = await deleteServiceData3(
-                workId,
-                arworkId,
-            );
+            const result = await deleteServiceData3(workId, arworkId);
             // const result2 = await deleteServiceData2(
             // );
             if (result.success === true) {
                 toast.success('Work Item deleted successfully');
             }
             setOpenDel(false);
-            fetchData()
+            fetchData();
             // processId: 'yourProcessId',
             // arprocessId: undefined,
             // whyChooseDesiniorId: undefined,
@@ -234,7 +220,7 @@ const WhychooseData = (type: any) => {
 
             // console.log('Deleted successfully:', result);
         } catch (error) {
-            toast.error('Failed to delete Work Item')
+            toast.error('Failed to delete Work Item');
             console.error('Deletion error:', error);
         }
     };
@@ -242,17 +228,20 @@ const WhychooseData = (type: any) => {
     return (
         <div>
             <div>
-                <button type='button' className='ml-auto my-2 btn btn-primary' onClick={() => {
-                    setIsEditMode(false);
-                    setPreview(null)
-                    formik.resetForm();
-                    handleOpen();
-                }}>
+                <button
+                    type="button"
+                    className="btn btn-primary my-2 ml-auto"
+                    onClick={() => {
+                        setIsEditMode(false);
+                        setPreview(null);
+                        formik.resetForm();
+                        handleOpen();
+                    }}
+                >
                     Add
                 </button>
             </div>
-            <div className='w-full overflow-x-scroll'>
-
+            <div className="w-full overflow-x-scroll">
                 <table id="WhychooseTable">
                     <thead>
                         <tr>
@@ -274,22 +263,21 @@ const WhychooseData = (type: any) => {
                                 const enItem = work.enData ? work.enData[index] : null;
                                 const arItem = work.arData ? work.arData[index] : null;
 
-
                                 const handleEdit = (work: any, work2: any) => {
                                     // setSelectedRowData(work);
-                                    setPreview(work.icon)
-                                    console.log("work", work)
-                                    console.log("work", work2)
+                                    setPreview(work.icon);
+                                    console.log('work', work);
+                                    console.log('work', work2);
                                     setIsEditMode(true);
-                                    setModelData({ work, work2 })
+                                    setModelData({ work, work2 });
 
                                     setOpen(true); // Open the dialog
                                     // setCurrentIndex(index);
                                 };
 
                                 const handleDelete = async (data: any, data2: any) => {
-                                    console.log("data id  ------------", data)
-                                    console.log("data2 id  ------------", data2)
+                                    console.log('data id  ------------', data);
+                                    console.log('data2 id  ------------', data2);
                                     setOpenDel(true);
                                     setWorkId(data);
                                     setArworkId(data2);
@@ -297,34 +285,24 @@ const WhychooseData = (type: any) => {
                                     // arprocessId: undefined,
                                     // whyChooseDesiniorId: undefined,
                                     // arwhyChooseDesiniorId: undefined,
-                                    console.log("state id  ------------", workId)
-                                    console.log("state id  ------------", arworkId)
+                                    console.log('state id  ------------', workId);
+                                    console.log('state id  ------------', arworkId);
                                 };
                                 return (
                                     <tr key={index}>
-                                        <td>
-                                            {enItem ? <img src={enItem.icon} className='w-12 h-12 object-cover rounded-full' alt={enItem.title} width={50} /> : null}
-                                        </td>
-                                        <td>
-                                            {enItem ? enItem.title : null}
-                                        </td>
-                                        <td>
-                                            {arItem ? arItem.title : null}
-                                        </td>
-                                        <td>
-                                            {enItem ? enItem.description : null}
-                                        </td>
-                                        <td>
-                                            {arItem ? arItem.description : null}
-                                        </td>
+                                        <td>{enItem ? <Image width={50} height={50} src={enItem.icon} className="h-12 w-12 rounded-full object-cover" alt={enItem.title}  /> : null}</td>
+                                        <td>{enItem ? enItem.title : null}</td>
+                                        <td>{arItem ? arItem.title : null}</td>
+                                        <td>{enItem ? enItem.description : null}</td>
+                                        <td>{arItem ? arItem.description : null}</td>
 
                                         <td>
                                             <div className="flex items-center justify-center">
-                                                <div onClick={() => handleEdit(enItem, arItem)} className='cursor-pointer'>
+                                                <div onClick={() => handleEdit(enItem, arItem)} className="cursor-pointer">
                                                     <IconPencil />
                                                 </div>
 
-                                                <div onClick={() => handleDelete(enItem?.id, arItem?.id)} className='cursor-pointer'>
+                                                <div onClick={() => handleDelete(enItem?.id, arItem?.id)} className="cursor-pointer">
                                                     <IconTrash />
                                                 </div>
                                             </div>
@@ -337,8 +315,6 @@ const WhychooseData = (type: any) => {
                 </table>
             </div>
 
-
-
             <Dialog open={open} handler={() => setOpen(false)} className="h-fit dark:bg-[#060818]">
                 <DialogHeader>{isEditMode ? 'Edit why choose desinoir' : 'Add why choose desinoir'}</DialogHeader>
                 <DialogBody>
@@ -348,56 +324,20 @@ const WhychooseData = (type: any) => {
                             {/* Preview the uploaded or current image */}
                             {preview && (
                                 <div className="mt-2">
-                                    <img
-                                        src={preview} 
-                                        alt="Preview"
-                                        className="h-16 w-16 object-cover"
-                                    />
+                                    <Image width={50} height={50} src={preview} alt="Preview" className="h-16 w-16 object-cover" />
                                 </div>
                             )}
-                            <label htmlFor="workIcon" className='btn btn-primary w-fit'  style={{ cursor: 'pointer' }}>
+                            <label htmlFor="workIcon" className="btn btn-primary w-fit" style={{ cursor: 'pointer' }}>
                                 Choose Image
-                                <input
-                                    type="file"
-                                    id="workIcon"
-                                    name="workIcon"
-                                    accept='image/*'
-                                    className="form-input"
-                                    onChange={(event) => handleFileChange(event)}
-                                    style={{display: 'none'}}
-                                />
-
+                                <input type="file" id="workIcon" name="workIcon" accept="image/*" className="form-input" onChange={(event) => handleFileChange(event)} style={{ display: 'none' }} />
                             </label>
-                            
-                            {formik.touched.workIcon && formik.errors.workIcon ? (
-                                <p className='text-red-800 text-xs'>{formik.errors.workIcon}</p>
-                            ) : null}
 
-                            {/* In Edit mode, show the existing image if no new image is uploaded */}
-                            {/* {isEditMode && modelData?.work?.icon && (
-                                <div className="mt-2">
-                                    <img
-                                        src={modelData.work.icon} // Existing image from the server
-                                        alt="Current Icon"
-                                        className="h-16 w-16 object-cover"
-                                    />
-                                </div>
-                            )} */}
+                            {formik.touched.workIcon && formik.errors.workIcon ? <p className="text-xs text-red-800">{formik.errors.workIcon}</p> : null}
+
+                            <input className="form-input" readOnly disabled name="type" value={type.type} placeholder="Type" />
                         </div>
-                        <input
-                            type="text"
-                            className="hidden"
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            value={formik.values.whyChooseDesiniorId}
-                        />
-                        <input
-                            type="text"
-                            className="hidden"
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            value={formik.values.arwhyChooseDesiniorId}
-                        />
+                        <input type="text" className="hidden" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.whyChooseDesiniorId} />
+                        <input type="text" className="hidden" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.arwhyChooseDesiniorId} />
                         <div>
                             <label htmlFor="titleEn">Title (EN)</label>
                             <input
@@ -410,9 +350,7 @@ const WhychooseData = (type: any) => {
                                 value={formik.values.titleEn} // Always use formik.values
                             />
                         </div>
-                        {formik.touched.titleEn && formik.errors.titleEn ? (
-                            <p className='text-red-800 text-xs'>{formik.errors.titleEn}</p>
-                        ) : null}
+                        {formik.touched.titleEn && formik.errors.titleEn ? <p className="text-xs text-red-800">{formik.errors.titleEn}</p> : null}
 
                         <div>
                             <label htmlFor="titleAr">Title (AR)</label>
@@ -425,9 +363,7 @@ const WhychooseData = (type: any) => {
                                 onBlur={formik.handleBlur}
                                 value={formik.values.titleAr} // Always use formik.values
                             />
-                            {formik.touched.titleAr && formik.errors.titleAr ? (
-                                <p className='text-red-800 text-xs'>{formik.errors.titleAr}</p>
-                            ) : null}
+                            {formik.touched.titleAr && formik.errors.titleAr ? <p className="text-xs text-red-800">{formik.errors.titleAr}</p> : null}
                         </div>
 
                         <div>
@@ -440,9 +376,7 @@ const WhychooseData = (type: any) => {
                                 onBlur={formik.handleBlur}
                                 value={formik.values.descriptionEn} // Always use formik.values
                             />
-                            {formik.touched.descriptionEn && formik.errors.descriptionEn ? (
-                                <p className='text-red-800 text-xs'>{formik.errors.descriptionEn}</p>
-                            ) : null}
+                            {formik.touched.descriptionEn && formik.errors.descriptionEn ? <p className="text-xs text-red-800">{formik.errors.descriptionEn}</p> : null}
                         </div>
 
                         <div>
@@ -455,15 +389,13 @@ const WhychooseData = (type: any) => {
                                 onBlur={formik.handleBlur}
                                 value={formik.values.descriptionAr} // Always use formik.values
                             />
-                            {formik.touched.descriptionAr && formik.errors.descriptionAr ? (
-                                <p className='text-red-800 text-xs'>{formik.errors.descriptionAr}</p>
-                            ) : null}
+                            {formik.touched.descriptionAr && formik.errors.descriptionAr ? <p className="text-xs text-red-800">{formik.errors.descriptionAr}</p> : null}
                         </div>
                         <DialogFooter>
                             <Button color="red" onClick={() => setOpen(false)}>
                                 Cancel
                             </Button>
-                            <Button type="submit" className='ms-2' color="green">
+                            <Button type="submit" className="ms-2" color="green">
                                 {isEditMode ? 'Update' : 'Add'}
                             </Button>
                         </DialogFooter>
@@ -471,17 +403,9 @@ const WhychooseData = (type: any) => {
                 </DialogBody>
             </Dialog>
 
-
-            {openDel &&
-                <DeleteModal
-                    open={openDel}
-                    onClose={() => setOpenDel(false)}
-                    onDelete={() => handleDeletemodal()}
-                    message="Are you sure you want to delete this Work Item?"
-                />
-            }
+            {openDel && <DeleteModal open={openDel} onClose={() => setOpenDel(false)} onDelete={() => handleDeletemodal()} message="Are you sure you want to delete this Work Item?" />}
         </div>
-    )
-}
+    );
+};
 
-export default WhychooseData
+export default WhychooseData;

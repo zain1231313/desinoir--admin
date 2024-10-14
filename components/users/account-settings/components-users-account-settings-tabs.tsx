@@ -4,6 +4,7 @@ import IconGithub from '@/components/icon/icon-github';
 import IconHome from '@/components/icon/icon-home';
 import IconLinkedin from '@/components/icon/icon-linkedin';
 import IconTwitter from '@/components/icon/icon-twitter';
+import Image from 'next/image';
 import React, { useState } from 'react';
 
 const ComponentsUsersAccountSettingsTabs = () => {
@@ -37,7 +38,7 @@ const ComponentsUsersAccountSettingsTabs = () => {
                         <h6 className="mb-5 text-lg font-bold">General Information</h6>
                         <div className="flex flex-col sm:flex-row">
                             <div className="mb-5 w-full sm:w-2/12 ltr:sm:mr-4 rtl:sm:ml-4">
-                                <img src="/assets//images/profile-34.jpeg" alt="img" className="mx-auto h-20 w-20 rounded-full object-cover md:h-32 md:w-32" />
+                                <Image width={50} height={50} src="/assets//images/profile-34.jpeg" alt="img" className="mx-auto h-20 w-20 rounded-full object-cover md:h-32 md:w-32" />
                             </div>
                             <div className="grid flex-1 grid-cols-1 gap-5 sm:grid-cols-2">
                                 <div>

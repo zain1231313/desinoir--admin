@@ -6,7 +6,7 @@ const Branding = () => {
 
    return (
         <>
-            <Services type="branding" />
+            {/* <Services type="branding" /> */}
         </>
     );
 };

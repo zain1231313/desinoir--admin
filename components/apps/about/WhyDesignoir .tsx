@@ -7,6 +7,7 @@ import { useFormik } from 'formik';
 import fetchAboutData, { AboutWhyChooses, postAboutData } from '@/components/utils/Helper';
 import toast from 'react-hot-toast';
 import Loading from '@/components/layouts/loading';
+import Image from 'next/image';
 
 const AboutWhyChoose = () => {
     const [loading, setLoading] = useState(false);
@@ -141,7 +142,7 @@ const AboutWhyChoose = () => {
                                 <div className="mt-5">
                                     <div className="my-2">
                                         <div className="">
-                                            {filePreview3 && <img src={filePreview3} alt="Initial Image" className="h-40 w-40 object-cover" />}
+                                            {filePreview3 && <Image width={50} height={50} src={filePreview3} alt="Initial Image" className="h-40 w-40 object-cover" />}
                                             <div className="my-2">
                                                 <div className="">
                                                     <label htmlFor="file-input2" className="btn btn-primary w-fit" style={{ cursor: 'pointer' }}>

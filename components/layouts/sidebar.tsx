@@ -319,16 +319,16 @@ const Sidebar = () => {
                                         <AnimateHeight duration={300} height={servicesMenuOpen ? 'auto' : 0}>
                                             <ul className="sub-menu text-gray-500">
                                                 <li>
-                                                    <Link href="/apps/services/Ui-service">{t('Ui-service')}</Link>
+                                                    <Link href="/apps/services/seriveHeader">{t('Service-Header')}</Link>
                                                 </li>
                                                 <li>
-                                                    <Link href="/apps/services/branding">{t('Branding')}</Link>
+                                                    <Link href="/apps/services/weWork">{t('We Work')}</Link>
                                                 </li>
                                                 <li>
-                                                    <Link href="/apps/services/graphic-designing">{t('Graphic Designing')}</Link>
+                                                    <Link href="/apps/services/weProcess">{t('We Process')}</Link>
                                                 </li>
                                                 <li>
-                                                    <Link href="/apps/services/motion-graphics">{t('Motion Graphics')}</Link>
+                                                    <Link href="/apps/services/weChoose">{t('we Choose')}</Link>
                                                 </li>
                                             </ul>
                                         </AnimateHeight>

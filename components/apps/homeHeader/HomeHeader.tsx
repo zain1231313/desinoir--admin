@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { setData, setLoading, setError } from '@/store/HomeSlice';
 import toast from 'react-hot-toast';
 import Loading from '@/components/layouts/loading';
+import Image from 'next/image';
 
 const HomeHeader = () => {
     const dispatch = useDispatch();
@@ -201,7 +202,7 @@ const HomeHeader = () => {
                                 onChange={formik.handleChange}
                             />
                         </div>
-                        {image1 && <img src={`${!filePreview ? image1 : filePreview}`} alt="Initial Image" className="h-40 w-40 object-cover" />}
+                        {image1 && <Image width={50} height={50} src={`${!filePreview ? image1 : filePreview}`} alt="Initial Image" className="h-40 w-40 object-cover" />}
                         <div className="my-2">
                             <label htmlFor="file-input" className="btn btn-primary w-fit" style={{ cursor: 'pointer' }}>
                                 Upload image
