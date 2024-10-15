@@ -26,7 +26,7 @@ const ComponentsDashboardSales = () => {
     const navigate = useRouter()
     useEffect(() => {
         if (token) {
-            console.log("token is there")
+            // console.log("token is there")
         } else {
             navigate.push("/sign-in");
         }

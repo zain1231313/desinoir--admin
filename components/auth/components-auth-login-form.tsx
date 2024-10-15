@@ -30,8 +30,8 @@ const ComponentsAuthLoginForm = () => {
                 storeCookies('Name', result.data.user.name);
                 toast.success(result.message)
                 setResponse(result);
-                console.log(result)
-                console.log("token ---> ", getAndDecryptCookie('AccessToken'))
+                // console.log(result)
+                // console.log("token ---> ", getAndDecryptCookie('AccessToken'))
 
                 // Redirect to the homepage
                 router.push('/');
