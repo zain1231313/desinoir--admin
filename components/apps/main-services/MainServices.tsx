@@ -365,7 +365,7 @@ const MainServices = () => {
                 <div className="panel border-white-light px-3 mb-3 dark:border-[#1b2e4b]">
                     <h5 className="text-lg font-semibold dark:text-white-light">UI/UX Design Section</h5>
                     {uiicon && (
-                        <Image width={50} height={50} src={`${!uiuxFilePreview ? uiicon : uiuxFilePreview}`} alt="Initial Image" className='w-40 h-40 object-cover' />
+                        <Image width={1000} height={1000} src={`${!uiuxFilePreview ? uiicon : uiuxFilePreview}`} alt="Initial Image" className='w-40 h-40 object-cover' />
                     )}
                     <div className="my-2">
                         <div className="">
@@ -454,7 +454,7 @@ const MainServices = () => {
                     <h5 className="text-lg font-semibold dark:text-white-light">Branding Section</h5>
 
                     {brandingicon && (
-                        <Image width={50} height={50} src={`${!brandingFilePreview ? brandingicon : brandingFilePreview}`} alt="Initial Image" className='w-40 h-40 object-cover' />
+                        <Image width={1000} height={1000} src={`${!brandingFilePreview ? brandingicon : brandingFilePreview}`} alt="Initial Image" className='w-40 h-40 object-cover' />
                     )}
                     <div className="my-2">
                         <div className="">
@@ -544,7 +544,7 @@ const MainServices = () => {
                     <h5 className="text-lg font-semibold dark:text-white-light">Graphic Designing Section</h5>
 
                     {graphicIcon && (
-                        <Image width={50} height={50} src={`${!graphicDesignFilePreview ? graphicIcon : graphicDesignFilePreview}`} alt="Initial Image" className='w-40 h-40 object-cover' />
+                        <Image width={1000} height={1000} src={`${!graphicDesignFilePreview ? graphicIcon : graphicDesignFilePreview}`} alt="Initial Image" className='w-40 h-40 object-cover' />
                     )}
                     <div className="my-2">
                         <div className="">
@@ -626,7 +626,7 @@ const MainServices = () => {
                     <h5 className="text-lg font-semibold dark:text-white-light">Motion Graphics Designing Section</h5>
 
                     {motionIcon && (
-                        <Image width={50} height={50} src={`${!motionGraphicsFilePreview ? motionIcon : motionGraphicsFilePreview}`} alt="Initial Image" className='w-40 h-40 object-cover' />
+                        <Image width={1000} height={1000} src={`${!motionGraphicsFilePreview ? motionIcon : motionGraphicsFilePreview}`} alt="Initial Image" className='w-40 h-40 object-cover' />
                     )}
                     <div className="my-2">
                         <div className="">
@@ -702,7 +702,7 @@ const MainServices = () => {
                     </div>
 
                 </div>
-                <button type="submit" className="btn btn-primary !mt-6">
+                <button type="submit" className="btn bg-[#20D091] border-none text-white ml-auto !mt-6">
                     Submit Form
                 </button>
             </form >

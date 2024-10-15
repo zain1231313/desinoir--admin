@@ -103,7 +103,7 @@ const ProblemStatementForm = ({ id, data }: any) => {
                 <label>Problem Statement Image</label>
                 {problemPreview && (
                     <div className="my-2">
-                        <Image width={50} height={50} src={problemPreview} alt="Problem Statement Image" className="h-20 w-20 rounded-lg object-cover" />
+                        <Image width={1000} height={1000} src={problemPreview} alt="Problem Statement Image" className="h-20 w-20 rounded-lg object-cover" />
                     </div>
                 )}
                 <label htmlFor="problemImage" className="btn btn-primary w-fit" style={{ cursor: 'pointer' }}>

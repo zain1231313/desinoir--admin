@@ -146,7 +146,7 @@ const AddArticle = () => {
                     <form onSubmit={formik.handleSubmit}>
                         <div className="panel border-white-light px-3 dark:border-[#1b2e4b]">
                             <label>Primary Image Section</label>
-                            {primaryImagePreview && <Image width={50} height={50} src={primaryImagePreview} alt="Primary Preview" className="h-40 w-40 object-cover" />}
+                            {primaryImagePreview && <Image width={1000} height={1000} src={primaryImagePreview} alt="Primary Preview" className="h-40 w-40 object-cover" />}
                             <div className="my-2">
                                 <label htmlFor="primary-file-input" className="btn btn-primary w-fit cursor-pointer rounded-l-md">
                                     Upload primary image
@@ -155,7 +155,7 @@ const AddArticle = () => {
                             </div>
 
                             <label>Secondary Image Section</label>
-                            {secondaryImagePreview && <Image width={50} height={50} src={secondaryImagePreview} alt="Primary Preview" className="h-40 w-40 object-cover" />}
+                            {secondaryImagePreview && <Image width={1000} height={1000} src={secondaryImagePreview} alt="Primary Preview" className="h-40 w-40 object-cover" />}
                             <div className="my-2">
                                 <label htmlFor="secondary-file-input" className="btn btn-primary w-fit cursor-pointer rounded-l-md">
                                     Upload secondary image
@@ -301,7 +301,7 @@ const AddArticle = () => {
                             </div>
 
                             <label>Admin Image Section</label>
-                            {adminImagePreview && <Image width={50} height={50} src={adminImagePreview} alt="Admin Preview" className="h-40 w-40 object-cover" />}
+                            {adminImagePreview && <Image width={1000} height={1000} src={adminImagePreview} alt="Admin Preview" className="h-40 w-40 object-cover" />}
                             <div className="my-2">
                                 <label htmlFor="admin-file-input" className="btn btn-primary w-fit cursor-pointer rounded-l-md">
                                     Upload admin image
@@ -310,7 +310,7 @@ const AddArticle = () => {
                             </div>
 
                             <div className="my-4">
-                                <button type="submit" className="rounded bg-blue-500 px-4 py-2 text-white" disabled={loading}>
+                                <button type="submit" className="btn bg-[#20D091] border-none text-white ml-auto" disabled={loading}>
                                     {loading ? 'Adding...' : 'Add Article'}
                                 </button>
                             </div>

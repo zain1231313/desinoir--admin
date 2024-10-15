@@ -182,7 +182,7 @@ const EditSolution = () => {
                 <label>Solution Image</label>
                 {solutionPreview && (
                     <div className="my-2">
-                        <Image width={50} height={50} src={solutionPreview} alt="Challenge Image" className="h-20 w-20 rounded-lg object-cover" />
+                        <Image width={1000} height={1000} src={solutionPreview} alt="Challenge Image" className="h-20 w-20 rounded-lg object-cover" />
                     </div>
                 )}
                 <label htmlFor="SolutionImage" className="btn btn-primary w-fit" style={{ cursor: 'pointer' }}>

@@ -328,20 +328,13 @@ const Sidebar = () => {
                                                     <Link href="/apps/services/weProcess">{t('We Process')}</Link>
                                                 </li>
                                                 <li>
-                                                    <Link href="/apps/services/weChoose">{t('we Choose')}</Link>
+                                                    <Link href="/apps/services/weChoose">{t('We Choose')}</Link>
                                                 </li>
                                             </ul>
                                         </AnimateHeight>
                                     </li>
 
-                                    {/* <li className="nav-item">
-                                        <Link href="/apps/about" className="group">
-                                            <div className="flex items-center">
-                                                <IconInfoCircle className="shrink-0 group-hover:!text-primary" />
-                                                <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{t('About')}</span>
-                                            </div>
-                                        </Link>
-                                    </li> */}
+                                    
                                     <li className="menu nav-item">
                                         <button type="button" className={`${aboutMenu ? 'active' : ''} nav-link group w-full`} onClick={toggleAboutMenu}>
                                             <div className="flex items-center">

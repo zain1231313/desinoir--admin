@@ -202,7 +202,7 @@ const AddUiStore = () => {
                         <label>Primary Image</label>
                         {imagePreview && (
                             <div className="my-2">
-                                <Image width={50} height={50} src={imagePreview} alt="Preview" className="h-20 w-20 rounded-lg object-cover" />
+                                <Image width={1000} height={1000} src={imagePreview} alt="Preview" className="h-20 w-20 rounded-lg object-cover" />
                             </div>
                         )}
                         <label htmlFor="file-input" className="btn btn-primary w-fit cursor-pointer">
@@ -231,7 +231,7 @@ const AddUiStore = () => {
                         {sliderPreview.length > 0 && (
                             <div className="my-2 flex flex-wrap gap-2">
                                 {sliderPreview.map((preview, index) => (
-                                    <Image width={50} height={50} key={index} src={preview} alt={`Slider ${index}`} className="h-20 w-20 rounded-lg object-cover" />
+                                    <Image width={1000} height={1000} key={index} src={preview} alt={`Slider ${index}`} className="h-20 w-20 rounded-lg object-cover" />
                                 ))}
                             </div>
                         )}

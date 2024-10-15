@@ -209,7 +209,7 @@ const AboutList = () => {
                                 <h5 className="text-lg font-semibold dark:text-white-light">Creativity Section</h5>
                                 <div className="my-2">
                                     <div className="">
-                                        {filePreview2 && <Image width={50} height={50} src={filePreview2} alt="Initial Image" className="h-40 w-40 object-cover" />}
+                                        {filePreview2 && <Image width={1000} height={1000} src={filePreview2} alt="Initial Image" className="h-40 w-40 object-cover" />}
                                         <div className="my-2">
                                             <div className="">
                                                 <label htmlFor="file-input" className="btn btn-primary w-fit" style={{ cursor: 'pointer' }}>
@@ -332,7 +332,7 @@ const AboutList = () => {
                                 <div className="mt-5">
                                     <div className="my-2">
                                         <div className="">
-                                            {filePreview3 && <Image width={50} height={50} src={filePreview3} alt="Initial Image" className="h-40 w-40 object-cover" />}
+                                            {filePreview3 && <Image width={1000} height={1000} src={filePreview3} alt="Initial Image" className="h-40 w-40 object-cover" />}
                                             <div className="my-2">
                                                 <div className="">
                                                     <label

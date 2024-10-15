@@ -244,7 +244,7 @@ const UpdateUiStore = () => {
                         <label>Primary Image</label>
                         {imagePreview && (
                             <div className="my-2">
-                                <Image width={50} height={50} src={imagePreview} alt="Preview" className="rounded-lg w-20 h-20 object-cover" />
+                                <Image width={1000} height={1000} src={imagePreview} alt="Preview" className="rounded-lg w-20 h-20 object-cover" />
                             </div>
                         )}
                         <label htmlFor="primaryImage" className='btn btn-primary w-fit' style={{ cursor: 'pointer' }}>
@@ -293,7 +293,7 @@ const UpdateUiStore = () => {
                         {sliderPreviews.length > 0 && (
                             <div className="my-2 flex gap-2">
                                 {sliderPreviews.map((preview, index) => (
-                                    <Image width={50} height={50}
+                                    <Image width={1000} height={1000}
                                         key={index}
                                         src={preview}
                                         alt={`Slider ${index}`}

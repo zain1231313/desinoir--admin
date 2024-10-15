@@ -183,7 +183,7 @@ const MainChoose = (type: any) => {
                 {/* Section 1 */}
                 <div className="panel border-white-light px-3 dark:border-[#1b2e4b]">
                     <form onSubmit={formik.handleSubmit}>
-                        <input className="form-input" readOnly disabled name="type" value={type.type} placeholder="Type" />
+                        <input className="form-input hidden" readOnly disabled name="type" value={type.type} placeholder="Type" />
                         <div className="panel border-white-light px-3 dark:border-[#1b2e4b]">
                             <h5 className="text-lg font-semibold dark:text-white-light">Why Choose Us Section</h5>
                             <div className="max-lg:gap-2 max-2xl:gap-3 mb-3 grid grid-cols-1 gap-4 lg:grid-cols-2">
@@ -216,7 +216,7 @@ const MainChoose = (type: any) => {
                             </div>
                         </div>
 
-                        <button type="submit" className="mt-4 rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
+                        <button type="submit" className="mt-4 btn bg-[#20D091] border-none text-white ml-auto">
                             Save
                         </button>
                     </form>

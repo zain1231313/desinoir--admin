@@ -224,7 +224,7 @@ const MainWeWork = (type: any) => {
                             </div>
                         </div>
 
-                        <button type="submit" className="mt-4 rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
+                        <button type="submit" className="mt-4 btn bg-[#20D091] border-none text-white ml-auto">
                             Save
                         </button>
                     </form>

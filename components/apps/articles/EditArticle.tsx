@@ -203,7 +203,7 @@ const EditArticle = () => {
                         <div className="panel border-white-light px-3 dark:border-[#1b2e4b]">
                             <h5 className="text-lg font-semibold dark:text-white-light">Primary Image Section</h5>
                             {primaryImagePreview && (
-                                <Image width={50} height={50} src={primaryImagePreview} alt="Primary Preview" className='w-40 h-40 object-cover' />
+                                <Image width={1000} height={1000} src={primaryImagePreview} alt="Primary Preview" className='w-40 h-40 object-cover' />
                             )}
                             <div className="my-2">
                                 <label htmlFor="primary-file-input" className="rounded-l-md btn btn-primary w-fit cursor-pointer">
@@ -221,7 +221,7 @@ const EditArticle = () => {
 
                             <h5 className="text-lg font-semibold dark:text-white-light">Secondary Image Section</h5>
                             {secondaryImagePreview && (
-                                <Image width={50} height={50} src={secondaryImagePreview} alt="Secondary Preview" className='w-40 h-40 object-cover' />
+                                <Image width={1000} height={1000} src={secondaryImagePreview} alt="Secondary Preview" className='w-40 h-40 object-cover' />
                             )}
                             <div className="my-2">
                                 <label htmlFor="secondary-file-input" className="rounded-l-md btn btn-primary w-fit cursor-pointer">
@@ -377,7 +377,7 @@ const EditArticle = () => {
                             />
 
                             {adminImagePreview && (
-                                <Image width={50} height={50} src={adminImagePreview} alt="Admin Preview" className='w-40 h-40 object-cover my-2' />
+                                <Image width={1000} height={1000} src={adminImagePreview} alt="Admin Preview" className='w-40 h-40 object-cover my-2' />
                             )}
                             <div className="my-2">
                                 <label htmlFor="admin-file-input" className="rounded-l-md btn btn-primary w-fit cursor-pointer">
@@ -396,7 +396,7 @@ const EditArticle = () => {
                             <div className="flex items-center justify-between px-2 py-3">
                                 <button
                                     type="submit"
-                                    className="btn btn-primary w-fit"
+                                    className="btn bg-[#20D091] border-none text-white ml-auto w-fit"
                                 >
                                     Save Changes
                                 </button>

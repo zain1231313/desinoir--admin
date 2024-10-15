@@ -282,7 +282,7 @@ const WhychooseData = (type: any) => {
                                 };
                                 return (
                                     <tr key={index}>
-                                        <td>{enItem ? <Image width={50} height={50} src={enItem.icon} className="h-12 w-12 rounded-full object-cover" alt={enItem.title}  /> : null}</td>
+                                        <td>{enItem ? <Image width={1000} height={1000} src={enItem.icon} className="h-12 w-12 rounded-full object-cover" alt={enItem.title}  /> : null}</td>
                                         <td>{enItem ? enItem.title : null}</td>
                                         <td>{arItem ? arItem.title : null}</td>
                                         <td>{enItem ? enItem.description : null}</td>
@@ -316,7 +316,7 @@ const WhychooseData = (type: any) => {
                             {/* Preview the uploaded or current image */}
                             {preview && (
                                 <div className="mt-2">
-                                    <Image width={50} height={50} src={preview} alt="Preview" className="h-16 w-16 object-cover" />
+                                    <Image width={1000} height={1000} src={preview} alt="Preview" className="h-16 w-16 object-cover" />
                                 </div>
                             )}
                             <label htmlFor="workIcon" className="btn btn-primary w-fit" style={{ cursor: 'pointer' }}>

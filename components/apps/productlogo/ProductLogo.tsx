@@ -288,7 +288,7 @@ function ProductLogo() {
                             </table>
                         </div>
 
-                        <Dialog open={open} className="h-[90svh] overflow-y-scroll  dark:bg-[#060818] " handler={() => setOpen(false)}>
+                        <Dialog open={open} className=" h-fit dark:bg-[#060818] " handler={() => setOpen(false)}>
                             <DialogHeader>{isEditMode ? 'Edit Logo' : 'Add Logo'}</DialogHeader>
                             <DialogBody>
                                 <form onSubmit={formik.handleSubmit}>
@@ -296,7 +296,7 @@ function ProductLogo() {
                                         <label htmlFor="darkLogo">Dark Logo</label>
                                         {previewUrlDark && (
                                             <div className="my-2">
-                                                <Image width={50} height={50} src={previewUrlDark} className="h-20 w-20 object-cover" alt=".." />
+                                                <Image width={1000} height={1000} src={previewUrlDark} className="h-20 w-20 object-cover" alt=".." />
                                             </div>
                                         )}
                                         <label htmlFor="darkLogo" className="btn btn btn-primary w-fit" style={{ cursor: 'pointer' }}>
@@ -309,7 +309,7 @@ function ProductLogo() {
                                         <label htmlFor="lightLogo">Light Logo</label>
                                         {previewUrlLight && (
                                             <div className="my-2">
-                                                <Image width={50} height={50} src={previewUrlLight} className="h-20 w-20 object-cover" alt=".." />
+                                                <Image width={1000} height={1000} src={previewUrlLight} className="h-20 w-20 object-cover" alt=".." />
                                             </div>
                                         )}
                                         <label htmlFor="lightLogo" className="btn btn btn-primary w-fit" style={{ cursor: 'pointer' }}>

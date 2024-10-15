@@ -40,7 +40,7 @@ const LanguageDropdown = ({ className = '' }: LanguageDropdownProps) => {
                     button={
                         <>
                             <div>
-                                <Image width={50} height={50} src={`/assets/images/flags/${i18n.language.toUpperCase()}.svg`} alt="image" className="h-5 w-5 rounded-full object-cover" />
+                                <Image width={1000} height={1000} src={`/assets/images/flags/${i18n.language.toUpperCase()}.svg`} alt="image" className="h-5 w-5 rounded-full object-cover" />
                             </div>
                             <div className="text-base font-bold uppercase">{i18n.language}</div>
                             <span className="shrink-0">
@@ -61,7 +61,7 @@ const LanguageDropdown = ({ className = '' }: LanguageDropdownProps) => {
                                             setLocale(item.code);
                                         }}
                                     >
-                                        <Image width={50} height={50} src={`/assets/images/flags/${item.code.toUpperCase()}.svg`} alt="flag" className="h-5 w-5 rounded-full object-cover" />
+                                        <Image width={1000} height={1000} src={`/assets/images/flags/${item.code.toUpperCase()}.svg`} alt="flag" className="h-5 w-5 rounded-full object-cover" />
                                         <span className="ltr:ml-3 rtl:mr-3">{item.name}</span>
                                     </button>
                                 </li>

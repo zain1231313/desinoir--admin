@@ -124,7 +124,7 @@ const ChallengeWork = ({ onNextStep }: any) => {
                 <label>Challenge Image</label>
                 {challengePreview && (
                     <div className="my-2">
-                        <Image width={50} height={50} src={challengePreview} alt="Challenge Image" className="h-20 w-20 rounded-lg object-cover" />
+                        <Image width={1000} height={1000} src={challengePreview} alt="Challenge Image" className="h-20 w-20 rounded-lg object-cover" />
                     </div>
                 )}
                 <label htmlFor="challengeImage" className="btn btn-primary w-fit" style={{ cursor: 'pointer' }}>

@@ -184,12 +184,12 @@ const MainProcess = (type: any) => {
                     {Category == 'uiux'
                         ? 'UI/UX Design'
                         : Category == 'branding'
-                        ? 'Branding Design'
-                        : Category == 'graphicdesign'
-                        ? 'Graphic Design'
-                        : Category == 'motionGraphic'
-                        ? 'Motion Graphic Design'
-                        : 'Service'}
+                            ? 'Branding Design'
+                            : Category == 'graphicdesign'
+                                ? 'Graphic Design'
+                                : Category == 'motionGraphic'
+                                    ? 'Motion Graphic Design'
+                                    : 'Service'}
                 </span>
             </h2>
             <div></div>
@@ -197,17 +197,9 @@ const MainProcess = (type: any) => {
                 {/* Section 1 */}
                 <div className="panel border-white-light px-3 dark:border-[#1b2e4b]">
                     <form onSubmit={formik.handleSubmit}>
-                        {edit ? (
-                            <input className="form-input" readOnly disabled name="type" value={formik.values.type} placeholder="Type" />
-                        ) : (
-                            <select className="form-select" value={formik.values.type} onChange={formik.handleChange} name="type">
-                                <option value="">Select type</option>
-                                <option value="uiux">Ui/Ux</option>
-                                <option value="branding">Branding</option>
-                                <option value="motiongraphic">Motion Graphic</option>
-                                <option value="graphicdesign">Graphic Design</option>
-                            </select>
-                        )}
+
+                        <input className="form-input hidden" readOnly disabled name="type" value={type.type} placeholder="Type" />
+
                         <div className="panel border-white-light px-3 dark:border-[#1b2e4b]">
                             <h5 className="text-lg font-semibold dark:text-white-light">Process Section</h5>
                             <div className="max-lg:gap-2 max-2xl:gap-3 mb-3 grid grid-cols-1 gap-4 lg:grid-cols-2">
@@ -277,7 +269,7 @@ const MainProcess = (type: any) => {
                                 <label>Process Image</label>
                                 {process && (
                                     <div className="my-2">
-                                        <Image width={50} height={50} src={process} alt="Preview" className="h-20 w-20 rounded-lg object-cover" />
+                                        <Image width={1000} height={1000} src={process} alt="Preview" className="h-20 w-20 rounded-lg object-cover" />
                                     </div>
                                 )}
                                 <label htmlFor="Processimage" className="btn btn-primary w-fit" style={{ cursor: 'pointer' }}>
@@ -295,7 +287,7 @@ const MainProcess = (type: any) => {
                             </div>
                         </div>
 
-                        <button type="submit" className="mt-4 rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
+                        <button type="submit" className="mt-4 btn bg-[#20D091] border-none text-white ml-auto">
                             Save
                         </button>
                     </form>

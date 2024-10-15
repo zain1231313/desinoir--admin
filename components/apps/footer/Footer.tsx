@@ -212,7 +212,7 @@ const Footer = () => {
                             placeholder="Rights"
                         />
                     </div>
-                    <button type="submit" className="btn btn-primary">
+                    <button type="submit" className="btn bg-[#20D091] border-none text-white ml-auto">
                         Submit
                     </button>
                 </form>

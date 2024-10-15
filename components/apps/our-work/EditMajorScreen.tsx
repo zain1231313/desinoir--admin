@@ -203,7 +203,7 @@ const EditMajorScreen = () => {
                 <label>Description 2 Image</label>
                 {description2Preview && (
                     <div className="my-2">
-                        <Image width={50} height={50} src={description2Preview} alt="Description 2 Image" className="h-20 w-20 rounded-lg object-cover" />
+                        <Image width={1000} height={1000} src={description2Preview} alt="Description 2 Image" className="h-20 w-20 rounded-lg object-cover" />
                     </div>
                 )}
                 <label htmlFor="description2Image" className="btn btn-primary w-fit" style={{ cursor: 'pointer' }}>
@@ -217,7 +217,7 @@ const EditMajorScreen = () => {
                     <div className="my-2 flex flex-wrap gap-2">
                         {majorScreensPreviews.map((preview, index) => (
                             <div key={index} className="relative inline-block">
-                                <Image width={50} height={50} src={preview} alt={`Major Screens Image ${index}`} className="h-20 w-20 rounded-lg object-cover" />
+                                <Image width={1000} height={1000} src={preview} alt={`Major Screens Image ${index}`} className="h-20 w-20 rounded-lg object-cover" />
                                 {/* Cross button to remove the image */}
                                 <button
                                     type="button"
@@ -235,7 +235,7 @@ const EditMajorScreen = () => {
                 {majorScreensPreviews.length > 0 && (
                     <div className="my-2 flex flex-wrap gap-2">
                         {majorScreensPreviews.map((preview, index) => (
-                            <Image width={50} height={50} key={index} src={preview} alt={`Major Screens Image ${index}`} className="h-20 w-20 rounded-lg object-cover" />
+                            <Image width={1000} height={1000} key={index} src={preview} alt={`Major Screens Image ${index}`} className="h-20 w-20 rounded-lg object-cover" />
                         ))}
                     </div>
                 )} */}

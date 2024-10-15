@@ -266,7 +266,7 @@ const Workdata = (type: any) => {
                                 };
                                 return (
                                     <tr key={index}>
-                                        <td>{enItem ? <Image width={50} height={50} src={enItem.icon} alt={enItem.title} className="h-12 w-12 rounded-full object-cover" /> : null}</td>
+                                        <td>{enItem ? <Image width={1000} height={1000} src={enItem.icon} alt={enItem.title} className="h-12 w-12 rounded-full object-cover" /> : null}</td>
                                         <td>{enItem ? enItem.title : null}</td>
                                         <td>{arItem ? arItem.title : null}</td>
                                         <td>{enItem ? enItem.description : null}</td>
@@ -300,13 +300,13 @@ const Workdata = (type: any) => {
                             {/* Preview the uploaded or current image */}
                             {preview && (
                                 <div className="mt-2">
-                                    <Image width={50} height={50} src={preview} alt="Preview" className="h-16 w-16 object-cover" />
+                                    <Image width={1000} height={1000} src={preview} alt="Preview" className="h-16 w-16 object-cover" />
                                 </div>
                             )}
                             {/* In Edit mode, show the existing image if no new image is uploaded */}
                             {isEditMode && !preview && modelData?.work?.icon && (
                                 <div className="mt-2">
-                                    <Image width={50} height={50}
+                                    <Image width={1000} height={1000}
                                         src={modelData.work.icon} // Existing image from the server
                                         alt="Current Icon"
                                         className="h-16 w-16 object-cover"

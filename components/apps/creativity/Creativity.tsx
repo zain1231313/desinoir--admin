@@ -124,7 +124,7 @@ const Creativity = () => {
                         <form onSubmit={formik.handleSubmit}>
                             <div className="my-2">
                                 <div className="">
-                                    {image2 && <Image width={50} height={50} src={`${!filePreview2 ? image2 : filePreview2}`} alt="Initial Image" className="h-40 w-40 object-cover" />}
+                                    {image2 && <Image width={1000} height={1000} src={`${!filePreview2 ? image2 : filePreview2}`} alt="Initial Image" className="h-40 w-40 object-cover" />}
                                     <div className="my-2">
                                         <div className="">
                                             <label htmlFor="file-input" className="btn btn-primary w-fit" style={{ cursor: 'pointer' }}>
@@ -248,7 +248,7 @@ const Creativity = () => {
                                 </div>
                             </div>
 
-                            <button type="submit" className="btn btn-primary !mt-6">
+                            <button type="submit" className="btn bg-[#20D091] border-none text-white ml-auto !mt-6">
                                 Submit Form
                             </button>
                         </form>

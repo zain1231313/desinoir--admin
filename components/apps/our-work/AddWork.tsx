@@ -147,7 +147,7 @@ const MainOurwork = ({ onNextStep }: any) => {
                         <label>Primary Image</label>
                         {imagePreview && (
                             <div className="my-2">
-                                <Image width={50} height={50} src={imagePreview} alt="Preview" className="h-20 w-20 rounded-lg object-cover" />
+                                <Image width={1000} height={1000} src={imagePreview} alt="Preview" className="h-20 w-20 rounded-lg object-cover" />
                             </div>
                         )}
                         <label htmlFor="primaryImage" className="btn btn-primary w-fit" style={{ cursor: 'pointer' }}>
@@ -193,7 +193,7 @@ const MainOurwork = ({ onNextStep }: any) => {
                     <label>Description Image</label>
                     {descriptionPreview && (
                         <div className="my-2">
-                            <Image width={50} height={50} src={descriptionPreview} alt="Preview" className="h-20 w-20 rounded-lg object-cover" />
+                            <Image width={1000} height={1000} src={descriptionPreview} alt="Preview" className="h-20 w-20 rounded-lg object-cover" />
                         </div>
                     )}
                     <label htmlFor="description" className="btn btn-primary w-fit" style={{ cursor: 'pointer' }}>
