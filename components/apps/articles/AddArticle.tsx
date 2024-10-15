@@ -68,7 +68,7 @@ const AddArticle = () => {
                 const response = await addNewArticle(formData);
                 if (response.success === true) {
                     toast.success(response.message);
-                    console.log('Article added successfully:', response);
+                    // console.log('Article added successfully:', response);
                     navigate.push('/apps/articles');
                     setLoading(false);
                 } else {
@@ -78,7 +78,7 @@ const AddArticle = () => {
             } catch (error: any) {
                 setLoading(false);
                 toast.error(error.message);
-                console.error('Failed to add article:', error);
+                // console.error('Failed to add article:', error);
                 // Handle error (e.g., show an error toast)
             }
         },

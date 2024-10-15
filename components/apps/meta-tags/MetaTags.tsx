@@ -29,7 +29,7 @@ const MetaTags = () => {
             setMetaTags(data.data);
             setLoading(false);
         } catch (error) {
-            console.error('Failed to fetch meta tags:', error);
+            // console.error('Failed to fetch meta tags:', error);
             setLoading(false);
         }
     };
@@ -80,7 +80,7 @@ const MetaTags = () => {
             } catch (error: any) {
                 setOpen(false);
                 toast.error(error.message);
-                console.error('Error adding/updating meta tag:', error);
+                // console.error('Error adding/updating meta tag:', error);
             }
         },
     });
@@ -96,7 +96,7 @@ const MetaTags = () => {
 
     // Edit meta tag handler
     const handleEdit = (metaTag: any) => {
-        console.log(metaTag);
+        // console.log(metaTag);
         setIsEditMode(true);
         setPreviewUrl(metaTag.image); // Set the image for preview
         formik.setValues({
@@ -121,7 +121,7 @@ const MetaTags = () => {
         } catch (error: any) {
             setOpenDel(false);
             toast.error(error.message);
-            console.error('Delete failed:', error);
+            // console.error('Delete failed:', error);
         }
     };
 

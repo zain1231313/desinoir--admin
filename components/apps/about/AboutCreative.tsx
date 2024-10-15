@@ -65,7 +65,7 @@ const AboutCreative = () => {
             } catch (error) {
                 setLoading(false);
                 toast.error('An error occurred');
-                console.error('Error submitting form:', error);
+                // console.error('Error submitting form:', error);
             }
         },
     });
@@ -88,7 +88,7 @@ const AboutCreative = () => {
             // setCreativeDescrip(result.data.data.en.creativitySection.description);
             // setCreativeDescripAr(result.data.data.ar.creativitySection.description);
         } catch (error) {
-            console.error('Error fetching about data:', error);
+            // console.error('Error fetching about data:', error);
         }
     };
     useEffect(() => {

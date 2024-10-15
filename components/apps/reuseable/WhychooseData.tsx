@@ -142,11 +142,6 @@ const WhychooseData = (type: any) => {
                         arwhyChooseDesiniorId: values.arwhyChooseDesiniorId,
                         workIcon: values.workIcon,
                         Type:values.type,
-                        // processData: '',  // Include actual values if needed
-                        // arProcessData: '',
-                        // whyChooseData: '',  // Include actual values if needed
-                        // arWhyChooseData: '',
-                        // processId: '', // Include actual values if needed
                     };
 
                     // Make the API call with the update helper function
@@ -213,13 +208,10 @@ const WhychooseData = (type: any) => {
             }
             setOpenDel(false);
             fetchData();
-            // processId: 'yourProcessId',
-            // arprocessId: undefined,
-            // whyChooseDesiniorId: undefined,
-            // arwhyChooseDesiniorId: undefined,
-
-            // console.log('Deleted successfully:', result);
+            window.location.reload()
+            
         } catch (error) {
+            setOpenDel(false);
             toast.error('Failed to delete Work Item');
             console.error('Deletion error:', error);
         }

@@ -53,7 +53,7 @@ const Faq = () => {
 
     const fetchData = async () => {
         const faqData = await getFaqs();
-        console.log('Fetched FAQs:', faqData);
+        // console.log('Fetched FAQs:', faqData);
         setData(faqData.data);
         setLoading(false);
     };
@@ -81,7 +81,7 @@ const Faq = () => {
             setOpenDel(false);
             toast.success('FAQ deleted successfully');
         } catch (error) {
-            console.error('Failed to delete FAQ:', error);
+            // console.error('Failed to delete FAQ:', error);
             toast.error('Failed to delete FAQ');
         }
     };
@@ -97,7 +97,7 @@ const Faq = () => {
         validationSchema: FaqSchema,
         enableReinitialize: true,
         onSubmit: async (values) => {
-            console.log('Values==>', values);
+            // console.log('Values==>', values);
             const faqData = {
                 enQuestion: values.enQuestion,
                 arQuestion: values.arQuestion,
@@ -119,7 +119,7 @@ const Faq = () => {
                 fetchData();
                 setOpenDialog(false);
             } catch (error) {
-                console.error('Error during FAQ operation:', error);
+                // console.error('Error during FAQ operation:', error);
                 toast.error('Failed to process FAQ');
             }
         },

@@ -29,11 +29,11 @@ const MajorScreenWork = ({ onNextStep }: any) => {
         validationSchema: MajorScreenSchema,
 
         onSubmit: async (values) => {
-            console.log('Working =>', values);
+            // console.log('Working =>', values);
             setLoading(true);
             try {
                 const response = await addOurWorkMajorScreen(values);
-                console.log('Response ==>', response);
+                // console.log('Response ==>', response);
                 if (response.success === true) {
                     push('/apps/our-work/');
                     onNextStep(response);
@@ -42,7 +42,7 @@ const MajorScreenWork = ({ onNextStep }: any) => {
                 }
             } catch (error: any) {
                 toast.error(error.message);
-                console.error('Failed to submit form:', error);
+                // console.error('Failed to submit form:', error);
             } finally {
                 setLoading(false);
             }
@@ -81,7 +81,7 @@ const MajorScreenWork = ({ onNextStep }: any) => {
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
-        console.log('Fromik values', formik?.values);
+        // console.log('Fromik values', formik?.values);
         //@ts-ignore
         formik.handleSubmit(formik?.values);
     };

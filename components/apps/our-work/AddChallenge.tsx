@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 
 const ChallengeWork = ({ onNextStep }: any) => {
     const id = useSelector((state: IRootState) => selectId(state));
-    console.log('IDD Challenge=>', id);
+    // console.log('IDD Challenge=>', id);
     const [loading, setLoading] = useState(false);
     const [challengePreview, setChallengePreview] = useState<string | null>(null);
     const formik = useFormik({
@@ -27,11 +27,11 @@ const ChallengeWork = ({ onNextStep }: any) => {
         validationSchema: ChallengeSchema,
 
         onSubmit: async (values) => {
-            console.log('Working =>', values);
+            // console.log('Working =>', values);
             setLoading(true);
             try {
                 const response = await addOurWorkChallenge(values);
-                console.log('Response ==>', response);
+                // console.log('Response ==>', response);
                 if (response.success === true) {
                     onNextStep(response);
                 } else {
@@ -39,7 +39,7 @@ const ChallengeWork = ({ onNextStep }: any) => {
                 }
             } catch (error: any) {
                 toast.error(error.message);
-                console.error('Failed to submit form:', error);
+                // console.error('Failed to submit form:', error);
             } finally {
                 setLoading(false);
             }

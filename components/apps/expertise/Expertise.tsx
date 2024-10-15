@@ -32,7 +32,7 @@ const Expertise = () => {
 
             try {
                 const result = await createExpertise(formData);
-                console.log(result);
+                // console.log(result);
                 // Update the values in the component
                 formik.setValues({
                     ExpertisetitleEnglish: result.data.data.en.ourExpertise.expertiseTitle,
@@ -62,7 +62,7 @@ const Expertise = () => {
                     ExpertisesubtitleEnglish: result.data.data.en.ourExpertise.expertiseSubTitle || '',
                     ExpertisesubtitleArabic: result.data.data.ar.ourExpertise.expertiseSubTitle || '',
                 });
-                console.log(result.data.data.en);
+                // console.log(result.data.data.en);
             }
             setLoading(false); // Set loading to false after fetching
         } catch (error) {

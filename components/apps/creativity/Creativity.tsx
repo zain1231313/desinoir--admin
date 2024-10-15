@@ -78,7 +78,7 @@ const Creativity = () => {
             } catch (error: any) {
                 setLoading(false);
                 toast.error(error);
-                console.error(error);
+                // console.error(error);
             }
         },
     });
@@ -104,7 +104,7 @@ const Creativity = () => {
             setLoading(false);
         } catch (error) {
             setLoading(false);
-            console.error('Error fetching data:', error);
+            // console.error('Error fetching data:', error);
             dispatch(setError('Failed to fetch data'));
         }
     };
@@ -202,7 +202,7 @@ const Creativity = () => {
                                         theme="snow"
                                         value={engDescrip}
                                         onChange={(content) => {
-                                            console.log('asdyhjkashdjkhasjkd', content);
+                                            // console.log('asdyhjkashdjkhasjkd', content);
                                             setEngDescrip(content);
                                         }}
                                         placeholder="Description Arabic"
@@ -214,7 +214,7 @@ const Creativity = () => {
                                         theme="snow"
                                         value={arDescrip}
                                         onChange={(content) => {
-                                            console.log('asdyhjkashdjkhasjkd', content);
+                                            // console.log('asdyhjkashdjkhasjkd', content);
                                             setArDescrip(content);
                                         }}
                                     />

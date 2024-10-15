@@ -51,7 +51,7 @@ const EditArticle = () => {
     const articleData = useSelector((state: IRootState) => state.articles.selectedArticle);
 
 
-    console.log(id); // Use id as needed
+    // console.log(id); // Use id as needed
 
     const formik = useFormik({
         initialValues: {
@@ -100,7 +100,7 @@ const EditArticle = () => {
         },
     });
 
-    console.log(data);
+    // console.log(data);
 
     useEffect(() => {
         const requestOptions: any = {

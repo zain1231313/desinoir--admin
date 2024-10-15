@@ -11,6 +11,7 @@ import 'datatables.net';
 import { workDataSchema } from '@/components/schema/schema';
 import DeleteModal from '@/components/Modals/DeleteModal';
 import Image from 'next/image';
+import { result } from 'lodash';
 
 const Workdata = (type: any) => {
     const [tableData, setTableData] = useState<any>(''); // Adjusted type if needed
@@ -20,7 +21,7 @@ const Workdata = (type: any) => {
     const [preview, setPreview] = useState<any>();
     const [modelData, setModelData] = useState<any>();
     const [workId, setWorkId] = useState<any>();
-    const [arworkId, setArworkId] = useState<any>();
+    const [arWorkId, setArworkId] = useState<any>();
     const [openDel, setOpenDel] = useState(false);
     const [edit, setEdit] = useState(false); // Adjusted type if needed
     const fetchData = async () => {
@@ -93,7 +94,6 @@ const Workdata = (type: any) => {
         validationSchema: workDataSchema,
         enableReinitialize: true,
         onSubmit: async (values) => {
-            console.log('values =================', values);
             try {
                 if (!isEditMode) {
                     console.log('edit mode is off');
@@ -197,21 +197,15 @@ const Workdata = (type: any) => {
 
     const handleDeletemodal = async () => {
         try {
-            const result = await deleteServiceData(workId, arworkId);
-            // const result2 = await deleteServiceData2(
-            // );
-            if (result.success === true) {
-                toast.success('Work Item deleted successfully');
-            }
+            const result = await deleteServiceData(workId, arWorkId);
+
+            toast.success(result.message);
             setOpenDel(false);
             fetchData();
-            // processId: 'yourProcessId',
-            // arprocessId: undefined,
-            // whyChooseDesiniorId: undefined,
-            // arwhyChooseDesiniorId: undefined,
+            window.location.reload()
 
-            // console.log('Deleted successfully:', result);
         } catch (error) {
+            setOpenDel(false);
             toast.error('Failed to delete Work Item');
             console.error('Deletion error:', error);
         }

@@ -117,7 +117,7 @@ const MainServices = () => {
 
             try {
                 const result = await createServiceHome(formData);
-                console.log("results ---------", result);
+                // console.log("results ---------", result);
                 formik.setValues({
                     // Update formik values if necessary
                     uiuxTitle: result.data.data.en.serviceSection.uiuxTitle,
@@ -157,7 +157,7 @@ const MainServices = () => {
                 fetchDataAsync()
             } catch (error: any) {
                 toast.error(error.message);
-                console.error(error);
+                // console.error(error);
             }
         }
     });
@@ -426,7 +426,7 @@ const MainServices = () => {
                                 theme="snow"
                                 value={enguiuxDescrip}
                                 onChange={(content) => {
-                                    console.log("asdyhjkashdjkhasjkd", content)
+                                    // console.log("asdyhjkashdjkhasjkd", content)
                                     setEnguiuxDescrip(content)
                                 }}
                                 placeholder="Description English"
@@ -440,7 +440,7 @@ const MainServices = () => {
                                 theme="snow"
                                 value={aruiuxDescrip}
                                 onChange={(content) => {
-                                    console.log("asdyhjkashdjkhasjkd", content)
+                                    // console.log("asdyhjkashdjkhasjkd", content)
                                     setAruiuxDescrip(content)
                                 }}
                                 placeholder="Description Arabic"
@@ -515,7 +515,7 @@ const MainServices = () => {
                                 theme="snow"
                                 value={engbrandingDescrip}
                                 onChange={(content) => {
-                                    console.log("asdyhjkashdjkhasjkd", content)
+                                    // console.log("asdyhjkashdjkhasjkd", content)
                                     setEngbrandingDescrip(content)
                                 }}
                                 placeholder="Description English"
@@ -530,7 +530,7 @@ const MainServices = () => {
                                 theme="snow"
                                 value={arbrandingDescrip}
                                 onChange={(content) => {
-                                    console.log("asdyhjkashdjkhasjkd", content)
+                                    // console.log("asdyhjkashdjkhasjkd", content)
                                     setArbrandingDescrip(content)
                                 }}
                                 placeholder="Description Arabic"
@@ -598,7 +598,7 @@ const MainServices = () => {
                                 theme="snow"
                                 value={enggraphicDescrip}
                                 onChange={(content) => {
-                                    console.log("asdyhjkashdjkhasjkd", content)
+                                    // console.log("asdyhjkashdjkhasjkd", content)
                                     setEnggraphicDescrip(content)
                                 }}
                                 placeholder="Description English"
@@ -612,7 +612,7 @@ const MainServices = () => {
                                 theme="snow"
                                 value={argraphicDescrip}
                                 onChange={(content) => {
-                                    console.log("asdyhjkashdjkhasjkd", content)
+                                    // console.log("asdyhjkashdjkhasjkd", content)
                                     setArgraphicDescrip(content)
                                 }}
                                 placeholder="Description Arabic"
@@ -679,7 +679,7 @@ const MainServices = () => {
                                 theme="snow"
                                 value={engmotionDescrip}
                                 onChange={(content) => {
-                                    console.log("asdyhjkashdjkhasjkd", content)
+                                    // console.log("asdyhjkashdjkhasjkd", content)
                                     setEngmotionDescrip(content)
                                 }}
                                 placeholder="Description English"
@@ -693,7 +693,7 @@ const MainServices = () => {
                                 theme="snow"
                                 value={armotionDescrip}
                                 onChange={(content) => {
-                                    console.log("asdyhjkashdjkhasjkd", content)
+                                    // console.log("asdyhjkashdjkhasjkd", content)
                                     setArmotionDescrip(content)
                                 }}
                                 placeholder="Description Arabic"

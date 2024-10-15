@@ -14,10 +14,10 @@ const Footer = () => {
         try {
             const result = await getFooterData();
             setFooterData(result.data[0].data);
-            console.log(result.data[0].data)
+            // console.log(result.data[0].data)
             setLoading(false);
         } catch (error) {
-            console.error('Error fetching footer data:', error);
+            // console.error('Error fetching footer data:', error);
             setError('Failed to fetch footer data.');
             setLoading(false);
         }
@@ -44,9 +44,9 @@ const Footer = () => {
         },
         onSubmit: async (values) => {
             try {
-                console.log("asjdkaksdhjhasdjhajksh", values)
+                // console.log("asjdkaksdhjhasdjhajksh", values)
                 const result = await addFooterData(values);
-                console.log(result)
+                // console.log(result)
                 if (result.success === true) {
                     toast.success(result.message)
                     fetchData()

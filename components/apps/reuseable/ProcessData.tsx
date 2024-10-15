@@ -169,20 +169,13 @@ const ProcessData = (type: any) => {
     const handleDeletemodal = async () => {
         try {
             const result = await deleteServiceData2(workId, arworkId);
-            // const result2 = await deleteServiceData2(
-            // );
-            if (result.success === true) {
-                toast.success('Work Item deleted successfully');
-            }
+
+            toast.success(result.message);
             setOpenDel(false);
             fetchData();
-            // processId: 'yourProcessId',
-            // arprocessId: undefined,
-            // whyChooseDesiniorId: undefined,
-            // arwhyChooseDesiniorId: undefined,
-
-            // console.log('Deleted successfully:', result);
+            window.location.reload()
         } catch (error) {
+            setOpenDel(false);
             toast.error('Failed to delete Work Item');
             console.error('Deletion error:', error);
         }

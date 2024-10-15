@@ -137,7 +137,9 @@ const API_ENDPOINT = {
     UPDATE_WEWORK: Server + 'service/add-howWorkTitle-data',
     UPDATE_WORK_CARD: Server + 'service/update-service-howwork-data',
     UPDATE_CHOOSE_CARD2: Server + 'service/update-service-whyChoose-data',
-    DELETE_SERVICES_DATA: Server + 'service/delete-service-data',
+    DELETE_SERVICES_HOW_DATA: Server + 'service/delete-services-how-work-data',
+    DELETE_SERVICES_PROCESS_DATA: Server + 'service/delete-services-process-data',
+    DELETE_SERVICES_WHY_CHOOSE_DATA: Server + 'service/delete-service-whyChoose-data',
 
     GET_META_DATA: Server + 'meta-tags/get-meta-tags',
     ADD_META_DATA: Server + 'meta-tags/add-meta-tags',

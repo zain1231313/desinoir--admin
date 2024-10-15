@@ -69,7 +69,7 @@ function Articles() {
                 setLoading(false)
             } catch (error) {
                 setLoading(false)
-                console.error('Error loading articles:', error);
+                // console.error('Error loading articles:', error);
             }
         };
         loadArticles();
@@ -95,7 +95,7 @@ function Articles() {
     }, [articles, loading]);
 
     const handleSelectArticle = (article: ArticleResponse) => {
-        console.log('----------Redux----------->', article);
+        // console.log('----------Redux----------->', article);
         dispatch(setSelectedArticle(article));
     };
     const handleDeleteClick = async (id: string) => {

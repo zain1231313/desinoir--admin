@@ -44,7 +44,7 @@ const AllHeader = () => {
                 setHeaders([]);
             }
         } catch (error) {
-            console.error('Failed to fetch headers:', error);
+            // console.error('Failed to fetch headers:', error);
             setHeaders([]);
         }
     };
@@ -72,7 +72,7 @@ const AllHeader = () => {
             }
         } catch (error: any) {
             toast.error(error.message);
-            console.error('Failed to add header:', error);
+            // console.error('Failed to add header:', error);
         } finally {
             setLoading(false);
         }

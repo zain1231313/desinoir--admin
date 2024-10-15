@@ -30,7 +30,7 @@ const HomeHeader = () => {
         },
         enableReinitialize: true,
         onSubmit: async (values) => {
-            console.log('MAIN Home =>', values);
+            // console.log('MAIN Home =>', values);
             setLoading(true);
             const formData = new FormData();
             if (image1) {
@@ -45,7 +45,7 @@ const HomeHeader = () => {
 
             try {
                 const result = await createHeaderHome(formData);
-                console.log(result);
+                // console.log(result);
                 if (result.success === true) {
                     formik.setValues({
                         titleEnglish: result.data.data.en.mainBanner.title,
@@ -68,7 +68,7 @@ const HomeHeader = () => {
             } catch (error: any) {
                 setLoading(false);
                 toast.error(error);
-                console.error(error);
+                // console.error(error);
             }
         },
     });
@@ -115,7 +115,7 @@ const HomeHeader = () => {
                     image: result.data.data.en.mainBanner.image,
                 });
                 setImage1(result.data.data.en.mainBanner.image);
-                console.log(result.data.data.en.mainBanner.image);
+                // console.log(result.data.data.en.mainBanner.image);
             }
         } catch (error) {
             dispatch(setError('Failed to fetch data'));

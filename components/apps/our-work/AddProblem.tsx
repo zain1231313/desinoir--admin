@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 
 const ProblemWork = ({ onNextStep }: any) => {
     const id = useSelector((state: IRootState) => selectId(state));
-    console.log('IDD1=>', id);
+    // console.log('IDD1=>', id);
     const [loading, setLoading] = useState(false);
     const [problemPreview, setProblemPreview] = useState<string | null>(null);
 
@@ -28,11 +28,11 @@ const ProblemWork = ({ onNextStep }: any) => {
         validationSchema: ProblemSchema,
 
         onSubmit: async (values) => {
-            console.log('Working =>', values);
+            // console.log('Working =>', values);
             setLoading(true);
             try {
                 const response = await addOurWorkProblem(values);
-                console.log('Response ==>', response);
+                // console.log('Response ==>', response);
                 if (response.success === true) {
                     onNextStep(response);
                 } else {
@@ -40,7 +40,7 @@ const ProblemWork = ({ onNextStep }: any) => {
                 }
             } catch (error: any) {
                 toast.error(error.message);
-                console.error('Failed to submit form:', error);
+                // console.error('Failed to submit form:', error);
             } finally {
                 setLoading(false);
             }

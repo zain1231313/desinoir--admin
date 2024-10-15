@@ -1978,99 +1978,100 @@ export const updateServiceData3 = async (serviceData: {
 
 export const deleteServiceData = async (
     workId: string,
-    arworkId: string
-    // processId?: string,
-    // arprocessId?: string,
-    // whyChooseDesiniorId?: string,
-    // arwhyChooseDesiniorId?: string
+    arWorkId: string
 ) => {
     try {
-        const response = await fetch(API_ENDPOINT.DELETE_SERVICES_DATA, {
-            method: 'DELETE',
+        const response = await fetch(API_ENDPOINT.DELETE_SERVICES_HOW_DATA, {
+            method: "DELETE",
             headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${getAndDecryptCookie('AccessToken')}`, // Include the token
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                workId: workId,
-                arworkId: arworkId,
-                // processId: ids.processId,
-                // arprocessId: ids.arprocessId,
-                // whyChooseDesiniorId: ids.whyChooseDesiniorId,
-                // arwhyChooseDesiniorId: ids.arwhyChooseDesiniorId,
+                arWorkId,
+                workId,
             }),
         });
 
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Failed to delete service data:', error);
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status} - ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        //   console.log("Deletion successful:", result);
+        return result;
+    } catch (error: any) {
+        //   console.error("Error deleting how work data:", error.message);
         throw error;
     }
 };
 
 export const deleteServiceData2 = async (
-    // workId: string,
-    // arworkId: string
     processId: string,
     arprocessId: string
-    // whyChooseDesiniorId?: string,
-    // arwhyChooseDesiniorId?: string
 ) => {
     try {
-        const response = await fetch(API_ENDPOINT.DELETE_SERVICES_DATA, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${getAndDecryptCookie('AccessToken')}`, // Include the token
-            },
-            body: JSON.stringify({
-                // workId: workId,
-                // arworkId: arworkId,
-                processId: processId,
-                arprocessId: arprocessId,
-                // whyChooseDesiniorId: ids.whyChooseDesiniorId,
-                // arwhyChooseDesiniorId: ids.arwhyChooseDesiniorId,
-            }),
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+
+        // Request body
+        const body = JSON.stringify({
+            processId,
+            arprocessId
         });
 
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Failed to delete service data:', error);
+        const requestOptions: RequestInit = {
+            method: "DELETE",
+            headers: headers,
+            body: body,
+            redirect: "follow"
+        };
+
+        const response = await fetch(API_ENDPOINT.DELETE_SERVICES_PROCESS_DATA, requestOptions);
+
+
+        const result = await response.json();
+        console.log('Deletion successful:', result);
+        return result;
+    } catch (error: any) {
+        console.error('Error deleting process data:', error.message);
         throw error;
     }
 };
 export const deleteServiceData3 = async (
-    // workId: string,
-    // arworkId: string
-    // processId: string,
-    // arprocessId: string,
+
     whyChooseDesiniorId?: string,
     arwhyChooseDesiniorId?: string
 ) => {
     try {
-        const response = await fetch(API_ENDPOINT.DELETE_SERVICES_DATA, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${getAndDecryptCookie('AccessToken')}`, // Include the token
-            },
-            body: JSON.stringify({
-                // workId: workId,
-                // arworkId: arworkId,
-                // processId: processId,
-                // arprocessId: arprocessId,
-                whyChooseDesiniorId: whyChooseDesiniorId,
-                arwhyChooseDesiniorId: arwhyChooseDesiniorId,
-            }),
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+
+        // Request body
+        const body = JSON.stringify({
+            whyChooseDesiniorId,
+            arwhyChooseDesiniorId
         });
 
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Failed to delete service data:', error);
-        throw error;
+        const requestOptions: RequestInit = {
+            method: "DELETE",
+            headers: headers,
+            body: body,
+            redirect: "follow"
+        };
+
+        const response = await fetch(API_ENDPOINT.DELETE_SERVICES_WHY_CHOOSE_DATA, requestOptions);
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`Error: ${errorData.message}`);
+        }
+
+        const result = await response.json();
+        console.log('Deletion successful:', result);
+        return result;
+    } catch (error: any) {
+        console.error('Error deleting whyChoose data:', error.message);
+        throw error; // Re-throw for higher-level error handling
     }
 };
 
