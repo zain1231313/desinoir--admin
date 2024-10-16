@@ -54,23 +54,21 @@ const UpdateUiStore = () => {
 
     useEffect(() => {
         const myHeaders = new Headers();
-        myHeaders.append("Accept", "application/json");
+        myHeaders.append('Accept', 'application/json');
 
         const requestOptions: any = {
-            method: "GET",
+            method: 'GET',
             headers: myHeaders,
-            redirect: "follow"
+            redirect: 'follow',
         };
 
         fetch(`${API_ENDPOINT.UISTORE_BY_ID}${id}`, requestOptions)
             .then((response) => response.json())
             .then((result) => {
-                return setData(result.data)
-
+                return setData(result.data);
             })
             .catch((error) => console.error(error));
-
-    }, [])
+    }, []);
     useEffect(() => {
         if (data?.sliderImages) {
             setImagePreview(data?.sliderImages);
@@ -78,8 +76,8 @@ const UpdateUiStore = () => {
         if (data?.sliderImages && data?.sliderImages.length > 0) {
             setSliderPreviews(data?.sliderImages);
         }
-    }, [data])
-    console.log(data?.primaryImage)
+    }, [data]);
+    console.log(data?.primaryImage);
     const formik = useFormik({
         initialValues: {
             title: data?.title.en,
@@ -90,6 +88,7 @@ const UpdateUiStore = () => {
             primaryImage: data?.primaryImage || null,
             sliderImages: data?.sliderImages || [],
             types: data?.types,
+            buylink: data?.buylink,
             uIKitrecommendedDescription: data?.uIKitrecommendedDescription.en,
             uIKitrecommendedDescriptionAr: data?.uIKitrecommendedDescription.ar,
             uIKitrecommendedTitle: data?.uIKitrecommendedTitle.en,
@@ -106,16 +105,15 @@ const UpdateUiStore = () => {
 
             licenseDescription: data?.licenseDescription.en,
             licenseDescriptionAr: data?.licenseDescription.ar,
-
         },
         enableReinitialize: true,
         onSubmit: async (values) => {
             try {
-                console.log("Updates ==========", values)
+                console.log('Updates ==========', values);
                 if (id) {
                     const result = await updateUiStore(id, values);
                     toast.success(result.message);
-                    navigate.push('/apps/ui-store')
+                    navigate.push('/apps/ui-store');
                 }
             } catch (error: any) {
                 toast.error(error.message);
@@ -137,21 +135,14 @@ const UpdateUiStore = () => {
         }
     };
 
-
     const handleSliderImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
         if (files) {
             const newImages = Array.from(files);
-            setSliderPreviews(newImages.map(file => URL.createObjectURL(file)));
+            setSliderPreviews(newImages.map((file) => URL.createObjectURL(file)));
             formik.setFieldValue('sliderImages', newImages);
         }
     };
-
-    // Remove image from sliderImages array
-    // const handleRemoveSliderImage = (index: number) => {
-    //     const updatedImages = formik.values.sliderImages.filter((_, i) => i !== index);
-    //     formik.setFieldValue('sliderImages', updatedImages);
-    // };
 
     const toolbarOptions = [
         [{ font: [] }, { size: [] }],
@@ -176,116 +167,77 @@ const UpdateUiStore = () => {
             <div className="panel border-white-light px-3 dark:border-[#1b2e4b]">
                 <form onSubmit={formik.handleSubmit}>
                     {/* Title Section */}
-                    <div className="my-2">
-                        <label>Title</label>
-                        <input
-                            type="text"
-                            name="title"
-                            value={formik.values.title}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            className="form-input"
-                            placeholder="English Title"
-                        />
+                    <div className='flex w-full gap-2'>
+                        <div className="my-2 w-full">
+                            <label>Title (EN)</label>
+                            <input type="text" name="title" value={formik.values.title} onChange={formik.handleChange} onBlur={formik.handleBlur} className="form-input" placeholder="English Title" />
+                        </div>
+                        <div className="my-2 w-full">
+                            <label>Title (AR)</label>
+                            <input
+                                type="text"
+                                name="titleAr"
+                                value={formik.values.titleAr}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                className="form-input"
+                                placeholder="Arabic Title"
+                            />
+                        </div>
                     </div>
-                    <div className="my-2">
-                        <input
-                            type="text"
-                            name="titleAr"
-                            value={formik.values.titleAr}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            className="form-input"
-                            placeholder="Arabic Title"
-                        />
-                    </div>
-                    <div className="my-2">
-                        <label>Subtitle</label>
-                        <input
-                            type="text"
-                            name="subtitle"
-                            value={formik.values.subtitle}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            className="form-input"
-                            placeholder="English Title"
-                        />
-                    </div>
-                    <div className="my-2">
-                        <input
-                            type="text"
-                            name="subtitleAr"
-                            value={formik.values.subtitleAr}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            className="form-input"
-                            placeholder="Arabic Title"
-                        />
+                    <div className='flex w-full gap-2'>
+                        <div className="my-2 w-full">
+                            <label>Subtitle (EN)</label>
+                            <input
+                                type="text"
+                                name="subtitle"
+                                value={formik.values.subtitle}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                className="form-input"
+                                placeholder="English Title"
+                            />
+                        </div>
+                        <div className="my-2 w-full">
+                            <label>Subtitle (AR)</label>
+                            <input
+                                type="text"
+                                name="subtitleAr"
+                                value={formik.values.subtitleAr}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                className="form-input"
+                                placeholder="Arabic Title"
+                            />
+                        </div>
                     </div>
 
                     {/* Price or Free Option Section */}
-                    <div className="my-2">
-                        <label>Price or Free</label>
-                        <input
-                            type='text'
-                            name="priceOrFree"
-                            value={formik.values.priceOrFree}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            className="form-input"
-                        />
+                    <div className='flex w-full gap-2'>
+                        <div className="my-2 w-full">
+                            <label>Price or Free</label>
+                            <input type="text" name="priceOrFree" value={formik.values.priceOrFree} onChange={formik.handleChange} onBlur={formik.handleBlur} className="form-input" />
+                        </div>
 
-
+                        <div className="my-2 w-full">
+                            <label>Buy Link</label>
+                            <input type="text" name="buylink" value={formik.values.buylink} onChange={formik.handleChange} onBlur={formik.handleBlur} className="form-input" />
+                        </div>
                     </div>
 
                     {/* Primary Image Section */}
                     <div className="my-2">
-
                         <label>Primary Image</label>
                         {imagePreview && (
                             <div className="my-2">
-                                <Image width={1000} height={1000} src={imagePreview} alt="Preview" className="rounded-lg w-20 h-20 object-cover" />
+                                <Image width={1000} height={1000} src={imagePreview} alt="Preview" className="h-20 w-20 rounded-lg object-cover" />
                             </div>
                         )}
-                        <label htmlFor="primaryImage" className='btn btn-primary w-fit' style={{ cursor: 'pointer' }}>
+                        <label htmlFor="primaryImage" className="btn btn-primary w-fit" style={{ cursor: 'pointer' }}>
                             Choose Image
-                            <input
-                                type="file"
-                                id='primaryImage'
-                                name="primaryImage"
-                                accept='image/*'
-                                onChange={handlePrimaryImageChange}
-                                className="form-input"
-                                style={{ display: 'none' }}
-                            />
+                            <input type="file" id="primaryImage" name="primaryImage" accept="image/*" onChange={handlePrimaryImageChange} className="form-input" style={{ display: 'none' }} />
                         </label>
-
                     </div>
-
-
-
-
-                    {/* <label>Description</label>
-                    <div className='grid grid-cols-2 gap-4 max-md:gap-2 gap-y-0 max-sm:grid-cols-1 mb-2'>
-                        <div className="my-2">
-                            <ReactQuill
-                                value={formik.values.Description}
-                                onChange={(content) => formik.setFieldValue('Description', content)}
-                                modules={modules}
-                                theme="snow"
-                            />
-
-                        </div>
-                        <div className="my-2">
-                            <ReactQuill
-                                value={formik.values.DescriptionAr}
-                                onChange={(content) => formik.setFieldValue('DescriptionAr', content)}
-                                modules={modules}
-                                theme="snow"
-                            />
-                        </div>
-
-                    </div> */}
 
                     {/* Slider Images Section */}
                     <div className="my-2">
@@ -293,42 +245,20 @@ const UpdateUiStore = () => {
                         {sliderPreviews.length > 0 && (
                             <div className="my-2 flex gap-2">
                                 {sliderPreviews.map((preview, index) => (
-                                    <Image width={1000} height={1000}
-                                        key={index}
-                                        src={preview}
-                                        alt={`Slider ${index}`}
-                                        className="rounded-lg w-20 h-20 object-cover"
-                                    />
+                                    <Image width={1000} height={1000} key={index} src={preview} alt={`Slider ${index}`} className="h-20 w-20 rounded-lg object-cover" />
                                 ))}
                             </div>
                         )}
-                        <label htmlFor="sliderImages" className='btn btn-primary w-fit' style={{ cursor: 'pointer' }}>
+                        <label htmlFor="sliderImages" className="btn btn-primary w-fit" style={{ cursor: 'pointer' }}>
                             Choose Images
-                            <input
-                                type="file"
-                                name="sliderImages"
-                                id="sliderImages"
-                                multiple
-                                accept='image/*'
-                                onChange={handleSliderImageChange}
-                                style={{ display: 'none' }}
-                            />
+                            <input type="file" name="sliderImages" id="sliderImages" multiple accept="image/*" onChange={handleSliderImageChange} style={{ display: 'none' }} />
                         </label>
-
                     </div>
-
-
 
                     {/* Types Section */}
                     <div className="my-2">
                         <label>Type</label>
-                        <select
-                            name="types"
-                            value={formik.values.types}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            className="form-select"
-                        >
+                        <select name="types" value={formik.values.types} onChange={formik.handleChange} onBlur={formik.handleBlur} className="form-select">
                             <option value="">Select type</option>
                             <option value="uiux">UiUx</option>
                             <option value="branding">Branding</option>
@@ -338,7 +268,7 @@ const UpdateUiStore = () => {
                     </div>
 
                     <label>UI Kit Recommended Title</label>
-                    <div className='grid grid-cols-2 gap-4 max-md:gap-2 gap-y-0 max-sm:grid-cols-1 mb-2'>
+                    <div className="max-md:gap-2 max-sm:grid-cols-1 mb-2 grid grid-cols-2 gap-4 gap-y-0">
                         {/* UI Kit Recommended Title Section */}
                         <div className="my-2">
                             <input
@@ -362,12 +292,11 @@ const UpdateUiStore = () => {
                                 placeholder="Arabic UI Kit Recommended Title"
                             />
                         </div>
-
                     </div>
 
                     {/* UI Kit Recommended Description Section */}
                     <label>UI Kit Recommended Description</label>
-                    <div className='grid grid-cols-2 gap-4 max-md:gap-2 gap-y-0 max-sm:grid-cols-1 mb-2'>
+                    <div className="max-md:gap-2 max-sm:grid-cols-1 mb-2 grid grid-cols-2 gap-4 gap-y-0">
                         <div className="my-2">
                             <ReactQuill
                                 value={formik.values.uIKitrecommendedDescription}
@@ -375,7 +304,6 @@ const UpdateUiStore = () => {
                                 modules={modules}
                                 theme="snow"
                             />
-
                         </div>
                         <div className="my-2">
                             <ReactQuill
@@ -385,12 +313,11 @@ const UpdateUiStore = () => {
                                 theme="snow"
                             />
                         </div>
-
                     </div>
 
                     {/* What’s Inside Title Section */}
                     <label>What’s Inside Title</label>
-                    <div className='grid grid-cols-2 gap-4 max-md:gap-2 gap-y-0 max-sm:grid-cols-1 mb-2'>
+                    <div className="max-md:gap-2 max-sm:grid-cols-1 mb-2 grid grid-cols-2 gap-4 gap-y-0">
                         <div className="my-2">
                             <input
                                 type="text"
@@ -413,33 +340,22 @@ const UpdateUiStore = () => {
                                 placeholder="Arabic What’s Inside Title"
                             />
                         </div>
-
                     </div>
 
                     {/* What’s Inside Description Section */}
                     <label>What’s Inside Description</label>
-                    <div className='grid grid-cols-2 gap-4 max-md:gap-2 gap-y-0 max-sm:grid-cols-1 mb-2'>
+                    <div className="max-md:gap-2 max-sm:grid-cols-1 mb-2 grid grid-cols-2 gap-4 gap-y-0">
                         <div className="my-2">
-                            <ReactQuill
-                                value={formik.values.whatinsideDescription}
-                                onChange={(content) => formik.setFieldValue('whatinsideDescription', content)}
-                                modules={modules}
-                                theme="snow"
-                            />
+                            <ReactQuill value={formik.values.whatinsideDescription} onChange={(content) => formik.setFieldValue('whatinsideDescription', content)} modules={modules} theme="snow" />
                         </div>
                         <div className="my-2">
-                            <ReactQuill
-                                value={formik.values.whatinsideDescriptionAr}
-                                onChange={(content) => formik.setFieldValue('whatinsideDescriptionAr', content)}
-                                modules={modules}
-                                theme="snow"
-                            />
+                            <ReactQuill value={formik.values.whatinsideDescriptionAr} onChange={(content) => formik.setFieldValue('whatinsideDescriptionAr', content)} modules={modules} theme="snow" />
                         </div>
                     </div>
 
                     {/* licenseTitle Title Section */}
                     <label>License Title</label>
-                    <div className="grid grid-cols-2 gap-4 max-md:gap-2 gap-y-0 max-sm:grid-cols-1 mb-2">
+                    <div className="max-md:gap-2 max-sm:grid-cols-1 mb-2 grid grid-cols-2 gap-4 gap-y-0">
                         <div className="my-2">
                             <input
                                 type="text"
@@ -466,28 +382,17 @@ const UpdateUiStore = () => {
 
                     {/* License Description Section */}
                     <label>License Description</label>
-                    <div className="grid grid-cols-2 gap-4 max-md:gap-2 gap-y-0 max-sm:grid-cols-1 mb-2">
+                    <div className="max-md:gap-2 max-sm:grid-cols-1 mb-2 grid grid-cols-2 gap-4 gap-y-0">
                         <div className="my-2">
-                            <ReactQuill
-                                value={formik.values.licenseDescription}
-                                onChange={(content) => formik.setFieldValue('licenseDescription', content)}
-                                modules={modules}
-                                theme="snow"
-                            />
+                            <ReactQuill value={formik.values.licenseDescription} onChange={(content) => formik.setFieldValue('licenseDescription', content)} modules={modules} theme="snow" />
                         </div>
                         <div className="my-2">
-                            <ReactQuill
-                                value={formik.values.licenseDescriptionAr}
-                                onChange={(content) => formik.setFieldValue('licenseDescriptionAr', content)}
-                                modules={modules}
-                                theme="snow"
-                            />
+                            <ReactQuill value={formik.values.licenseDescriptionAr} onChange={(content) => formik.setFieldValue('licenseDescriptionAr', content)} modules={modules} theme="snow" />
                         </div>
                     </div>
 
-
                     {/* Submit Button */}
-                    <button type="submit" className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">
+                    <button type="submit" className="mt-4 rounded bg-blue-500 px-4 py-2 text-white">
                         Update
                     </button>
                 </form>

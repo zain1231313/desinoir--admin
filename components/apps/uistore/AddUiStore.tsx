@@ -12,7 +12,6 @@ import Image from 'next/image';
 // Component
 const AddUiStore = () => {
     const [imagePreview, setImagePreview] = useState<string | null>(null);
-    const [filePreview2, setFilePreview2] = useState<string | null>(null);
     const [sliderPreview, setSliderPreview] = useState<string[]>([]);
 
     const navigate = useRouter();
@@ -24,6 +23,7 @@ const AddUiStore = () => {
             arSubtitle: '',
             priceOrFree: '',
             types: '',
+            buylink:'',
             Description: '',
             DescriptionAr: '',
             uIKitrecommendedTitle: '',
@@ -181,6 +181,19 @@ const AddUiStore = () => {
                                 placeholder="Price or Free"
                             />
                             {formik.touched.priceOrFree && formik.errors.priceOrFree && <p className="text-sm text-red-500">{formik.errors.priceOrFree}</p>}
+                        </div>
+                        <div className="my-2">
+                            <label>Buy Link</label>
+                            <input
+                                type="text"
+                                name="buylink"
+                                value={formik.values.buylink}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                className="form-input"
+                                placeholder="Buy Link"
+                            />
+                            {formik.touched.buylink && formik.errors.buylink && <p className="text-sm text-red-500">{formik.errors.buylink}</p>}
                         </div>
 
                         {/* Types Section */}

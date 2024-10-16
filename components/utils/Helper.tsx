@@ -1199,6 +1199,7 @@ export const updateUiStore = async (id: string, values: any) => {
     formData.append('arSubtitle', values.subtitleAr);
     formData.append('priceOrFree', values.priceOrFree);
     formData.append('types', values.types);
+    formData.append('buylink', values.buylink);
     formData.append('uIKitrecommendedTitle', values.uIKitrecommendedTitle);
     formData.append('arUIKitrecommendedTitle', values.uIKitrecommendedTitleAr);
     formData.append('uIKitrecommendedDescription', values.uIKitrecommendedDescription);
@@ -1285,6 +1286,7 @@ export async function addUiStore(data: any) {
     formData.append('arSubtitle', data.arSubtitle);
     formData.append('priceOrFree', data.priceOrFree);
     formData.append('types', data.types);
+    formData.append('buylink', data.buylink);
     formData.append('uIKitrecommendedTitle', data.uIKitrecommendedTitle);
     formData.append('arUIKitrecommendedTitle', data.arUIKitrecommendedTitle);
     formData.append('uIKitrecommendedDescription', data.uIKitrecommendedDescription);

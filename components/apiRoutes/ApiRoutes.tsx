@@ -1,5 +1,5 @@
-// const Server = "https://desinoir.com/backend/api/";
-const Server = 'http://localhost:8000/api/';
+const Server = 'https://api.desinoir.com/api/';
+// const Server = 'http://localhost:8000/api/';
 
 interface API_ENDPOINT {
     LOGIN: string;

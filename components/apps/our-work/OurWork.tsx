@@ -12,6 +12,7 @@ import DeleteModal from '@/components/Modals/DeleteModal';
 import toast from 'react-hot-toast';
 import $ from 'jquery';
 import 'datatables.net';
+import Accordion from '../reuseable/Accordion';
 
 function OurWork() {
     const [open, setOpen] = useState<boolean>(false);
@@ -72,13 +73,74 @@ function OurWork() {
         }
     };
     console.log('Works ==>', works);
+    const tables = [
+        {
+            title: 'Our Work',
+            data: works.map((work) => ({
+                title: work?.title,
+                subtitle: work?.subtitle,
+                description: work?.description,
+                primaryImage: work?.primaryImage,
+                id:work?._id,
+                linkUpdate: 'edit-works',
+            })),
+        },
+        {
+            title: 'Our Problem',
+            data: works.map((work) => ({
+                title: work?.ProblemStatementTitle, // Assuming this is the correct field
+                description: work?.ProblemStatementDescription,
+                subtitle: "",
+                id:work?._id,
+                primaryImage: work?.ProblemStatementImage,
+                linkUpdate: 'edit-problems',
+            })),
+        },
+        {
+            title: 'Our Challenge',
+            data: works.map((work) => ({
+                title: work?.challengesTitle,
+                description: work?.challengesDescription,
+                subtitle:"", // If needed
+                primaryImage: work?.challengeImage,
+                id:work?._id,
+                linkUpdate: 'edit-challenges',
+            })),
+        },
+        {
+            title: 'Our Solution',
+            data: works.map((work) => ({
+                title: work?.SolutionTitle, // Assuming this is the correct field
+                description: work?.SolutionDescription,
+                subtitle: "", // If needed
+                primaryImage: work?.SolutionImage,
+                id:work?._id,
+                linkUpdate: 'edit-solution',
+            })),
+        },
+        {
+            title: 'Our Major Screen',
+            data: works.map((work) => ({
+                title: work?.title,
+                description: work?.description2,
+                subtitle: "",
+                primaryImage: work?.description2Image,
+                id:work?._id,
+                linkUpdate: 'edit-major-screen',
+            })),
+        },
+    ];
+
+    // Render the tables
+
+    // <Accordion tables={tables} />;
 
     return (
         <>
             <h2 className="mb-1 flex items-center px-2 py-3 font-extrabold uppercase">
                 <span>Our Work</span>
             </h2>
-            <div className="panel border-white-light px-3 dark:border-[#1b2e4b]">
+            <div className="panel flex flex-col gap-8 border-white-light px-3 dark:border-[#1b2e4b]">
                 <div className="py-3">
                     <Link href={'/apps/our-work/add-work'}>
                         <button type="button" className="btn btn-primary ml-auto">
@@ -87,7 +149,9 @@ function OurWork() {
                     </Link>
                 </div>
 
-                <div className="w-full overflow-x-scroll">
+                <Accordion tables={tables} />
+
+                {/* <div className="w-full overflow-x-scroll">
                     <table id="WorkTable" className="display overflow-x-scroll">
                         <thead>
                             <tr>
@@ -130,7 +194,7 @@ function OurWork() {
                         </tbody>
                     </table>
                 </div>
-                {open && <DeleteModal open={open} onClose={() => setOpen(false)} onDelete={() => handleConfirmDelete(workId)} message="Are you sure you want to delete this work?" />}
+                {open && <DeleteModal open={open} onClose={() => setOpen(false)} onDelete={() => handleConfirmDelete(workId)} message="Are you sure you want to delete this work?" />} */}
             </div>
         </>
     );

@@ -211,18 +211,20 @@ const Sidebar = () => {
                                     </li>
 
                                     <li className="menu nav-item">
-                                        <button type="button" className={`${ourWork ? 'active' : ''} nav-link group w-full`} onClick={toggleOurWork}>
+                                        {/* <button type="button" className={`${ourWork ? 'active' : ''} nav-link group w-full`} onClick={toggleOurWork}> */}
+                                        <Link href="/apps/our-work" className="group">
                                             <div className="flex items-center">
                                                 <IconClipboardText className="shrink-0 group-hover:!text-primary" />
                                                 <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{t('Our Work')}</span>
                                             </div>
-
+                                        </Link>
+                                        {/* 
                                             <div className={ourWork ? '' : '-rotate-90 rtl:rotate-90'}>
                                                 <IconCaretDown />
-                                            </div>
-                                        </button>
+                                            </div> */}
+                                        {/* </button> */}
 
-                                        <AnimateHeight duration={300} height={ourWork ? 'auto' : 0}>
+                                        {/* <AnimateHeight duration={300} height={ourWork ? 'auto' : 0}>
                                             <ul className="sub-menu text-gray-500">
                                                 <li className="ps-2">
                                                     <Link href="/apps/our-work" className="group">
@@ -268,7 +270,7 @@ const Sidebar = () => {
                                                     </Link>
                                                 </li>
                                             </ul>
-                                        </AnimateHeight>
+                                        </AnimateHeight> */}
                                     </li>
 
                                     <li className="nav-item">
@@ -334,7 +336,6 @@ const Sidebar = () => {
                                         </AnimateHeight>
                                     </li>
 
-                                    
                                     <li className="menu nav-item">
                                         <button type="button" className={`${aboutMenu ? 'active' : ''} nav-link group w-full`} onClick={toggleAboutMenu}>
                                             <div className="flex items-center">

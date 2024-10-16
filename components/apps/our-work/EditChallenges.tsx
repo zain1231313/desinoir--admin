@@ -65,7 +65,7 @@ const EditChallenges = () => {
                     setArChallengesDescrip(result?.challengesDescription?.ar || '');
                     if (result.success === true) {
                         toast.success(result.message);
-                        // navigate.push('/apps/our-work');
+                        navigate.push('/apps/our-work');
                     } else {
                         toast.error(result.message);
                     }

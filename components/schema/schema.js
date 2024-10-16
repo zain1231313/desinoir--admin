@@ -15,6 +15,7 @@ export const AddUISchema = Yup.object({
     subtitle: Yup.string().required('Subtitle is required'),
     arSubtitle: Yup.string().required('Arabic Subtitle is required'),
     priceOrFree: Yup.string().required('Price or Free is required'),
+    buylink: Yup.string().required('Buy Link is required'),
     types: Yup.string().required('Type is required'),
     Description: Yup.string().required('Description is required'),
     DescriptionAr: Yup.string().required('Arabic Description is required'),
