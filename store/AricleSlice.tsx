@@ -41,15 +41,20 @@ interface Article {
     updatedAt: string;
     __v: number;
 }
+interface TypeState {
+    typeArr: Array<{ _id: string; type: string; }>;
+}
 
 interface ArticlesState {
     selectedArticle: Article | null;
     id: string | null;
+    typeArr: []
 }
 
 const initialState: ArticlesState = {
     selectedArticle: null,
     id: null,
+    typeArr: []
 };
 
 export const articlesSlice = createSlice({
@@ -65,10 +70,15 @@ export const articlesSlice = createSlice({
         setId: (state, action: PayloadAction<string>) => {
             state.id = action.payload;
         },
+        setTypeArr: (state, action: PayloadAction<TypeState['typeArr']>) => {
+            //@ts-ignore
+            state.typeArr = action.payload;
+        },
     },
 });
 
-export const { setSelectedArticle, clearSelectedArticle, setId } = articlesSlice.actions;
+export const { setSelectedArticle, clearSelectedArticle, setId, setTypeArr } = articlesSlice.actions;
 export const selectSelectedArticle = (state: IRootState) => state.articles.selectedArticle;
 export const selectId = (state: IRootState) => state.articles.id;
+export const selectTypeArr = (state: IRootState) => state.articles.typeArr;
 export default articlesSlice.reducer;

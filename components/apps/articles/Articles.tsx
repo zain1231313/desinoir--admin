@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import Image from 'next/image';
 import Link from 'next/link';
-import { deleteArticleRequest, fetchArticles } from '@/components/utils/Helper';
-import { setSelectedArticle } from '@/store/AricleSlice'; // adjust the path
+import { deleteArticleRequest, fetchArticles, fetchType } from '@/components/utils/Helper';
+import { selectTypeArr, setSelectedArticle, setTypeArr } from '@/store/AricleSlice'; // adjust the path
 import IconPencil from '@/components/icon/icon-pencil';
 import IconTrash from '@/components/icon/icon-trash';
 import toast from 'react-hot-toast';
@@ -59,6 +59,7 @@ function Articles() {
     const [uiId, setUiId] = useState<string>('');
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [types, setTypes] = useState<[]>([]);
     const dispatch = useDispatch();
     useEffect(() => {
         const loadArticles = async () => {
@@ -66,6 +67,8 @@ function Articles() {
                 setLoading(true)
                 const results = await fetchArticles();
                 setArticles(results.data);
+                const result = await fetchType();
+                dispatch(setTypeArr(result.data));
                 setLoading(false)
             } catch (error) {
                 setLoading(false)
@@ -103,6 +106,9 @@ function Articles() {
         setUiId(id);
     };
 
+
+    // console.log("Redux Type=>", typeArr);
+
     const handleConfirmDelete = async (id: string) => {
         try {
             setLoading(true);
@@ -120,22 +126,7 @@ function Articles() {
             toast.error(error.message); // Error message in case of failure
         }
     };
-    // const handleDelete = async (articleId: string) => {
-    //     try {
-    //         setLoading(true)
-    //         const result = await deleteArticleRequest(articleId); // Pass the articleId to deleteArticleRequest
-    //         setArticles(articles.filter(article => article?._id !== articleId)); // Update state after deletion
-    //         if (result.message) {
-    //             setLoading(false)
-    //             toast.success(result.message);
-    //         } else {
-    //             toast.error(result.message);
-    //         }
-    //         // Success message
-    //     } catch (error: any) {
-    //         toast.error(error.message); // Error message in case of failure
-    //     }
-    // };
+
     return (
         <>
             {loading === true ? (

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useFormik } from 'formik';
-import { GetServices, submitServiceData, weWorkSubmitData } from '@/components/utils/Helper';
+import { fetchType, GetServices, submitServiceData, weWorkSubmitData } from '@/components/utils/Helper';
 import toast from 'react-hot-toast';
 import Workdata from './Workdata';
 import ProcessData from './ProcessData';
@@ -69,24 +69,30 @@ interface SelectedRowDataType {
         description: string;
     };
 }
+interface OptionType {
+    _id: string;
+    type: string;
+}
 
 const MainWeWork = (type: any) => {
-    const [value, setValue] = useState<any>(''); // Adjusted type if needed
-    const [edit, setEdit] = useState(false); // Adjusted type if needed
-    const [valuear, setValuear] = useState<any>(''); // Adjusted type if needed
-    const [tableData, setTableData] = useState<any>(''); // Adjusted type if needed
+    const [value, setValue] = useState<any>('');
+    const [edit, setEdit] = useState(false);
+    const [valuear, setValuear] = useState<any>('');
+    const [tableData, setTableData] = useState<any>('');
     const [open, setOpen] = useState(false);
     const [preview, setPreview] = useState<any>(null);
     const [process, setProcess] = useState<any>(null);
+    const [types, setTypes] = useState<[]>([]);
+    const [selecttype, setSelectType] = useState<OptionType | undefined>();
     const [primaryImagePreview, setPrimaryImagePreview] = useState<any>(null);
     const [Category, setCategory] = useState<string | undefined>();
 
     const fetchData = async () => {
         try {
-            const result = await GetServices(type);
-
+            const result = await GetServices(type.type._id);
             setValue(result.data[0].data.en);
-
+            // const typeData = await fetchType();
+            // setTypes(typeData?.data);
             setValuear(result.data[0].data.ar);
             setTableData(result.data[0].data);
         } catch (error) {
@@ -110,9 +116,9 @@ const MainWeWork = (type: any) => {
             mainDescriptionAr: '',
         },
         onSubmit: async (values) => {
-            console.log('We Work=>', values);
+            console.log('We Work=>', type);
             try {
-                const response = await weWorkSubmitData(values, type);
+                const response = await weWorkSubmitData(values, type?.type?._id);
                 console.log(response, 'responseresponse');
                 toast.success(response.message);
                 fetchData();
@@ -136,8 +142,6 @@ const MainWeWork = (type: any) => {
         setPreview(value?.serviceSecondaryImage);
         setProcess(value?.ourProcess?.image);
     }, [value, valuear]);
-
-    console.log(value.ourProcess);
 
     useEffect(() => {
         if (value && valuear) {
@@ -163,12 +167,12 @@ const MainWeWork = (type: any) => {
                     {Category == 'uiux'
                         ? 'UI/UX Design'
                         : Category == 'branding'
-                        ? 'Branding Design'
-                        : Category == 'graphicdesign'
-                        ? 'Graphic Design'
-                        : Category == 'motionGraphic'
-                        ? 'Motion Graphic Design'
-                        : 'Service'}
+                            ? 'Branding Design'
+                            : Category == 'graphicdesign'
+                                ? 'Graphic Design'
+                                : Category == 'motionGraphic'
+                                    ? 'Motion Graphic Design'
+                                    : 'Service'}
                 </span>
             </h2>
             <div className="grid grid-cols-1 gap-4 ">

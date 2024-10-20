@@ -87,7 +87,7 @@ const MainChoose = (type: any) => {
 
     const fetchData = async () => {
         try {
-            const result = await GetServices(type);
+            const result = await GetServices(type.type._id);
 
             setValue(result.data[0].data.en);
 
@@ -171,12 +171,12 @@ const MainChoose = (type: any) => {
                     {Category == 'uiux'
                         ? 'UI/UX Design'
                         : Category == 'branding'
-                        ? 'Branding Design'
-                        : Category == 'graphicdesign'
-                        ? 'Graphic Design'
-                        : Category == 'motionGraphic'
-                        ? 'Motion Graphic Design'
-                        : 'Service'}
+                            ? 'Branding Design'
+                            : Category == 'graphicdesign'
+                                ? 'Graphic Design'
+                                : Category == 'motionGraphic'
+                                    ? 'Motion Graphic Design'
+                                    : 'Service'}
                 </span>
             </h2>
             <div className="grid grid-cols-1 gap-4 ">

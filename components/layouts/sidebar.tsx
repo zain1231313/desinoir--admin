@@ -26,6 +26,8 @@ import IconLoader from '../icon/icon-loader';
 import IconCircleCheck from '../icon/icon-circle-check';
 import IconInfoCircle from '../icon/icon-info-circle';
 import IconMenu from '../icon/icon-menu';
+import IconUserPlus from '../icon/icon-user-plus';
+import IconBook from '../icon/icon-book';
 const Sidebar = () => {
     const dispatch = useDispatch();
     const { t } = getTranslation();
@@ -190,6 +192,22 @@ const Sidebar = () => {
                                             <div className="flex items-center">
                                                 <IconChrome className="shrink-0 group-hover:!text-primary" />
                                                 <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{t('Meta Tags')}</span>
+                                            </div>
+                                        </Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link href="/apps/all-pages" className="group">
+                                            <div className="flex items-center">
+                                                <IconBook className="shrink-0 group-hover:!text-primary" />
+                                                <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{t('Page')}</span>
+                                            </div>
+                                        </Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link href="/apps/type" className="group">
+                                            <div className="flex items-center">
+                                                <IconUserPlus className="shrink-0 group-hover:!text-primary" />
+                                                <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{t('Type')}</span>
                                             </div>
                                         </Link>
                                     </li>

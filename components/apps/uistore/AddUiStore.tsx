@@ -8,11 +8,20 @@ import 'react-quill/dist/quill.snow.css';
 import { useRouter } from 'next/navigation';
 import { AddUISchema } from '@/components/schema/schema';
 import Image from 'next/image';
-
+import { selectTypeArr } from '@/store/AricleSlice';
+import { IRootState } from '@/store';
+import { useSelector } from 'react-redux';
+interface OptionType {
+    _id: string;
+    type: string;
+}
 // Component
 const AddUiStore = () => {
+    const typeArr = useSelector((state: IRootState) => selectTypeArr(state));
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [sliderPreview, setSliderPreview] = useState<string[]>([]);
+    const [types, setTypes] = useState<[]>(typeArr || []);
+    const [selecttype, setSelectType] = useState<OptionType>();
 
     const navigate = useRouter();
     const formik = useFormik({
@@ -22,8 +31,8 @@ const AddUiStore = () => {
             subtitle: '',
             arSubtitle: '',
             priceOrFree: '',
-            types: '',
-            buylink:'',
+            typeId: '',
+            buylink: '',
             Description: '',
             DescriptionAr: '',
             uIKitrecommendedTitle: '',
@@ -45,7 +54,7 @@ const AddUiStore = () => {
         onSubmit: async (values) => {
             console.log('Values===>', values);
             try {
-                const result = await addUiStore(values);
+                const result = await addUiStore(values, selecttype?._id);
                 if (result.success === true) {
                     toast.success(result.message);
                     navigate.push('/apps/ui-store');
@@ -112,7 +121,15 @@ const AddUiStore = () => {
     const modules = {
         toolbar: toolbarOptions,
     };
+    const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedValue = e.target.value;
+        formik.setFieldValue('typeId', selectedValue);
+        //@ts-ignore
+        const selectedObj = types.find(option => option.type === selectedValue);
 
+
+        setSelectType(selectedObj);
+    };
     return (
         <>
             <h2 className="mb-1 flex items-center px-2 py-3 font-extrabold uppercase">
@@ -199,14 +216,15 @@ const AddUiStore = () => {
                         {/* Types Section */}
                         <div className="my-2">
                             <label>Type</label>
-                            <select name="types" value={formik.values.types} onChange={formik.handleChange} onBlur={formik.handleBlur} className="form-select">
-                                <option value="">Select type</option>
-                                <option value="uiux">uiux</option>
-                                <option value="branding">branding</option>
-                                <option value="graphicdesign">graphicdesigning</option>
-                                <option value="motionGraphic">motionGraphics</option>
+                            <select className="form-select" name="typeId" value={formik.values.typeId} onChange={handleSelectChange}>
+                                <option value="">Select Option</option>
+                                {types.map((option: any, index: number) => (
+                                    <option key={index} value={option.type}>
+                                        {option.type}
+                                    </option>
+                                ))}
                             </select>
-                            {formik.touched.types && formik.errors.types && <p className="text-sm text-red-500">{formik.errors.types}</p>}
+                            {formik.touched.typeId && formik.errors.typeId && <p className="text-sm text-red-500">{formik.errors.typeId}</p>}
                         </div>
                     </div>
 

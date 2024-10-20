@@ -1,15 +1,25 @@
 'use client';
 import Loading from '@/components/layouts/loading';
 // import { ArticleSchema } from '@/components/schema/schema';
-import { addNewArticle } from '@/components/utils/Helper';
+import { addNewArticle, fetchType } from '@/components/utils/Helper';
+import { IRootState } from '@/store';
+import { selectTypeArr } from '@/store/AricleSlice';
 import { useFormik } from 'formik';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { useSelector } from 'react-redux';
+interface OptionType {
+    _id: string;
+    type: string;
+}
+
 const AddArticle = () => {
+    const typeArr = useSelector((state: IRootState) => selectTypeArr(state));
+    // console.log("Redux Type=>", typeArr);
     const [descriptionEn, setDescriptionEn] = useState<string>('');
     const [descriptionAr, setDescriptionAr] = useState<string>('');
     const [conclusionEn, setConclusionEn] = useState<string>('');
@@ -25,10 +35,28 @@ const AddArticle = () => {
     const [adminImage, setAdminImage] = useState<File | null>(null);
     const [adminImagePreview, setAdminImagePreview] = useState<string | null>(null);
     const [relatedPosts, setRelatedPosts] = useState<string[]>([]);
-    const [types, setTypes] = useState<string>('');
+    const [types, setTypes] = useState<[]>(typeArr || []);
+    const [selecttype, setSelectType] = useState<OptionType>();
     const [loading, setLoading] = useState(false);
 
+
     const navigate = useRouter();
+    // const getTypes = async () => {
+    //     setLoading(true);
+    //     try {
+    //         const result = await fetchType();
+    //         setTypes(result?.data);
+    //         setLoading(false);
+    //     } catch (error) {
+    //         setLoading(false);
+    //         console.error('Error fetching team members:', error);
+    //     }
+    // };
+
+    // useEffect(() => {
+    //     getTypes();
+    // }, []);
+
 
     const formik = useFormik({
         initialValues: {
@@ -41,6 +69,7 @@ const AddArticle = () => {
             types: '',
         },
         onSubmit: async (values) => {
+            console.log("Values ARTICLE=>", values)
             const formData = new FormData();
 
             formData.append('enMainTitle', values.titleEnglish);
@@ -57,7 +86,11 @@ const AddArticle = () => {
             formData.append('arAdminName', adminNameAr);
             formData.append('enFeedback', adminFeedbackEn);
             formData.append('arFeedback', adminFeedbackAr);
-            formData.append('types', types);
+            if (selecttype && selecttype._id) {
+                formData.append('typeId', selecttype._id);
+            } else {
+                console.error("No valid option selected for 'types'");
+            }
 
             if (primaryImage) formData.append('primaryImage', primaryImage);
             if (secondaryImage) formData.append('secondaryImage', secondaryImage);
@@ -136,6 +169,16 @@ const AddArticle = () => {
         toolbar: toolbarOptions,
     };
 
+    console.log("Typo=>", types)
+    const handleSelectChange = (e: any) => {
+        const selectedValue = e.target.value;
+        console.log("Selelct value->", selectedValue)
+        //@ts-ignore
+        const selectedObj: any = types.find(option => option.type === selectedValue);
+
+        setSelectType(selectedObj);
+    };
+
     return (
         <>
             {loading === true ? (
@@ -190,12 +233,14 @@ const AddArticle = () => {
                                     <h2 className="mb-1 flex items-center px-2 py-3 font-semibold text-[#0e1726] dark:text-[#888EA8]">
                                         <span>Article Type</span>
                                     </h2>
-                                    <select className="form-select" value={types} onChange={(e) => setTypes(e.target.value)}>
-                                        <option value="">Select Options</option>
-                                        <option value="uiux">Ui/Ux</option>
-                                        <option value="branding">Branding</option>
-                                        <option value="graphicdesign">Graphic Designing</option>
-                                        <option value="motionDesign">Motion Grraphic Design</option>
+
+                                    <select className="form-select" value={selecttype?.type || ''} onChange={handleSelectChange}>
+                                        <option value="">Select Option</option>
+                                        {types.map((option: any, index: any) => (
+                                            <option key={index} value={option.type}>
+                                                {option.type}
+                                            </option>
+                                        ))}
                                     </select>
                                 </div>
                                 <div>
@@ -315,8 +360,8 @@ const AddArticle = () => {
                                 </button>
                             </div>
                         </div>
-                    </form>
-                </div>
+                    </form >
+                </div >
             )}
         </>
     );

@@ -87,7 +87,8 @@ const MainProcess = (type: any) => {
 
     const fetchData = async () => {
         try {
-            const result = await GetServices(type);
+            const result = await GetServices(type?.type._id);
+            console.log(result);
             setValue(result.data[0].data.en);
             setValuear(result.data[0].data.ar);
             setTableData(result.data[0].data);
@@ -113,8 +114,9 @@ const MainProcess = (type: any) => {
             Processimage: '',
         },
         onSubmit: async (values) => {
+            console.log("Types=>", type)
             try {
-                const response = await submitProcessData(values, type);
+                const response = await submitProcessData(values, type.type);
                 console.log(response, 'responseresponse');
                 toast.success(response.message);
                 fetchData();

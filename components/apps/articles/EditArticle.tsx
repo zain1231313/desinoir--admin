@@ -13,7 +13,11 @@ import { useRouter } from "next/navigation";
 import Loading from "@/components/layouts/loading";
 import API_ENDPOINT from "@/components/apiRoutes/ApiRoutes";
 import Image from "next/image";
-
+import { selectTypeArr } from "@/store/AricleSlice";
+interface OptionType {
+    _id: string;
+    type: string;
+}
 type ComponentType = 'quill' | 'uploader';
 
 interface ComponentItem {
@@ -25,7 +29,8 @@ const EditArticle = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const id = searchParams.get('id');
-
+    const typeArr = useSelector((state: IRootState) => selectTypeArr(state));
+    console.log("Redux Type=>", typeArr);
     const [open, setOpen] = useState<boolean>(false);
     const [dropdown, setDropdown] = useState<boolean>(false);
     const [components, setComponents] = useState<ComponentItem[]>([]);
@@ -46,18 +51,19 @@ const EditArticle = () => {
     const [adminImagePreview, setAdminImagePreview] = useState<string | null>(null);
     const [loading, setLoading] = useState(false)
     const [articles, setArticles] = useState<any>()
+    const [types, setTypes] = useState<[]>(typeArr || []);
+    const [selecttype, setSelectType] = useState<OptionType>();
     const [data, setData] = useState<any>()
 
     const articleData = useSelector((state: IRootState) => state.articles.selectedArticle);
 
 
-    // console.log(id); // Use id as needed
 
     const formik = useFormik({
         initialValues: {
             titleEnglish: data?.title.en,
             titleArabic: data?.title.ar,
-            type: data?.types,
+            type: data?.types || '',
             title: data?.title.en,
             arTitle: data?.title.ar,
             name: data?.name.en,
@@ -109,7 +115,7 @@ const EditArticle = () => {
         };
 
         fetch(`${API_ENDPOINT.ARTICLE_BY_ID}${id}`, requestOptions)
-        // fetch(`https://desinoir.com/backend/api/articles/get-article-id/${id}`, requestOptions)
+            // fetch(`https://desinoir.com/backend/api/articles/get-article-id/${id}`, requestOptions)
             .then((response) => response.json())
             .then(
                 (result) => {
@@ -172,6 +178,14 @@ const EditArticle = () => {
             reader.readAsDataURL(file);
         }
     };
+    useEffect(() => {
+        if (data) {
+            //@ts-ignore
+            setSelectType(types.find(option => option._id === data.types) || null);
+            formik.setFieldValue('type', selecttype?.type || '');
+            // Set other form fields here based on data...
+        }
+    }, [data, types]);
 
     const toolbarOptions = [
         [{ font: [] }, { size: [] }],
@@ -187,6 +201,13 @@ const EditArticle = () => {
 
     const modules = {
         toolbar: toolbarOptions,
+    };
+    const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedValue = e.target.value;
+        //@ts-ignore
+        const selectedObj: any = types.find(option => option.type === selectedValue);
+        setSelectType(selectedObj);
+        formik.setFieldValue('types', selectedObj._id);
     };
 
     return (
@@ -258,15 +279,13 @@ const EditArticle = () => {
                             <h2 className="mb-1 flex items-center px-2 py-3 font-semibold text-[#0e1726] dark:text-[#888EA8]">
                                 <span>Article Type</span>
                             </h2>
-                            <select
-                                className="form-select"
-                                {...formik.getFieldProps('type')}
-                            >
-                                <option value="">Select Options</option>
-                                <option value="uiux">Ui/Ux</option>
-                                <option value="branding">Branding</option>
-                                <option value="graphicdesign">Graphic Designing</option>
-                                <option value="motionDesign">Motion Grraphic Design</option>
+                            <select className="form-select" value={selecttype?.type || ''} onChange={handleSelectChange}>
+                                <option value="">Select Option</option>
+                                {types.map((option: any, index) => (
+                                    <option key={index} value={option?.type}>
+                                        {option?.type}
+                                    </option>
+                                ))}
                             </select>
 
                             <h2 className="mb-1 flex items-center px-2 py-3 font-semibold text-[#0e1726] dark:text-[#888EA8]">

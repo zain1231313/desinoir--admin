@@ -26,8 +26,8 @@ const Workdata = (type: any) => {
     const [edit, setEdit] = useState(false); // Adjusted type if needed
     const fetchData = async () => {
         try {
-            console.log('data fetched ');
-            const result = await GetServices(type);
+            console.log("Data=>Type", type)
+            const result = await GetServices(type.type._id);
             console.log('Words Data==>', result);
             const datamap = result?.data?.map((item: any, index: number) => {
                 const mapLanguageData = (langData: any, lang: string) => {
@@ -42,7 +42,7 @@ const Workdata = (type: any) => {
                         };
                     });
                 };
-
+                console.log(item?.data?.ar?.howWorks?.data)
                 const arData = mapLanguageData(item?.data?.ar?.howWorks?.data, 'ar');
                 const enData = mapLanguageData(item?.data?.en?.howWorks?.data, 'en');
 
@@ -57,21 +57,22 @@ const Workdata = (type: any) => {
             console.error('Failed to fetch data:', error);
         }
     };
+    console.log("------==========", workdata)
 
-    useEffect(() => {
-        if (workdata) {
-            if ($.fn.dataTable.isDataTable('#workTable')) {
-                $('#workTable').DataTable().destroy();
-            }
+    // useEffect(() => {
+    //     if (workdata) {
+    //         if ($.fn.dataTable.isDataTable('#workTable')) {
+    //             $('#workTable').DataTable().destroy();
+    //         }
 
-            $('#workTable').DataTable({
-                paging: true,
-                searching: true,
-                ordering: false,
-                info: false,
-            });
-        }
-    }, [workdata, type]);
+    //         $('#workTable').DataTable({
+    //             paging: true,
+    //             searching: true,
+    //             ordering: false,
+    //             info: false,
+    //         });
+    //     }
+    // }, [workdata]);
 
     useEffect(() => {
         fetchData();
@@ -113,7 +114,7 @@ const Workdata = (type: any) => {
                     ];
 
                     // Make the API call with helper function
-                    const result = await addWorkData(values.workIcon, values.type, howWorksData, arHowWorksData);
+                    const result = await addWorkData(values.workIcon, values, howWorksData, arHowWorksData);
                     fetchData();
                     formik.resetForm();
                     setOpen(false);
@@ -135,7 +136,7 @@ const Workdata = (type: any) => {
                         workId: values.workId,
                         workarId: values.workArId,
                         workIcon: values.workIcon,
-                        type: values.type,
+                        type: type,
                         // processData: '',  // Include actual values if needed
                         // arProcessData: '',
                         // whyChooseData: '',  // Include actual values if needed
@@ -241,6 +242,7 @@ const Workdata = (type: any) => {
                     <tbody>
                         {workdata?.map((work: any, index: number) => {
                             // Get the maximum length of enData and arData
+                            console.log("workdata-----------", workdata)
                             const maxLength = Math.max(work.enData?.length || 0, work.arData?.length || 0);
 
                             // Create an array with the maximum length to ensure all rows are covered
@@ -264,6 +266,8 @@ const Workdata = (type: any) => {
                                     setWorkId(data);
                                     setArworkId(data2);
                                 };
+
+                                console.log("----======-->")
                                 return (
                                     <tr key={index}>
                                         <td>{enItem ? <Image width={1000} height={1000} src={enItem.icon} alt={enItem.title} className="h-12 w-12 rounded-full object-cover" /> : null}</td>
@@ -318,7 +322,7 @@ const Workdata = (type: any) => {
                                 <input type="file" id="workIcon" name="workIcon" accept="image/*" className="form-input" onChange={(event) => handleFileChange(event)} style={{ display: 'none' }} />
                             </label>
                         </div>
-                        <input className="form-input" readOnly disabled name="type" value={type.type} placeholder="Type" />
+                        <input className="form-input" readOnly disabled name="type" value={type} placeholder="Type" />
 
                         {formik.touched.workIcon && formik.errors.workIcon ? <p className="text-xs text-red-800">{formik.errors.workIcon}</p> : null}
                         <input type="text" className="hidden" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.workId} />

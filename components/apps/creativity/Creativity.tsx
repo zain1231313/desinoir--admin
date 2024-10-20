@@ -23,6 +23,7 @@ const Creativity = () => {
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
+            console.log("File=>", file)
             setImage2(file);
             setFileName2(file.name);
             const reader = new FileReader();
@@ -124,17 +125,35 @@ const Creativity = () => {
                         <form onSubmit={formik.handleSubmit}>
                             <div className="my-2">
                                 <div className="">
-                                    {image2 && <Image width={1000} height={1000} src={`${!filePreview2 ? image2 : filePreview2}`} alt="Initial Image" className="h-40 w-40 object-cover" />}
+                                    {filePreview2 ? (
+                                        <Image
+                                            width={1000}
+                                            height={1000}
+                                            src={filePreview2} // Use the preview URL
+                                            alt="Uploaded Preview"
+                                            className="h-40 w-40 object-cover"
+                                        />
+                                    ) : (
+                                        <div>No image preview available</div>
+                                    )}
                                     <div className="my-2">
                                         <div className="">
                                             <label htmlFor="file-input" className="btn btn-primary w-fit" style={{ cursor: 'pointer' }}>
                                                 Upload image
-                                                <input type="file" id="file-input" placeholder="Choose a File" accept="image/*" onChange={handleFileChange} style={{ display: 'none' }} />
+                                                <input
+                                                    type="file"
+                                                    id="file-input"
+                                                    placeholder="Choose a File"
+                                                    accept="image/*"
+                                                    onChange={handleFileChange}
+                                                    style={{ display: 'none' }}
+                                                />
                                             </label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
                             {/*  ///////////////////// title /////////////////  */}
                             <div className="max-md:gap-2 max-sm:grid-cols-1 grid grid-cols-2 gap-4">
                                 <div className="max-sm:my-2 lg:my-3">

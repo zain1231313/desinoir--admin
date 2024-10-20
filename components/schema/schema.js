@@ -16,7 +16,7 @@ export const AddUISchema = Yup.object({
     arSubtitle: Yup.string().required('Arabic Subtitle is required'),
     priceOrFree: Yup.string().required('Price or Free is required'),
     buylink: Yup.string().required('Buy Link is required'),
-    types: Yup.string().required('Type is required'),
+    typeId: Yup.string().required('Type is required'),
     Description: Yup.string().required('Description is required'),
     DescriptionAr: Yup.string().required('Arabic Description is required'),
     uIKitrecommendedTitle: Yup.string().required('UI Kit Recommended Title is required'),
@@ -40,7 +40,7 @@ export const FaqSchema = Yup.object().shape({
     arQuestion: Yup.string().required('Question in Arabic is required'),
     enAnswer: Yup.string().required('Answer in English is required'),
     arAnswer: Yup.string().required('Answer in Arabic is required'),
-    type: Yup.string().required('Type is required')
+    typeId: Yup.string().required('Type is required')
 });
 // export const MainOurWork = Yup.object().shape({
 //     title: Yup.string().required('Title is required'),

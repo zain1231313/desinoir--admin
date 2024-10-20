@@ -25,7 +25,7 @@ const WhychooseData = (type: any) => {
 
     const fetchData = async () => {
         try {
-            const result = await GetServices(type);
+            const result = await GetServices(type.type._id);
             console.log('reesult', result);
             const datamap = result?.data?.map((item: any, index: number) => {
                 const mapLanguageData = (langData: any, lang: string) => {
@@ -60,20 +60,20 @@ const WhychooseData = (type: any) => {
         }
     };
 
-    useEffect(() => {
-        if (workdata) {
-            if ($.fn.dataTable.isDataTable('#WhychooseTable')) {
-                $('#WhychooseTable').DataTable().destroy();
-            }
+    // useEffect(() => {
+    //     if (workdata) {
+    //         if ($.fn.dataTable.isDataTable('#WhychooseTable')) {
+    //             $('#WhychooseTable').DataTable().destroy();
+    //         }
 
-            $('#WhychooseTable').DataTable({
-                paging: true,
-                searching: true,
-                ordering: false,
-                info: false,
-            });
-        }
-    }, [workdata]);
+    //         $('#WhychooseTable').DataTable({
+    //             paging: true,
+    //             searching: true,
+    //             ordering: false,
+    //             info: false,
+    //         });
+    //     }
+    // }, [workdata]);
 
     useEffect(() => {
         fetchData();

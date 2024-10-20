@@ -6,7 +6,7 @@ import { Button, Dialog, DialogBody, DialogFooter, DialogHeader } from '@materia
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import DeleteModal from '@/components/Modals/DeleteModal';
-import { getMetaData, addMetaTags, deleteMeta } from '@/components/utils/Helper';
+import { getMetaData, addMetaTags, deleteMeta, fetchPageData } from '@/components/utils/Helper';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import toast from 'react-hot-toast';
@@ -21,6 +21,7 @@ const MetaTags = () => {
     const [previewUrl, setPreviewUrl] = useState<any>();
     const [openDel, setOpenDel] = useState(false);
     const [metaId, setMetaId] = useState('');
+    const [pageData, setPageData] = useState<any>();
 
     // Fetch meta tags data
     const fetchMetaTags = async () => {
@@ -33,6 +34,16 @@ const MetaTags = () => {
             setLoading(false);
         }
     };
+    const fetchPage = async () => {
+        try {
+            const data = await fetchPageData();
+            setPageData(data.data)
+        } catch (error) {
+            // console.error('Failed to fetch meta tags:', error);
+            setLoading(false);
+        }
+    };
+
 
     useEffect(() => {
         if (!loading && metaTags.length > 0) {
@@ -52,6 +63,7 @@ const MetaTags = () => {
         }
     }, [metaTags, loading]);
     useEffect(() => {
+        fetchPage()
         fetchMetaTags();
     }, []);
 
@@ -67,10 +79,10 @@ const MetaTags = () => {
             title: Yup.string().required('Title is required'),
             description: Yup.string().required('Description is required'),
             image: Yup.mixed().required('Image is required'),
-            type: Yup.string().required('Type is required'),
         }),
         enableReinitialize: true,
         onSubmit: async (values) => {
+            console.log(values)
             try {
                 const result = await addMetaTags(values.title, values.description, values.type, values.image);
                 toast.success(result.message);
@@ -155,7 +167,6 @@ const MetaTags = () => {
                                 <thead>
                                     <tr>
                                         <th>Image</th>
-                                        <th>Type</th>
                                         <th>Title</th>
                                         <th>Description</th>
                                         <th>Actions</th>
@@ -165,7 +176,6 @@ const MetaTags = () => {
                                     {metaTags.map((metaTag: any) => (
                                         <tr key={metaTag?._id}>
                                             <td>{metaTag?.image && <Image src={metaTag?.image} alt="metaTag" className="h-14 w-14 rounded-full object-cover" width={50} height={50} />}</td>
-                                            <td>{metaTag?.type}</td>
                                             <td>{metaTag?.title}</td>
                                             <td>{metaTag?.description}</td>
                                             <td className="h-full items-center">
@@ -218,30 +228,25 @@ const MetaTags = () => {
                                         {formik.errors.image && formik.touched.image && <p className="text-sm text-red-500">{formik.errors.image}</p>}
                                     </div>
                                     <div>
-                                        <label htmlFor="type">Type</label>
                                         {isEditMode ? (
-                                            <p className="py-2 font-extrabold">{formik.values.type}</p>
+                                            <p className='m-0 p-0'></p>
+                                        ) :
+                                            (
+                                                <label htmlFor="type">Type</label>
+                                            )
+                                        }
+                                        {isEditMode ? (
+                                            <p className='m-0 p-0'> </p>
                                         ) : (
                                             <select id="type" name="type" className="form-select" onChange={formik.handleChange} value={formik.values.type}>
-                                                <option value=""></option>
-                                                <option value="home">Home</option>
-                                                <option value="about">About</option>
-                                                <option value="services">Services</option>
-                                                <option value="uiux">UI/UX Service</option>
-                                                <option value="branding">Branding</option>
-                                                <option value="motionGraphic">Motion Graphic Service</option>
-                                                <option value="graphicdesign">Graphic Design Service</option>
-                                                <option value="ourWork">Our Work</option>
-                                                <option value="ourWorkDetail">Our Work Detail</option>
-                                                <option value="article">Article</option>
-                                                <option value="articleDeatil">Article Deatil</option>
-                                                <option value="uiStore">Ui Store</option>
-                                                <option value="uiStoreDetail">Ui Store Detail</option>
-                                                <option value="contactUs">Contact Us</option>
-                                                <option value="ourTeam">Our Team</option>
+                                                {pageData.map((page: any, index: number) => (
+                                                    <option key={index} value={page?._id}>
+                                                        {page?.pages}
+                                                    </option>
+                                                ))}
                                             </select>
                                         )}
-                                        {formik.errors.type && formik.touched.type && <p className="text-sm text-red-500">{formik.errors.type}</p>}
+
                                     </div>
                                     <DialogFooter>
                                         <Button type="submit" onClick={() => formik.submitForm} className="btn btn-primary" color="green">
@@ -257,7 +262,7 @@ const MetaTags = () => {
 
                         {openDel && <DeleteModal open={openDel} onClose={() => setOpenDel(false)} onDelete={() => handleDelmodal()} message="Are you sure you want to delete this meta tag?" />}
                     </div>
-                </div>
+                </div >
             )}
         </>
     );

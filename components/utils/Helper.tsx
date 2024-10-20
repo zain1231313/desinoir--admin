@@ -291,6 +291,7 @@ export const fetchTeamMembers = async () => {
 };
 
 export const addTeamMember = async (teamMemberData: FormData): Promise<any> => {
+
     const myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${getAndDecryptCookie('AccessToken')}`);
 
@@ -310,6 +311,7 @@ export const addTeamMember = async (teamMemberData: FormData): Promise<any> => {
         throw error;
     }
 };
+
 
 export async function updateTeamMember(id: string, formData: FormData) {
     const myHeaders = new Headers();
@@ -332,6 +334,100 @@ export async function updateTeamMember(id: string, formData: FormData) {
         throw error; // Re-throw the error to handle it in the component
     }
 }
+
+export const addType = async (type: string): Promise<any> => {
+    console.log("Type Add Request =>", type);
+
+    const myHeaders = new Headers();
+    myHeaders.append('Authorization', `Bearer ${getAndDecryptCookie('AccessToken')}`);
+    myHeaders.append('Content-Type', 'application/json'); // Specify content type as JSON
+
+    const rawData = JSON.stringify({ type }); // Convert data to JSON string
+
+    const requestOptions: RequestInit = {
+        method: 'POST',
+        headers: myHeaders,
+        body: rawData, // Use the JSON string in the body
+        redirect: 'follow',
+    };
+
+    try {
+        // Send POST request to add the new type
+        const response = await fetch(API_ENDPOINT.ADD_TYPE, requestOptions);
+
+        // Check if response is successful
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || 'Failed to add type');
+        }
+
+        // Parse response
+        const result = await response.json();
+        console.log('Type added successfully:', result);
+        return result;
+
+    } catch (error: any) {
+        console.error('Error adding type:', error.message || error);
+        throw new Error(error.message || 'An error occurred while adding the type');
+    }
+};
+export const fetchType = async () => {
+    const myHeaders = new Headers();
+    myHeaders.append('Authorization', `Bearer ${getAndDecryptCookie('AccessToken')}`);
+
+    const requestOptions: RequestInit = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow',
+    };
+
+    const response = await fetch(API_ENDPOINT.GET_TYPE, requestOptions);
+    const data = await response.json();
+    return data;
+};
+export async function updateType(id: string, type: string) {
+    const myHeaders = new Headers();
+    myHeaders.append('Authorization', `Bearer ${getAndDecryptCookie('AccessToken')}`);
+    myHeaders.append('Content-Type', 'application/json'); // Set the Content-Type to JSON
+
+    const requestOptions: RequestInit = {
+        method: 'PUT',
+        headers: myHeaders,
+        body: JSON.stringify({ type }), // Send raw JSON data
+        redirect: 'follow',
+    };
+
+    try {
+        const response = await fetch(API_ENDPOINT.UPDATE_TYPE + `${id}`, requestOptions);
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('Error updating team member:', error);
+        throw error; // Re-throw the error to handle it in the component
+    }
+}
+
+export const deleteType = async (id: string) => {
+    const myHeaders = new Headers();
+    myHeaders.append('Authorization', `Bearer ${getAndDecryptCookie('AccessToken')}`);
+
+    const requestOptions: RequestInit = {
+        method: 'DELETE',
+        headers: myHeaders,
+        redirect: 'follow',
+    };
+
+    try {
+        const response = await fetch(API_ENDPOINT.DELETE_TYPE + `${id}`, requestOptions);
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('Error deleting team member:', error);
+        throw error;
+    }
+};
 
 export const deleteTeamMember = async (id: string) => {
     const myHeaders = new Headers();
@@ -1275,7 +1371,7 @@ export const updateUiStore = async (id: string, values: any) => {
     }
 };
 
-export async function addUiStore(data: any) {
+export async function addUiStore(data: any, id: any) {
     console.log('data ====================', data);
     const formData = new FormData();
 
@@ -1285,7 +1381,7 @@ export async function addUiStore(data: any) {
     formData.append('subtitle', data.subtitle);
     formData.append('arSubtitle', data.arSubtitle);
     formData.append('priceOrFree', data.priceOrFree);
-    formData.append('types', data.types);
+    formData.append('typeId', id);
     formData.append('buylink', data.buylink);
     formData.append('uIKitrecommendedTitle', data.uIKitrecommendedTitle);
     formData.append('arUIKitrecommendedTitle', data.arUIKitrecommendedTitle);
@@ -1519,10 +1615,6 @@ export async function deleteFaq(id: string): Promise<void> {
 }
 
 export const GetServices = async (type: any) => {
-    // console.log('type=>', type);
-    // Construct query string from queryParams
-
-    // Create headers with Authorization token
     const myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${getAndDecryptCookie('AccessToken')}`);
 
@@ -1535,12 +1627,12 @@ export const GetServices = async (type: any) => {
     try {
         console.log(type);
         // Fetch data from the API
-        const response = await fetch(API_ENDPOINT.GET_SERVICES + `${type.type}`, defaultOptions);
-
-        // Check for non-OK response status
+        const response = await fetch(API_ENDPOINT.GET_SERVICES + `${type}`, defaultOptions);
+        const responseData = await response.json()
+        // Check for non-OK response stat
 
         // Parse and return the response as JSON
-        return await response.json();
+        return responseData
     } catch (error) {
         // Log and rethrow the error for further handling
         console.error('Fetch error:', error);
@@ -1567,9 +1659,9 @@ export const submitChooseData = async (values: any, type: any) => {
 
 export const submitServiceData = async (values: any, type: any) => {
     const formData = new FormData();
-    console.log(values.type);
+    console.log("Type Are Here", type);
     // Append values to formData
-    formData.append('type', values.type);
+    formData.append('typeId', type);
     formData.append('serviceTitle', values.serviceTitle);
     formData.append('arServiceTitle', values.serviceTitleAr);
 
@@ -1596,9 +1688,9 @@ export const submitServiceData = async (values: any, type: any) => {
 
 export const submitProcessData = async (values: any, type: any) => {
     const formData = new FormData();
-    console.log(type);
 
-    formData.append('type', values.type);
+
+    console.log("Type-==->", type);
 
     if (values.Processimage) {
         formData.append('ourprocessImage', values.Processimage);
@@ -1613,6 +1705,7 @@ export const submitProcessData = async (values: any, type: any) => {
 
     formData.append('ourProcessMainDescription', values.ProcessmainDescription);
     formData.append('arOurProcessMainDescription', values.ProcessmainDescriptionAr);
+    formData.append('type', type);
 
     // Call API
     const response = await fetch(API_ENDPOINT.UPDATE_PROCESS, {
@@ -1627,7 +1720,7 @@ export const submitProcessData = async (values: any, type: any) => {
 };
 export const weWorkSubmitData = async (values: any, type: any) => {
     const formData = new FormData();
-    console.log(type);
+
 
     formData.append('howWorksMainTitle', values.maintitle);
     formData.append('arHowWorksMainTitle', values.maintitleAr);
@@ -1638,7 +1731,7 @@ export const weWorkSubmitData = async (values: any, type: any) => {
     formData.append('howWorksMainDescription', values.mainDescription);
     formData.append('arHowWorksMainDescription', values.mainDescriptionAr);
 
-    formData.append('type', values.type);
+    formData.append('typeId', type);
     const response = await fetch(API_ENDPOINT.UPDATE_WEWORK, {
         method: 'POST',
         body: formData,
@@ -1732,7 +1825,7 @@ export const addWorkData = async (
         // formdata.append("arWhyChooseDesiniorData[]", JSON.stringify(arWhyChooseDesiniorData));
 
         formdata.append('workIcon', workIcon);
-        formdata.append('type', type);
+        formdata.append('typeId', type);
 
         // Request options
         const requestOptions: RequestInit = {
@@ -1870,7 +1963,7 @@ export const updateServiceData = async (serviceData: { howWorksData: string; arH
         }
         formdata.append('howWorksData', serviceData.howWorksData);
         formdata.append('arHowWorksData', serviceData.arHowWorksData);
-        formdata.append('type', serviceData.type);
+        formdata.append('typeId', serviceData.type);
 
         const requestOptions: RequestInit = {
             method: 'PUT',
@@ -2100,7 +2193,6 @@ export const getMetaData = async () => {
     }
 };
 
-// helpers/apiHelper.ts
 export const addMetaTags = async (title: string, description: string, type: string, imageFile: File | null): Promise<any> => {
     const myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${getAndDecryptCookie('AccessToken')}`);
@@ -2108,7 +2200,7 @@ export const addMetaTags = async (title: string, description: string, type: stri
     const formData = new FormData();
     formData.append('title', title);
     formData.append('description', description);
-    formData.append('type', type);
+    formData.append('typeId', type);
 
     if (imageFile) {
         formData.append('image', imageFile, '[PROXY]');
@@ -2148,6 +2240,102 @@ export const deleteMeta = async (id: string): Promise<any> => {
         return result;
     } catch (error) {
         console.error('Error during DELETE request:', error);
+        throw error;
+    }
+};
+
+
+export const fetchPageData = async () => {
+    const requestOptions = {
+        method: "GET",
+        redirect: "follow" as RequestRedirect
+    };
+
+    try {
+        const response = await fetch(API_ENDPOINT.GET_PAGES, requestOptions);
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Fetch error:", error);
+        throw error;
+    }
+};
+
+
+export const addPage = async (pageName: string) => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const raw = JSON.stringify({
+        pages: pageName,  // Use the parameter pageName
+    });
+
+    const requestOptions: RequestInit = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+    };
+
+    try {
+        const response = await fetch(API_ENDPOINT.ADD_PAGES, requestOptions);
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error("Error adding page:", error);
+        throw error;
+    }
+};
+
+
+export const updatePage = async (pageId: string, pageName: string) => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const raw = JSON.stringify({
+        pages: pageName,  // Use the parameter for page name
+    });
+
+    const requestOptions: RequestInit = {
+        method: "PUT",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+    };
+
+    try {
+        const response = await fetch(API_ENDPOINT.UPDATE_PAGES + `${pageId}`, requestOptions);
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error("Error updating page:", error);
+        throw error;
+    }
+};
+
+
+export const deletePage = async (pageId: string) => {
+    const requestOptions: RequestInit = {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+    };
+
+    try {
+        const response = await fetch(API_ENDPOINT.DELETE_PAGES + `${pageId}`, requestOptions);
+
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('Failed to delete the page:', error);
         throw error;
     }
 };

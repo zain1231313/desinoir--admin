@@ -1,5 +1,5 @@
-const Server = 'https://api.desinoir.com/api/';
-// const Server = 'http://localhost:8000/api/';
+// const Server = 'https://api.desinoir.com/api/';
+const Server = 'http://localhost:8000/api/';
 
 interface API_ENDPOINT {
     LOGIN: string;
@@ -64,6 +64,10 @@ const API_ENDPOINT = {
     TEAM_SECTION: Server + 'team/get-team-members',
     ADD_TEAM: Server + 'team/add-team-members',
     UPDATE_TEAM: Server + 'team/update-team-member/',
+    ADD_TYPE: Server + 'types/add-types',
+    GET_TYPE: Server + 'types/get-all-types',
+    UPDATE_TYPE: Server + 'types/update-types/',
+    DELETE_TYPE: Server + 'types/delete-types/',
     DELETE_MEMBER: Server + 'team/delete-team-members/',
 
     OUR_WORK_SECTION: Server + 'our-work/get-all-our-work',
@@ -125,7 +129,7 @@ const API_ENDPOINT = {
     DELETE_FAQS: Server + 'faqs/delete-faq/',
     CREATE_FAQ: Server + 'faqs/create-faq',
 
-    GET_SERVICES: Server + 'service/get-services-data?keyword=',
+    GET_SERVICES: Server + 'service/get-services-data?typeId=',
     GET_TEAM_HEADER: Server + 'team/get-team-title/',
     UPDATE_TEAM_HEADER: Server + 'team/team-title',
     UPDATE_SERVICES: Server + 'service/add-service-data',
@@ -148,6 +152,12 @@ const API_ENDPOINT = {
     OUR_WORK_BY_ID: Server + 'our-work/getWorkById/',
     ARTICLE_BY_ID: Server + 'articles/get-article-id/',
     UISTORE_BY_ID: Server + 'ui-store/getUiStoreById/',
+
+
+    GET_PAGES: Server + "page/get-pages",
+    ADD_PAGES: Server + "page/add-pages",
+    UPDATE_PAGES: Server + "page/update-pages/",
+    DELETE_PAGES: Server + "page/delete-pages/",
 };
 
 export default API_ENDPOINT;

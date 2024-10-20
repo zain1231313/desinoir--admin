@@ -24,7 +24,7 @@ const ProcessData = (type: any) => {
 
     const fetchData = async () => {
         try {
-            const result = await GetServices(type);
+            const result = await GetServices(type.type._id);
             const datamap = result?.data?.map((item: any, index: number) => {
                 const mapLanguageData = (langData: any, lang: string) => {
                     return langData?.map((item2: any) => {
@@ -52,20 +52,20 @@ const ProcessData = (type: any) => {
             console.error('Failed to fetch data:', error);
         }
     };
-    useEffect(() => {
-        if (processdata) {
-            if ($.fn.dataTable.isDataTable('#processTable')) {
-                $('#processTable').DataTable().destroy();
-            }
+    // useEffect(() => {
+    //     if (processdata) {
+    //         if ($.fn.dataTable.isDataTable('#processTable')) {
+    //             $('#processTable').DataTable().destroy();
+    //         }
 
-            $('#processTable').DataTable({
-                paging: true,
-                searching: true,
-                ordering: false,
-                info: false,
-            });
-        }
-    }, [processdata]);
+    //         $('#processTable').DataTable({
+    //             paging: true,
+    //             searching: true,
+    //             ordering: false,
+    //             info: false,
+    //         });
+    //     }
+    // }, [processdata]);
 
     useEffect(() => {
         fetchData();

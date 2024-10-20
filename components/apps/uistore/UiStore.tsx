@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Loading from '@/components/layouts/loading';
-import { deleteUiStore, fetchUIStoreData } from '@/components/utils/Helper'; // Path to your helper function
+import { deleteUiStore, fetchType, fetchUIStoreData } from '@/components/utils/Helper'; // Path to your helper function
 import IconPencil from '@/components/icon/icon-pencil';
 import IconTrash from '@/components/icon/icon-trash';
 import { useDispatch } from 'react-redux';
@@ -13,8 +13,12 @@ import $ from 'jquery';
 import 'datatables.net';
 import toast from 'react-hot-toast';
 import DeleteModal from '@/components/Modals/DeleteModal';
+import { selectTypeArr, setTypeArr } from '@/store/AricleSlice';
+import { useSelector } from 'react-redux';
+import { IRootState } from '@/store';
 
 const UiStore = () => {
+    const typeArr = useSelector((state: IRootState) => selectTypeArr(state));
     const [loading, setLoading] = useState(true);
     const [uiId, setUiId] = useState<string>('');
     const [testimonials, setTestimonials] = useState<any[]>([]); // Use appropriate type if needed
@@ -42,6 +46,8 @@ const UiStore = () => {
     const loadData = async () => {
         const data = await fetchUIStoreData();
         setTestimonials(data);
+        const result = await fetchType();
+        dispatch(setTypeArr(result.data));
         setLoading(false);
     };
     useEffect(() => {
@@ -94,15 +100,20 @@ const UiStore = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {testimonials?.map((item, index) => (
-                                        <tr key={index}>
+                                    {testimonials?.map((item, index) => {
+                                        console.log("first2", item)
+                                        //@ts-ignore
+                                        const typeData: any = typeArr.find(type => type._id === item.types);
+                                        console.log("first", typeData)
+                                        return (<tr key={index}>
                                             <td>
                                                 <Image className="h-10 w-10 rounded-full object-cover" src={item.primaryImage} width={40} height={40} alt="UI Store Image" />
                                             </td>
                                             <td>{item.title?.en}</td>
                                             <td>{item.title?.ar}</td>
                                             <td>{item.priceOrFree}</td>
-                                            <td>{item.types}</td>
+
+                                            <td>{typeData ? typeData?.type : 'N/A'}</td>
                                             <td>
                                                 <Link
                                                     href={{
@@ -118,8 +129,9 @@ const UiStore = () => {
                                                     <IconTrash />
                                                 </button>
                                             </td>
-                                        </tr>
-                                    ))}
+                                        </tr>)
+
+                                    })}
                                 </tbody>
                             </table>
                         </div>

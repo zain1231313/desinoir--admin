@@ -4,13 +4,20 @@ import { useFormik } from 'formik';
 import { Dialog, DialogHeader, DialogBody, DialogFooter, Button } from '@material-tailwind/react';
 import IconPencil from '@/components/icon/icon-pencil';
 import IconTrash from '@/components/icon/icon-trash';
-import { getFaqs, updateFaq, createFaq, deleteFaq } from '@/components/utils/Helper';
+import { getFaqs, updateFaq, createFaq, deleteFaq, fetchType } from '@/components/utils/Helper';
 import toast from 'react-hot-toast';
 import $ from 'jquery';
 import 'datatables.net';
 import { FaqSchema } from '@/components/schema/schema';
 import DeleteModal from '@/components/Modals/DeleteModal';
-
+import { useSelector } from 'react-redux';
+import { IRootState } from '@/store';
+import { selectTypeArr, setTypeArr } from '@/store/AricleSlice';
+import { useDispatch } from 'react-redux';
+interface OptionType {
+    _id: string;
+    type: string;
+}
 interface FAQ {
     _id: string;
     question: {
@@ -21,12 +28,13 @@ interface FAQ {
         en: string;
         ar: string;
     };
-    type: string;
+    typeId: string;
     createdAt: string;
     updatedAt: string;
 }
 
 const Faq = () => {
+    const typeArr = useSelector((state: IRootState) => selectTypeArr(state));
     const [data, setData] = useState<FAQ[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -34,6 +42,9 @@ const Faq = () => {
     const [openDel, setOpenDel] = useState(false);
     const [selectedFaq, setSelectedFaq] = useState<FAQ | null>(null);
     const [edit, setEdit] = useState(false);
+    const [types, setTypes] = useState<[]>(typeArr || []);
+    const [selecttype, setSelectType] = useState<OptionType>();
+    const dispatch = useDispatch();
     useEffect(() => {
         if (!loading && data?.length > 0) {
             if ($.fn.dataTable.isDataTable('#FaqTable')) {
@@ -53,8 +64,10 @@ const Faq = () => {
 
     const fetchData = async () => {
         const faqData = await getFaqs();
-        // console.log('Fetched FAQs:', faqData);
         setData(faqData.data);
+        const result = await fetchType();
+        setTypes(result.data)
+        dispatch(setTypeArr(result.data));
         setLoading(false);
     };
     useEffect(() => {
@@ -92,18 +105,18 @@ const Faq = () => {
             arQuestion: '',
             enAnswer: '',
             arAnswer: '',
-            type: '',
+            typeId: '',
         },
         validationSchema: FaqSchema,
         enableReinitialize: true,
         onSubmit: async (values) => {
-            // console.log('Values==>', values);
+            console.log('Values Faqs==>', values);
             const faqData = {
                 enQuestion: values.enQuestion,
                 arQuestion: values.arQuestion,
                 enAnswer: values.enAnswer,
                 arAnswer: values.arAnswer,
-                type: values.type,
+                typeId: selecttype,
             };
 
             // console.log('FaqData being sent:', faqData);
@@ -113,6 +126,7 @@ const Faq = () => {
                     await updateFaq(selectedFaq._id, faqData);
                     window.location.reload();
                 } else {
+                    //@ts-ignore
                     await createFaq(faqData);
                     window.location.reload();
                 }
@@ -133,12 +147,11 @@ const Faq = () => {
             arQuestion: faq.question.ar,
             enAnswer: faq.answer.en,
             arAnswer: faq.answer.ar,
-            type: faq.type,
+            typeId: faq.typeId,
         });
         setOpenDialog(true);
-        
-    };
 
+    };
     const handleAdd = () => {
         setEdit(false);
         setSelectedFaq(null);
@@ -146,7 +159,15 @@ const Faq = () => {
         setOpenDialog(true);
     };
     const [faqId, setFaqId] = useState<any>();
+    const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedValue = e.target.value;
+        formik.setFieldValue('typeId', selectedValue);
+        //@ts-ignore
+        const selectedObj = types.find(option => option.type === selectedValue);
+        //@ts-ignore
+        setSelectType(selectedObj?._id);
 
+    };
     return (
         <div>
             <h2 className="mb-1 flex items-center px-2 py-3 font-extrabold uppercase">
@@ -172,13 +193,17 @@ const Faq = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {data?.map((faq: FAQ) => (
-                            <tr key={faq?._id}>
+                        {data?.map((faq: FAQ) => {
+                            //@ts-ignore
+                            const typeData: any = typeArr.find(type => type._id === faq.types);
+                            console.log("first", faq)
+                            return (<tr key={faq?._id}>
                                 <td>{faq?.question?.en}</td>
                                 <td>{faq?.question?.ar}</td>
                                 <td className="text-ellipsis">{faq?.answer?.en}</td>
                                 <td className="text-ellipsis">{faq?.answer?.ar}</td>
-                                <td>{faq?.type}</td>
+
+                                <td>{typeData ? typeData?.type : 'N/A'}</td>
                                 <td>
                                     <div className="flex items-center">
                                         <button onClick={() => handleEdit(faq)} className="">
@@ -189,8 +214,9 @@ const Faq = () => {
                                         </button>
                                     </div>
                                 </td>
-                            </tr>
-                        ))}
+                            </tr>)
+
+                        })}
                     </tbody>
                 </table>
             </div>
@@ -223,18 +249,19 @@ const Faq = () => {
                             <div>
                                 <label>Type</label>
                                 {edit ? (
-                                    <input className="form-input" readOnly disabled name="type" value={formik.values.type} placeholder="Type" />
+                                    <input className="form-input" readOnly disabled name="typeId" value={formik.values.typeId} placeholder="Type" />
                                 ) : (
-                                    <select className="form-select" name="type" value={formik.values.type} onChange={formik.handleChange}>
-                                        <option value="">Select type</option>
-                                        <option value="uiux">UI/UX</option>
-                                        <option value="branding">Branding</option>
-                                        <option value="graphicdesign">Graphic Designing</option>
-                                        <option value="motionGraphic">Motion Graphics</option>
+                                    <select className="form-select" name="typeId" value={formik.values.typeId} onChange={handleSelectChange}>
+                                        <option value="">Select Option</option>
+                                        {types.map((option: any, index: number) => (
+                                            <option key={index} value={option.type}>
+                                                {option.type}
+                                            </option>
+                                        ))}
                                     </select>
                                 )}
 
-                                {formik.touched.type && formik.errors.type && <p className="text-sm text-red-500">{formik.errors.type}</p>}
+                                {formik.touched.typeId && formik.errors.typeId && <p className="text-sm text-red-500">{formik.errors.typeId}</p>}
                             </div>
                         </div>
                     </DialogBody>

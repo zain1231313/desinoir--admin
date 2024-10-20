@@ -142,7 +142,7 @@ const AboutWhyChoose = () => {
                                 <div className="mt-5">
                                     <div className="my-2">
                                         <div className="">
-                                            {filePreview3 && <Image width={1000} height={1000}000} src={filePreview3} alt="Initial Image" className="h-40 w-40 object-cover" />}
+                                            {filePreview3 && <Image width={1000} height={1000} src={filePreview3} alt="Initial Image" className="h-40 w-40 object-cover" />}
                                             <div className="my-2">
                                                 <div className="">
                                                     <label htmlFor="file-input2" className="btn btn-primary w-fit" style={{ cursor: 'pointer' }}>

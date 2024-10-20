@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useFormik } from 'formik';
-import { GetServices, submitServiceData } from '@/components/utils/Helper';
+import { fetchType, GetServices, submitServiceData } from '@/components/utils/Helper';
 import toast from 'react-hot-toast';
 import Workdata from './Workdata';
 import ProcessData from './ProcessData';
@@ -69,14 +69,21 @@ interface SelectedRowDataType {
         description: string;
     };
 }
+interface OptionType {
+    _id: string;
+    type: string;
+}
 
 const MainService = () => {
+    // const typeArr = useSelector((state: IRootState) => selectTypeArr(state));
     const [value, setValue] = useState<any>('');
     const [edit, setEdit] = useState(false); // Adjusted type if needed
     const [valuear, setValuear] = useState<any>(''); // Adjusted type if needed
     const [tableData, setTableData] = useState<any>(''); // Adjusted type if needed
     const [open, setOpen] = useState(false);
-    const [type, setType] = useState('uiux');
+    const [type, setType] = useState("");
+    const [types, setTypes] = useState<[]>([]);
+    const [selecttype, setSelectType] = useState<OptionType | undefined>();
     const [workdata, setWorkdata] = useState<any>();
     const [isEditMode, setIsEditMode] = useState<boolean>(false);
     const [preview, setPreview] = useState<any>(null);
@@ -86,11 +93,15 @@ const MainService = () => {
 
     const fetchData = async () => {
         try {
+            console.log("Type in Header =>", types)
             const result = await GetServices(type);
             console.log('Header=>', result);
-
             setValue(result.data[0].data.en);
-
+            const typeData = await fetchType();
+        
+            console.log('Header=>', typeData);
+             
+            setTypes(typeData?.data);
             setValuear(result.data[0].data.ar);
             setTableData(result.data[0].data);
         } catch (error) {
@@ -116,7 +127,8 @@ const MainService = () => {
         onSubmit: async (values) => {
             console.log('Vlaues==>', values);
             try {
-                const response = await submitServiceData(values, values.type);
+                //@ts-ignore
+                const response = await submitServiceData(values, selecttype._id);
                 console.log(response, 'responseresponse');
                 toast.success(response.message);
                 fetchData();
@@ -173,10 +185,22 @@ const MainService = () => {
             }
         }
     };
-    ////////////////////////////////////
+    const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedValue = e.target.value;
+        console.log("Selected value->", selectedValue);
 
-    const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setType(event.target.value); // Select type and update state
+        // Find the selected object based on the selected value
+        const selectedObj = types.find((option: any) => option.type === selectedValue);
+
+        if (selectedObj) {
+            //@ts-ignore
+            setType(selectedObj.type);
+            setSelectType(selectedObj); // Store the full object, not just the _id
+        } else {
+            // If no valid option is selected, reset the states
+            setType('');
+            setSelectType(undefined);
+        }
     };
     return (
         <div className="">
@@ -198,15 +222,20 @@ const MainService = () => {
                 <div className="panel border-white-light px-3 dark:border-[#1b2e4b]">
                     <div>
                         {edit ? (
-                            <input className="form-input" readOnly disabled name="type" value={type} placeholder="Type" />
+                            <input className="form-input" readOnly disabled name="type" value={selecttype?.type || ''} placeholder="Type" />
                         ) : (
                             <div>
-                                <select className="form-select" value={type} onChange={handleTypeChange} name="type">
-                                    <option value="">Select type</option>
-                                    <option value="uiux">UI/UX</option>
-                                    <option value="branding">Branding</option>
-                                    <option value="motionGraphic">Motion Graphic</option>
-                                    <option value="graphicdesign">Graphic Design</option>
+                                <select
+                                    className="form-select"
+                                    value={selecttype?.type || ''}
+                                    onChange={handleSelectChange}
+                                >
+                                    <option value="">Select Option</option>
+                                    {types.map((option: any, index: number) => (
+                                        <option key={index} value={option.type}>
+                                            {option.type}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
                         )}
