@@ -76,7 +76,7 @@ function OurWork() {
     const tables = [
         {
             title: 'Our Work',
-            data: works.map((work) => ({
+            data: works?.map((work) => ({
                 title: work?.title,
                 subtitle: work?.subtitle,
                 description: work?.description,
@@ -87,7 +87,7 @@ function OurWork() {
         },
         {
             title: 'Our Problem',
-            data: works.map((work) => ({
+            data: works?.map((work) => ({
                 title: work?.ProblemStatementTitle, // Assuming this is the correct field
                 description: work?.ProblemStatementDescription,
                 subtitle: "",
@@ -98,7 +98,7 @@ function OurWork() {
         },
         {
             title: 'Our Challenge',
-            data: works.map((work) => ({
+            data: works?.map((work) => ({
                 title: work?.challengesTitle,
                 description: work?.challengesDescription,
                 subtitle:"", // If needed
@@ -109,7 +109,7 @@ function OurWork() {
         },
         {
             title: 'Our Solution',
-            data: works.map((work) => ({
+            data: works?.map((work) => ({
                 title: work?.SolutionTitle, // Assuming this is the correct field
                 description: work?.SolutionDescription,
                 subtitle: "", // If needed
@@ -120,7 +120,7 @@ function OurWork() {
         },
         {
             title: 'Our Major Screen',
-            data: works.map((work) => ({
+            data: works?.map((work) => ({
                 title: work?.title,
                 description: work?.description2,
                 subtitle: "",

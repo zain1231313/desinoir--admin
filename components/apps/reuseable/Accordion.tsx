@@ -65,7 +65,7 @@ const Accordion = ({ tables }: any) => {
         <>
             <div className="relative z-30 w-full px-4">
                 {tables?.length
-                    ? tables.map((table: any, index: any) => (
+                    ? tables?.map((table: any, index: any) => (
                           <div key={index} className="pb-[20px] lg:pb-[40px]">
                               <div
                                   className="flex cursor-pointer items-center justify-between rounded-md bg-white-light/30 px-4 py-4 dark:bg-dark dark:bg-opacity-[0.08]"
@@ -93,35 +93,35 @@ const Accordion = ({ tables }: any) => {
                                                       <th>Image</th>
                                                       <th>Title (EN)</th>
                                                       <th>Title (AR)</th>
-                                                      {table.data.some((item: any) => item.subtitle) && <th>Subtitle (EN)</th>}
-                                                      {table.data.some((item: any) => item.subtitle) && <th>Subtitle (AR)</th>}
+                                                      {table?.data?.some((item: any) => item?.subtitle) && <th>Subtitle (EN)</th>}
+                                                      {table?.data?.some((item: any) => item?.subtitle) && <th>Subtitle (AR)</th>}
                                                       <th>Description</th>
                                                       <th>Action</th>
                                                   </tr>
                                               </thead>
                                               <tbody className="h-fit">
-                                                  {table.data.map((item: any, itemIndex: any) => (
+                                                  {table?.data?.map((item: any, itemIndex: any) => (
                                                       <tr key={itemIndex}>
-                                                          <td>{item.primaryImage && <img src={item.primaryImage} alt={item.title.en} className="h-8 w-8 rounded-full object-cover" />}</td>
-                                                          <td>{item.title.en}</td>
-                                                          <td>{item.title.ar}</td>
-                                                          {item.subtitle && (
+                                                          <td>{item?.primaryImage && <img src={item?.primaryImage} alt={item?.title?.en} className="h-8 w-8 rounded-full object-cover" />}</td>
+                                                          <td>{item?.title?.en}</td>
+                                                          <td>{item?.title?.ar}</td>
+                                                          {item?.subtitle && (
                                                               <td>
-                                                                  <div dangerouslySetInnerHTML={{ __html: item.subtitle.en.slice(0, 20) + '...' }} />
+                                                                  <div dangerouslySetInnerHTML={{ __html: item?.subtitle?.en.slice(0, 20) + '...' }} />
                                                               </td>
                                                           )}{' '}
-                                                          {item.subtitle && (
+                                                          {item?.subtitle && (
                                                               <td>
-                                                                  <div dangerouslySetInnerHTML={{ __html: item.subtitle.ar.slice(0, 20) + '...' }} />
+                                                                  <div dangerouslySetInnerHTML={{ __html: item?.subtitle?.ar.slice(0, 20) + '...' }} />
                                                               </td>
                                                           )}
                                                           <td>
-                                                              <div dangerouslySetInnerHTML={{ __html: item.description.en.slice(0, 20) + '...' }} />
+                                                              <div dangerouslySetInnerHTML={{ __html: item?.description?.en.slice(0, 20) + '...' }} />
                                                           </td>
                                                           <td>
                                                               <div className="flex items-center justify-center gap-3">
                                                                   <button>
-                                                                      <Link href={`/apps/our-work/${item.linkUpdate}?id=${item.id}`}>
+                                                                      <Link href={`/apps/our-work/${item?.linkUpdate}?id=${item.id}`}>
                                                                           <IconPencil />
                                                                       </Link>
                                                                   </button>

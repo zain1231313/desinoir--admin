@@ -116,7 +116,7 @@ const AllPages = () => {
             ) : (
                 <div>
                     <h2 className="mb-1 flex items-center px-2 py-3 font-extrabold uppercase">
-                        <span>Meta Tags</span>
+                        <span>Pages</span>
                     </h2>
                     <div className="panel border-white-light px-3 dark:border-[#1b2e4b]">
                         <div className="py-3">
