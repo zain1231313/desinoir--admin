@@ -111,7 +111,7 @@ const MainChoose = (type: any) => {
         },
         onSubmit: async (values) => {
             try {
-                const response = await submitChooseData(values, type);
+                const response = await submitChooseData(values, type.type._id);
                 console.log(response, 'responseresponse');
                 toast.success(response.message);
                 fetchData();

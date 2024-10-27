@@ -668,13 +668,13 @@ export const addOurWork = async (data: any) => {
         throw error;
     }
 };
-export const addOurWorkMain = async (data: any) => {
+export const addOurWorkMain = async (data: any, type: any) => {
     const formData = new FormData();
     formData.append('subtitle', data.subtitle || '');
     formData.append('arSubtitle', data.arSubtitle || '');
     formData.append('title', data.title || '');
     formData.append('arTitle', data.arTitle || '');
-    formData.append('types', data.types || '');
+    formData.append('typeId', type);
     formData.append('description', data.description || '');
     formData.append('arDescription', data.arDescription || '');
     if (data.primaryImage) {
@@ -683,7 +683,6 @@ export const addOurWorkMain = async (data: any) => {
     if (data.descriptionImage) {
         formData.append('descriptionImage', data.descriptionImage);
     }
-    console.log('Main Work=>', formData);
     try {
         const requestOptions: RequestInit = {
             method: 'POST',
@@ -694,8 +693,8 @@ export const addOurWorkMain = async (data: any) => {
             },
         };
         const response = await fetch(API_ENDPOINT.ADD_OUR_WORK_MAIN, requestOptions);
-        console.log('Response =>', response);
         const result = await response.json();
+        console.log("result ----", result)
         return result;
     } catch (error) {
         console.error('Error in addOurWork:', error);
@@ -1470,6 +1469,7 @@ export const getFooterData = async () => {
 };
 
 export const addFooterData = async (footerData: any) => {
+    console.log("footerData ----------", footerData)
     try {
         // Creating the headers for the request
         const myHeaders = new Headers();
@@ -1479,9 +1479,9 @@ export const addFooterData = async (footerData: any) => {
         // Creating the body as a JSON string
         const bodyData = JSON.stringify({
             greetingTitle: footerData.greetingTitle,
-            arGreetingTitle: footerData.arGreetingTitle,
+            arGreetingTitle: footerData.greetingTitleAr,
             greetingDescription: footerData.greetingDescription,
-            arGreetingDescription: footerData.arGreetingDescription,
+            arGreetingDescription: footerData.greetingDescriptionAr,
             contactInfo: {
                 phone: footerData.phone,
                 email: footerData.email,
@@ -1641,8 +1641,7 @@ export const GetServices = async (type: any) => {
 };
 export const submitChooseData = async (values: any, type: any) => {
     const formData = new FormData();
-    console.log(type);
-    formData.append('type', values.type);
+    formData.append('typeId', type);
     formData.append('whyChooseDesiniorMainTitle', values.whyChooseDesinior);
     formData.append('arWhyChooseDesiniorMainTitle', values.whyChooseDesiniorAr);
 
@@ -1659,8 +1658,6 @@ export const submitChooseData = async (values: any, type: any) => {
 
 export const submitServiceData = async (values: any, type: any) => {
     const formData = new FormData();
-    console.log("Type Are Here", type);
-    // Append values to formData
     formData.append('typeId', type);
     formData.append('serviceTitle', values.serviceTitle);
     formData.append('arServiceTitle', values.serviceTitleAr);
@@ -1690,8 +1687,6 @@ export const submitProcessData = async (values: any, type: any) => {
     const formData = new FormData();
 
 
-    console.log("Type-==->", type);
-
     if (values.Processimage) {
         formData.append('ourprocessImage', values.Processimage);
     }
@@ -1705,7 +1700,7 @@ export const submitProcessData = async (values: any, type: any) => {
 
     formData.append('ourProcessMainDescription', values.ProcessmainDescription);
     formData.append('arOurProcessMainDescription', values.ProcessmainDescriptionAr);
-    formData.append('type', type);
+    formData.append('typeId', type);
 
     // Call API
     const response = await fetch(API_ENDPOINT.UPDATE_PROCESS, {
@@ -1799,7 +1794,7 @@ export const addServiceData = async (
 };
 export const addWorkData = async (
     workIcon: any,
-    type: any,
+    values: any,
     howWorksData: any[], // Expecting arrays for each data type
     arHowWorksData: any[]
     // ourProcessData: any[],
@@ -1807,7 +1802,8 @@ export const addWorkData = async (
     // whyChooseDesiniorData: any[],
     // arWhyChooseDesiniorData: any[]
 ) => {
-    console.log(howWorksData);
+
+
     try {
         // Headers setup
         const headers = new Headers();
@@ -1816,8 +1812,8 @@ export const addWorkData = async (
         // Form data setup
         const formdata = new FormData();
 
-        formdata.append('howWorksData[]', JSON.stringify(howWorksData));
-        formdata.append('arHowWorksData[]', JSON.stringify(arHowWorksData));
+        formdata.append('howWorksData', JSON.stringify(howWorksData));
+        formdata.append('arHowWorksData', JSON.stringify(arHowWorksData));
 
         // formdata.append("ourProcessData[]", JSON.stringify(ourProcessData));
         // formdata.append("arOurProcessData[]", JSON.stringify(arOurProcessData));
@@ -1825,7 +1821,7 @@ export const addWorkData = async (
         // formdata.append("arWhyChooseDesiniorData[]", JSON.stringify(arWhyChooseDesiniorData));
 
         formdata.append('workIcon', workIcon);
-        formdata.append('typeId', type);
+        formdata.append('typeId', values.type);
 
         // Request options
         const requestOptions: RequestInit = {
@@ -2253,9 +2249,7 @@ export const fetchPageData = async () => {
 
     try {
         const response = await fetch(API_ENDPOINT.GET_PAGES, requestOptions);
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status}`);
-        }
+
         const data = await response.json();
         return data;
     } catch (error) {
@@ -2265,12 +2259,13 @@ export const fetchPageData = async () => {
 };
 
 
-export const addPage = async (pageName: string) => {
+export const addPage = async (pageName: string, route: string) => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
     const raw = JSON.stringify({
-        pages: pageName,  // Use the parameter pageName
+        pages: pageName,
+        route: route  // Use the parameter pageName
     });
 
     const requestOptions: RequestInit = {
@@ -2292,12 +2287,13 @@ export const addPage = async (pageName: string) => {
 };
 
 
-export const updatePage = async (pageId: string, pageName: string) => {
+export const updatePage = async (pageId: string, pageName: string, route: string) => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
     const raw = JSON.stringify({
-        pages: pageName,  // Use the parameter for page name
+        pages: pageName,
+        route: route
     });
 
     const requestOptions: RequestInit = {

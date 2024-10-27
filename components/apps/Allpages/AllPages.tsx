@@ -57,18 +57,20 @@ const AllPages = () => {
     const formik = useFormik({
         initialValues: {
             page: '',
+            route:''
         },
         validationSchema: Yup.object({
             page: Yup.string().required('Page is required'),
+            route: Yup.string().required('Route is required'),
         }),
         enableReinitialize: true,
         onSubmit: async (values) => {
             try {
                 if (isEditMode) {
-                    const result = await updatePage(pageId, values.page);
+                    const result = await updatePage(pageId, values.page, values.route);
                     toast.success(result.message);
                 } else {
-                    const result = await addPage(values.page);
+                    const result = await addPage(values.page, values.route);
                     toast.success(result.message);
                 }
                 setOpen(false);
@@ -80,9 +82,9 @@ const AllPages = () => {
         },
     });
     const handleEdit = (page: any) => {
+        setPageId(page.id);
         setIsEditMode(true);
-        setPageId(page._id);
-        formik.setValues({ page: page.pages });
+        formik.setValues({ page: page.pages, route: page.route });
         handleOpen();
     };
 
@@ -138,6 +140,7 @@ const AllPages = () => {
                                 <thead>
                                     <tr>
                                         <th>Pages</th>
+                                        <th>Routes</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -145,6 +148,7 @@ const AllPages = () => {
                                     {pageData?.map((page: any) => (
                                         <tr key={page?._id}>
                                             <td>{page?.pages}</td>
+                                            <td>{page?.route}</td>
                                             <td className="h-full items-center">
                                                 <div>
                                                     <button onClick={() => handleEdit(page)}>
@@ -183,6 +187,20 @@ const AllPages = () => {
                                         />
                                         {formik.errors.page && formik.touched.page && (
                                             <p className="text-sm text-red-500">{formik.errors.page}</p>
+                                        )}
+                                    </div>
+                                    <div>
+                                        <label htmlFor="route">Route</label>
+                                        <input
+                                            type="text"
+                                            id="route"
+                                            name="route"
+                                            className="form-input"
+                                            onChange={formik.handleChange}
+                                            value={formik.values.route}
+                                        />
+                                        {formik.errors.route && formik.touched.route && (
+                                            <p className="text-sm text-red-500">{formik.errors.route}</p>
                                         )}
                                     </div>
 

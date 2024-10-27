@@ -18,7 +18,7 @@ function OurWok() {
         try {
             const typeData = await fetchType();
             console.log("Our typeData=>", typeData)
-            setType(typeData?.data[2]);
+            setType(typeData?.data[0]);
             setTypes(typeData?.data);
 
         } catch (error) {

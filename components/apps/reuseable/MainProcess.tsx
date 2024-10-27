@@ -116,7 +116,7 @@ const MainProcess = (type: any) => {
         onSubmit: async (values) => {
             console.log("Types=>", type)
             try {
-                const response = await submitProcessData(values, type.type);
+                const response = await submitProcessData(values, type.type._id);
                 console.log(response, 'responseresponse');
                 toast.success(response.message);
                 fetchData();

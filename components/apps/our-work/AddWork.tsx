@@ -1,16 +1,41 @@
 'use client';
 import { MainOurWork } from '@/components/schema/mainourwork';
-import { addOurWorkMain } from '@/components/utils/Helper';
+import { addOurWorkMain, fetchType } from '@/components/utils/Helper';
 import { useFormik } from 'formik';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import ReactQuill from 'react-quill';
 
+interface OptionType {
+    _id: string;
+    type: string;
+}
 const MainOurwork = ({ onNextStep }: any) => {
     const [loading, setLoading] = useState(false);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [descriptionPreview, setDescriptionPreview] = useState<string | null>(null);
+    const [types, setTypes] = useState<[]>([]);
+    const [selecttype, setSelectType] = useState<OptionType | undefined>();
+    const [type, setType] = useState<OptionType | undefined>();
+
+    const fetchData = async () => {
+        try {
+
+            const typeData = await fetchType();
+
+
+            setTypes(typeData?.data);
+        } catch (error) {
+            console.error('Failed to fetch data:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    console.log("type -----------", type)
 
     const formik = useFormik({
         initialValues: {
@@ -27,11 +52,9 @@ const MainOurwork = ({ onNextStep }: any) => {
         validationSchema: MainOurWork,
 
         onSubmit: async (values) => {
-            console.log('Working =>', values);
             setLoading(true);
             try {
-                const response = await addOurWorkMain(values);
-                console.log('Response ==>', response);
+                const response = await addOurWorkMain(values, type);
                 if (response.success === true) {
                     onNextStep(response);
                 } else {
@@ -74,6 +97,20 @@ const MainOurwork = ({ onNextStep }: any) => {
         e.preventDefault();
         //@ts-ignore
         formik.handleSubmit(formik?.values);
+    };
+
+    const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedValue = e.target.value;
+        // Find the selected object based on the selected value
+        const selectedObj = types.find((option: any) => option._id === selectedValue);
+
+        if (selectedObj) {
+            //@ts-ignore
+            setType(selectedObj._id);
+            setSelectType(selectedObj);
+        } else {
+            console.error("Selected object is undefined");
+        }
     };
 
     return (
@@ -131,14 +168,22 @@ const MainOurwork = ({ onNextStep }: any) => {
                         </div>
                         <div>
                             <label>Types</label>
-                            <select name="types" className="form-select" value={formik.values.types} onChange={formik.handleChange} onBlur={formik.handleBlur}>
-                                <option value="">Select Options</option>
-                                <option value="uiux">Ui/Ux</option>
-                                <option value="branding">Branding</option>
-                                <option value="graphicdesign">Graphic Designing</option>
-                                <option value="motiongraphic">Motion Grraphic Design</option>
-                            </select>
-                            {formik.touched.types && formik.errors.types ? <p className="text-xs text-red-800">{formik.errors.types}</p> : null}
+
+                            <div>
+                                <select
+                                    className="form-select"
+                                    value={selecttype?._id}
+                                    onChange={handleSelectChange}
+                                >
+                                    {types.map((option: any, index: number) => (
+                                        <option key={index} value={option._id}>
+                                            {option.type}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+
                         </div>
                     </div>
 

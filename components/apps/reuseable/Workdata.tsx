@@ -24,9 +24,12 @@ const Workdata = (type: any) => {
     const [arWorkId, setArworkId] = useState<any>();
     const [openDel, setOpenDel] = useState(false);
     const [edit, setEdit] = useState(false); // Adjusted type if needed
+    const [typeId, setTypeId ] = useState<any>(type._id); // Adjusted type if needed
+    const [typeName, setTypeName ] = useState<any>(type.type); // Adjusted type if needed
+
     const fetchData = async () => {
         try {
-            console.log("Data=>Type", type)
+            console.log("Data=>Type", type.type)
             const result = await GetServices(type.type._id);
             console.log('Words Data==>', result);
             const datamap = result?.data?.map((item: any, index: number) => {
@@ -81,6 +84,7 @@ const Workdata = (type: any) => {
     const handleOpen = () => {
         setOpen(true);
     };
+    console.log("type.type.type._id -----------", type?.type?._id)
     const formik = useFormik({
         initialValues: {
             workIcon: null,
@@ -90,7 +94,7 @@ const Workdata = (type: any) => {
             workDescriptionAr: '',
             workId: '',
             workArId: '',
-            type: type.type,
+            type: type?.type?._id,
         },
         validationSchema: workDataSchema,
         enableReinitialize: true,
@@ -136,7 +140,7 @@ const Workdata = (type: any) => {
                         workId: values.workId,
                         workarId: values.workArId,
                         workIcon: values.workIcon,
-                        type: type,
+                        type: type?.type?._id,
                         // processData: '',  // Include actual values if needed
                         // arProcessData: '',
                         // whyChooseData: '',  // Include actual values if needed
@@ -322,7 +326,7 @@ const Workdata = (type: any) => {
                                 <input type="file" id="workIcon" name="workIcon" accept="image/*" className="form-input" onChange={(event) => handleFileChange(event)} style={{ display: 'none' }} />
                             </label>
                         </div>
-                        <input className="form-input" readOnly disabled name="type" value={type} placeholder="Type" />
+                        <input className="form-input" readOnly disabled name="type" value={type?.type?._id} placeholder={typeName} />
 
                         {formik.touched.workIcon && formik.errors.workIcon ? <p className="text-xs text-red-800">{formik.errors.workIcon}</p> : null}
                         <input type="text" className="hidden" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.workId} />

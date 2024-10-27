@@ -239,7 +239,7 @@ const MetaTags = () => {
                                             <p className='m-0 p-0'> </p>
                                         ) : (
                                             <select id="type" name="type" className="form-select" onChange={formik.handleChange} value={formik.values.type}>
-                                                {pageData.map((page: any, index: number) => (
+                                                {pageData?.map((page: any, index: number) => (
                                                     <option key={index} value={page?._id}>
                                                         {page?.pages}
                                                     </option>

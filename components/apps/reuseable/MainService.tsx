@@ -91,18 +91,19 @@ const MainService = () => {
     const [primaryImagePreview, setPrimaryImagePreview] = useState<any>(null);
     const [Category, setCategory] = useState<string | undefined>();
 
-    const fetchData = async () => {
+    const fetchData = async (type: any) => {
         try {
-            console.log("Type in Header =>", types)
+            console.log("Type in Header =>", type)
             const result = await GetServices(type);
             console.log('Header=>', result);
             setValue(result.data[0].data.en);
-            const typeData = await fetchType();
-        
-            console.log('Header=>', typeData);
-             
-            setTypes(typeData?.data);
             setValuear(result.data[0].data.ar);
+            console.log("values 1 --------", value)
+            console.log("values 1 --------", valuear)
+            const typeData = await fetchType();
+
+
+            setTypes(typeData?.data);
             setTableData(result.data[0].data);
         } catch (error) {
             console.error('Failed to fetch data:', error);
@@ -110,8 +111,8 @@ const MainService = () => {
     };
 
     useEffect(() => {
+        fetchData(type);
         setCategory(type);
-        fetchData();
     }, [type]);
 
     const formik = useFormik({
@@ -131,7 +132,7 @@ const MainService = () => {
                 const response = await submitServiceData(values, selecttype._id);
                 console.log(response, 'responseresponse');
                 toast.success(response.message);
-                fetchData();
+                fetchData(type);
             } catch (error: any) {
                 toast.error(error.message);
             }
@@ -151,25 +152,24 @@ const MainService = () => {
         setPrimaryImagePreview(value?.servicePrimaryImage);
         setPreview(value?.serviceSecondaryImage);
         setProcess(value?.ourProcess?.image);
-    }, [value, valuear]);
+    }, [value, valuear, type]);
 
-    console.log(value.ourProcess);
 
-    useEffect(() => {
-        if (value && valuear) {
-            formik.setValues({
-                type: `${type}`,
-                serviceTitle: value?.serviceTitle,
-                serviceTitleAr: valuear?.serviceTitle,
-                serviceDescription: value?.serviceDescription,
-                serviceDescriptionAr: valuear?.serviceDescription,
-                servicePrimaryImage: value?.servicePrimaryImage,
-                serviceSecondaryImage: value?.serviceSecondaryImage,
-            });
-            console.log('------', value);
-            setPrimaryImagePreview(value?.servicePrimaryImage);
-        }
-    }, []);
+    // useEffect(() => {
+    //     if (value && valuear) {
+    //         formik.setValues({
+    //             type: `${type}`,
+    //             serviceTitle: value?.serviceTitle,
+    //             serviceTitleAr: valuear?.serviceTitle,
+    //             serviceDescription: value?.serviceDescription,
+    //             serviceDescriptionAr: valuear?.serviceDescription,
+    //             servicePrimaryImage: value?.servicePrimaryImage,
+    //             serviceSecondaryImage: value?.serviceSecondaryImage,
+    //         });
+    //         console.log('------', value);
+    //         setPrimaryImagePreview(value?.servicePrimaryImage);
+    //     }
+    // }, [value, valuear, type]);
 
     const handleImage = (event: React.ChangeEvent<HTMLInputElement>, imageField: string) => {
         const file = event.currentTarget?.files?.[0];
@@ -194,10 +194,9 @@ const MainService = () => {
 
         if (selectedObj) {
             //@ts-ignore
-            setType(selectedObj.type);
-            setSelectType(selectedObj); // Store the full object, not just the _id
+            setType(selectedObj._id);
+            setSelectType(selectedObj);
         } else {
-            // If no valid option is selected, reset the states
             setType('');
             setSelectType(undefined);
         }
@@ -230,7 +229,6 @@ const MainService = () => {
                                     value={selecttype?.type || ''}
                                     onChange={handleSelectChange}
                                 >
-                                    <option value="">Select Option</option>
                                     {types.map((option: any, index: number) => (
                                         <option key={index} value={option.type}>
                                             {option.type}

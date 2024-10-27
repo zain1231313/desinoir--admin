@@ -5,7 +5,6 @@ export const MainOurWork = Yup.object().shape({
     arTitle: Yup.string().required('Arabic title is required'),
     subtitle: Yup.string().required('Subtitle is required'),
     arSubtitle: Yup.string().required('Arabic subtitle is required'),
-    types: Yup.string().required('Types is required'),
     description: Yup.string().required('Description is required'),
     arDescription: Yup.string().required('Arabic description is required'),
     primaryImage: Yup.mixed().required('Primary Image is required'),
