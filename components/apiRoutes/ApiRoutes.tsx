@@ -1,4 +1,4 @@
-const Server = 'https://api.desinoir.com/api/';
+const Server = 'http://13.60.155.243:8000/api/';
 // const Server = 'http://localhost:8000/api/';
 
 interface API_ENDPOINT {
